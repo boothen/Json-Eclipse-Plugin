@@ -22,14 +22,14 @@ import org.sourceforge.jsonedit.core.JsonLog;
 import org.sourceforge.jsonedit.core.validation.IncrementalJsonValidator;
 
 /**
- * Project nature allows the request project to validate any org.sourceforge.jsonedit.core.core files.
+ * Project nature allows the request project to validate any org.sourceforge.jsonedit.core files.
  * 
  * @author Matt Garner
  *
  */
 public class JsonValidationNature implements IProjectNature {
 	
-	public static final String NATURE_ID = "org.sourceforge.jsonedit.core.core.validation.nature";
+	public static final String NATURE_ID = "org.sourceforge.jsonedit.core.validation.nature";
 	
 	private IProject project;
 	

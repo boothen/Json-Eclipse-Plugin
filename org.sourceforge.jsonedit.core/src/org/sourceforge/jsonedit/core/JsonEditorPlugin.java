@@ -21,7 +21,7 @@ import org.sourceforge.jsonedit.core.util.JsonColorProvider;
 public class JsonEditorPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "Json";
+	public static final String PLUGIN_ID = "org.sourceforge.jsonedit.core";
 	
 	// Singleton plugin instance.
 	private static JsonEditorPlugin fgInstance;
