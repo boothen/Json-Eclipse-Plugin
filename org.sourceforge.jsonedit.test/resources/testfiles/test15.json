@@ -1,0 +1,4 @@
+{
+   "dlsTrace":"#0 \/var\/www\/lib\/Dls\/Rest\/Server.php(83): Dls_Rest_Server->_getMethodParams(Object(Dls_Service_Rest_Entry), 'getPhotosOfAlbu...', Array)\n#1 \/var\/www\/service\/index.php(54): Dls_Rest_Server->handle()\n#2 {main}",
+   "test":"test"
+}

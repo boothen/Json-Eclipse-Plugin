@@ -1,0 +1,64 @@
+{
+   "message":"success",
+   "code":-1,
+   "response":{
+      "84":{
+         "meta":{
+            "id":"84",
+            "parent_id":"2",
+            "idpath":"\/2\/84\/",
+            "user_id":"1",
+            "entry_type":"space",
+            "storage_id":null,
+            "entry_subtype":"DEFAULT",
+            "access_type":"PUBLIC",
+            "name":"Bens Share",
+            "mtime":"2008-12-17 13:44:36",
+            "favourite":"0",
+            "hash":null,
+            "size":null,
+            "physical_path":null,
+            "mime_type":null,
+            "ref_count":null,
+            "quarantine_path":null,
+            "representations":false,
+            "properties":null,
+            "visible":null,
+            "encrypted":null,
+            "file_type":null,
+            "purchased":null,
+            "ultime":"2008-12-17 13:44:36",
+            "ctime":"2008-12-17 13:44:36",
+            "metadata":null,
+            "files":3,
+            "folders":0,
+            "projects":0,
+            "shares":[
+               {
+                  "user_id":"1",
+                  "id":"84",
+                  "parent_id":"2",
+                  "name":"Bens Share",
+                  "entry_subtype":"DEFAULT",
+                  "access_type":"PUBLIC",
+                  "ctime":"2008-12-17 13:44:36",
+                  "metadata":null,
+                  "friend_id":"1",
+                  "folder_id":"84",
+                  "rights":"2",
+                  "start_date":null,
+                  "end_date":"0000-00-00",
+                  "path":"\/2\/84\/",
+                  "firstname":"Tom",
+                  "secondname":"Ate",
+                  "email":"postfach@imur.eu"
+               }
+            ],
+            "entries":[
+
+            ]
+         },
+         "id":"84"
+      }
+   }
+}

@@ -1,0 +1,48 @@
+{
+   "response":{
+      "id":"232",
+      "parent_id":"13",
+      "idpath":"\/11\/13\/1141\/",
+      "representations":{
+         "16x16.jpg":"FINISHED",
+         "54x41.jpg":"FINISHED",
+         "76x81.jpg":"FINISHED",
+         "mobil54x41.jpg":"FINISHED",
+         "mobil76x81.jpg":"FINISHED",
+         "mobil450x450.jpg":"FINISHED",
+         "120x150.jpg":"FINISHED",
+         "450x450.jpg":"FINISHED",
+         "800x800.jpg":"FINISHED",
+         "exif":"FINISHED",
+         "iptc":"FINISHED",
+         "xmp":"FINISHED",
+         "iptv174x174.png":"FINISHED",
+         "iptv640x480.png":"FINISHED",
+         "iptv854x480.png":"FINISHED"
+      },
+      "properties":{
+         "EXIF":{
+            "FileName":"726.jpg",
+            "FileDateTime":"1234861650",
+            "FileSize":"31956",
+            "FileType":"2",
+            "MimeType":"image\/jpeg",
+            "COMPUTED":{
+               "html":"width=\"300\" height=\"420\"",
+               "Height":"420",
+               "Width":"300",
+               "IsColor":"1"
+            },
+            "Company":"Ducky"
+         }
+      },
+      "visible":"1",
+      "encrypted":"0",
+      "file_type":null,
+      "purchased":"0",
+      "ultime":"2009-02-17 10:07:47",
+      "ctime":"2009-02-17 10:07:47",
+      "metadata":null,
+      "favourite":"0"
+   }
+}

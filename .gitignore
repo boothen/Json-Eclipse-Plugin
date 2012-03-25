@@ -1,0 +1,10 @@
+.DS_Store
+
+org.sourceforge.jsonedit.core/bin/*
+org.sourceforge.jsonedit.test/bin/*
+
+org.sourceforge.jsonedit.core/target/*
+org.sourceforge.jsonedit.test/target/*
+
+org.sourceforge.jsonedit.feature/target/*
+
