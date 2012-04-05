@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Json Editor Plugin
 Bundle-SymbolicName: org.sourceforge.jsonedit.core;singleton:=true
-Bundle-Version: 0.9.4
+Bundle-Version: 0.9.51
 Bundle-Activator: org.sourceforge.jsonedit.core.JsonEditorPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

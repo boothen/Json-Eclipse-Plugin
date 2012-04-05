@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.sourceforge.jsonedit</groupId>
   <artifactId>parent</artifactId>
-  <version>0.9.4</version>
+  <version>0.9.51</version>
   <packaging>pom</packaging>
   <modules>
     <module>org.sourceforge.jsonedit.core</module>

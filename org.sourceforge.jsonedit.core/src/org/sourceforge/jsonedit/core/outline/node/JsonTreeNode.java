@@ -141,6 +141,10 @@ public class JsonTreeNode {
 	private Image createMyImage(String urlPath) {
 		ImageDescriptor imgDescriptor = null;
 		imgDescriptor = JsonEditorPlugin.imageDescriptorFromPlugin(JsonEditorPlugin.getDefault().getBundle().getSymbolicName(), urlPath);
+		
+		if (imgDescriptor == null)
+		    return null;
+		
 		return imgDescriptor.createImage();
 	}
 	

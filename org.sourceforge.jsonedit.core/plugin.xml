@@ -5,12 +5,17 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            name="Json Editor"
+            class="org.sourceforge.jsonedit.core.editors.JsonPageEditor"
+            contributorClass="org.sourceforge.jsonedit.core.editors.JsonPageEditorContributor"
+            default="true"
             extensions="json"
             icon="icons/JsonFile.gif"
-            contributorClass="org.sourceforge.jsonedit.core.editors.JsonPageEditorContributor"
-            class="org.sourceforge.jsonedit.core.editors.JsonPageEditor"
-            id="org.sourceforge.jsonedit.core.editors.JsonPageEditor">
+            id="org.sourceforge.jsonedit.core.editors.JsonPageEditor"
+            name="Json Editor"
+            symbolicFontName="org.eclipse.wst.sse.ui.textfont">
+         <contentTypeBinding
+               contentTypeId="org.sourceforge.jsonedit.core.jsonsource">
+         </contentTypeBinding>
       </editor>
    </extension>
    <extension
@@ -134,6 +139,16 @@
             </adapt>
          </enabledWhen>
       </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.text"
+            file-extensions="json"
+            id="jsonsource"
+            name="Json Source"
+            priority="high">
+      </content-type>
    </extension>
 
 </plugin>
