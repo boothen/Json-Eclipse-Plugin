@@ -687,4 +687,26 @@ public class JsonReconcilingStrategyTest {
 		Assert.assertEquals(27, jtop.nodes.size());
 		Assert.assertEquals(8, jtop.jsonNodes.size());
 	}
+	
+	@Test
+	public void testFile33() {
+		
+		IDocument doc = FileToDocUtility.getDocument(System.getProperty("user.dir") + "/resources/testfiles/test33.json");
+		
+		JsonReconcilingStrategy jtop = new JsonReconcilingStrategy();
+		jtop.setDocument(doc);
+		
+		jtop.initialReconcile();
+		
+		for (Node node : jtop.nodes) {
+			System.out.println(node);
+		}
+		
+		for (JsonNode node : jtop.jsonNodes) {
+			System.out.println(node);
+		}
+		
+		Assert.assertEquals(9, jtop.nodes.size());
+		Assert.assertEquals(3, jtop.jsonNodes.size());
+	}
 }
