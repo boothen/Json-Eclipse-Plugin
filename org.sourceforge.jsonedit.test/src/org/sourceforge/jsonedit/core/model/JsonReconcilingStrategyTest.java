@@ -698,15 +698,65 @@ public class JsonReconcilingStrategyTest {
 		
 		jtop.initialReconcile();
 		
+		System.out.println("");
 		for (Node node : jtop.nodes) {
 			System.out.println(node);
 		}
 		
+		System.out.println("");
 		for (JsonNode node : jtop.jsonNodes) {
 			System.out.println(node);
 		}
 		
 		Assert.assertEquals(9, jtop.nodes.size());
 		Assert.assertEquals(3, jtop.jsonNodes.size());
+	}
+	
+	@Test
+	public void testFile34() {
+		
+		IDocument doc = FileToDocUtility.getDocument(System.getProperty("user.dir") + "/resources/testfiles/test34.json");
+		
+		JsonReconcilingStrategy jtop = new JsonReconcilingStrategy();
+		jtop.setDocument(doc);
+		
+		jtop.initialReconcile();
+		
+		System.out.println("");
+		for (Node node : jtop.nodes) {
+			System.out.println(node);
+		}
+		
+		System.out.println("");
+		for (JsonNode node : jtop.jsonNodes) {
+			System.out.println(node);
+		}
+		
+		Assert.assertEquals(9, jtop.nodes.size());
+		Assert.assertEquals(3, jtop.jsonNodes.size());
+	}
+	
+	@Test
+	public void testFile35() {
+		
+		IDocument doc = FileToDocUtility.getDocument(System.getProperty("user.dir") + "/resources/testfiles/test35.json");
+		
+		JsonReconcilingStrategy jtop = new JsonReconcilingStrategy();
+		jtop.setDocument(doc);
+		
+		jtop.initialReconcile();
+		
+		System.out.println("");
+		for (Node node : jtop.nodes) {
+			System.out.println(node);
+		}
+		
+		System.out.println("");
+		for (JsonNode node : jtop.jsonNodes) {
+			System.out.println(node);
+		}
+		
+		Assert.assertEquals(9, jtop.nodes.size());
+		Assert.assertEquals(4, jtop.jsonNodes.size());
 	}
 }
