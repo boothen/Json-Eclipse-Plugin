@@ -468,8 +468,8 @@ public class JsonNodeBuilder {
 		
 		if (isNodeType(index, nodes, nodeCloseType)) {
 			JsonNode lastNode = jsonNodes.get(jsonNodes.size()-1);
-			if (lastNode.getJsonType() == JsonType.End || (lastNode.getJsonType() == jsonType && nodes.get(index -1).getType() == nodeOpenType)) {
-			//if (errorNodes.size() == 0) { 
+			boolean errorNodeTest = (nodes.size() - index - 2 < 0) ||  (nodes.get(index - 2).getType() != Type.Error);
+			if (lastNode.getJsonType() == JsonType.End || (lastNode.getJsonType() == jsonType && nodes.get(index -1).getType() == nodeOpenType && errorNodeTest)) {
 				JsonNode endNode = new JsonNode(null, nodes.get(index), JsonType.End);
 				jsonNodes.add(endNode);
 				JsonNode parent = (objectArrayStack.size() > 0) ? objectArrayStack.remove(0) : null;
@@ -488,7 +488,6 @@ public class JsonNodeBuilder {
 		if (isNodeType(index, nodes, nodeCloseType) && isNodeType(index+1, nodes, Type.Comma)) {
 			JsonNode lastNode = jsonNodes.get(jsonNodes.size()-1);
 			if (lastNode.getJsonType() == JsonType.End || (lastNode.getJsonType() == jsonType && nodes.get(index -1).getType() == nodeOpenType)) {
-			//if (errorNodes.size() == 0) { 
 				JsonNode endNode = new JsonNode(null, nodes.get(index), JsonType.End);
 				jsonNodes.add(endNode);
 				JsonNode parent = (objectArrayStack.size() > 0) ? objectArrayStack.remove(0) : null;

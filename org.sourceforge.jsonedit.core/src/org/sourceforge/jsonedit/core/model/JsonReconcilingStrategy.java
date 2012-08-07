@@ -63,6 +63,10 @@ IReconcilingStrategyExtension {
 	private void parse() {
 		
 		nodes = new NodeBuilder(fDocument).buildNodes();
+		for (Node node : nodes) {
+			System.out.println(node);
+		}
+		
 		jsonNodes = new JsonNodeBuilder(fDocument, nodes).buildJsonNodes();
 		fPositions.clear();
 		fPositions.addAll(new JsonFoldingPositionsBuilder(jsonNodes).buildFoldingPositions());
