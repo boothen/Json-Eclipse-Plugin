@@ -852,7 +852,7 @@ public class JsonReconcilingStrategyTest {
 			System.out.println(node);
 		}
 
-		Assert.assertEquals(2, jtop.nodes.size());
-		Assert.assertEquals(2, jtop.jsonNodes.size());
+		Assert.assertEquals(5, jtop.nodes.size());
+		Assert.assertEquals(3, jtop.jsonNodes.size());
 	}
 }
