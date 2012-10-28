@@ -26,31 +26,31 @@ import org.sourceforge.jsonedit.core.outline.JsonContentOutlinePage;
 
 /**
  * JsonTextEditor is the TextEditor instance used by the plugin.
- * 
+ *
  * @author Matt Garner
  *
  */
 public class JsonTextEditor extends TextEditor {
-	
+
 	private JsonSourceViewerConfiguration viewerConfiguration;
-	
+
 	protected final static char[] PAIRS= { '{', '}', '[', ']' };
-	
+
 	private DefaultCharacterPairMatcher pairsMatcher = new DefaultCharacterPairMatcher(PAIRS);
 
-	
+
 	/** The outline page */
 	private JsonContentOutlinePage fOutlinePage;
-	
+
 	public JsonTextEditor() {
 		super();
-		
+
 	}
-	
+
 	@Override
 	protected void configureSourceViewerDecorationSupport(SourceViewerDecorationSupport support) {
 		support.setCharacterPairMatcher(pairsMatcher);
-		
+
 		support.setMatchingCharacterPainterPreferenceKeys(JsonEditorPlugin.EDITOR_MATCHING_BRACKETS, JsonEditorPlugin.EDITOR_MATCHING_BRACKETS_COLOR);
 		super.configureSourceViewerDecorationSupport(support);
 	}
@@ -62,11 +62,11 @@ public class JsonTextEditor extends TextEditor {
 		viewerConfiguration = new JsonSourceViewerConfiguration(this);
 		setSourceViewerConfiguration(viewerConfiguration);
 	}
-	
+
 	public void dispose() {
 		if (fOutlinePage != null)
 			fOutlinePage.setInput(null);
-		
+
 		if (pairsMatcher != null) {
 			pairsMatcher.dispose();
 			pairsMatcher = null;
@@ -74,21 +74,21 @@ public class JsonTextEditor extends TextEditor {
 
 		super.dispose();
 	}
-	
+
 	public void doRevertToSaved() {
 		super.doRevertToSaved();
 		if (fOutlinePage != null)
 			fOutlinePage.update();
 	}
-	
+
 	public void doSave(IProgressMonitor monitor) {
 		super.doSave(monitor);
 		if (fOutlinePage != null)
 			fOutlinePage.update();
 	}
-	
-	/** The <code>JavaEditor</code> implementation of this 
-	 * <code>AbstractTextEditor</code> method performs any extra 
+
+	/** The <code>JavaEditor</code> implementation of this
+	 * <code>AbstractTextEditor</code> method performs any extra
 	 * save as behavior required by the java editor.
 	 */
 	public void doSaveAs() {
@@ -96,28 +96,28 @@ public class JsonTextEditor extends TextEditor {
 		if (fOutlinePage != null)
 			fOutlinePage.update();
 	}
-	
-	/** The <code>JavaEditor</code> implementation of this 
-	 * <code>AbstractTextEditor</code> method performs sets the 
+
+	/** The <code>JavaEditor</code> implementation of this
+	 * <code>AbstractTextEditor</code> method performs sets the
 	 * input of the outline page after AbstractTextEditor has set input.
-	 * 
+	 *
 	 * @param input the editor input
 	 * @throws CoreException in case the input can not be set
-	 */ 
+	 */
 	public void doSetInput(IEditorInput input) throws CoreException {
 		super.doSetInput(input);
 		if (fOutlinePage != null)
 			fOutlinePage.setInput(input);
 	}
-	
-	/** The <code>JavaEditor</code> implementation of this 
+
+	/** The <code>JavaEditor</code> implementation of this
 	 * <code>AbstractTextEditor</code> method performs gets
-	 * the java content outline page if request is for a an 
+	 * the java content outline page if request is for a an
 	 * outline page.
-	 * 
+	 *
 	 * @param required the required type
 	 * @return an adapter for the required type or <code>null</code>
-	 */ 
+	 */
 	@SuppressWarnings("unchecked")
 	public Object getAdapter(Class required) {
 		if (IContentOutlinePage.class.equals(required)) {
@@ -128,28 +128,29 @@ public class JsonTextEditor extends TextEditor {
 			}
 			return fOutlinePage;
 		}
-		
+
 		return super.getAdapter(required);
 	}
-	
+
 	private ProjectionAnnotationModel annotationModel;
 	private ProjectionSupport projectionSupport;
-	private Annotation[] oldAnnotations;
-	
+	private ProjectionAnnotation[] oldAnnotations;
+	private boolean[] annotationCollapsedState;
+
 	@Override
 	public void createPartControl(Composite parent) {
 		// TODO Auto-generated method stub
 		super.createPartControl(parent);
 		ProjectionViewer viewer =(ProjectionViewer)getSourceViewer();
-        
+
         projectionSupport = new ProjectionSupport(viewer,getAnnotationAccess(),getSharedColors());
 		projectionSupport.install();
-		
+
 		//turn projection mode on
 		viewer.doOperation(ProjectionViewer.TOGGLE);
-		
+
 		annotationModel = viewer.getProjectionAnnotationModel();
-		
+
 		SourceViewerDecorationSupport support = getSourceViewerDecorationSupport(viewer);
 		support.install(JsonEditorPlugin.getJsonPreferenceStore());
 	}
@@ -164,34 +165,46 @@ public class JsonTextEditor extends TextEditor {
 		getSourceViewerDecorationSupport(viewer);
 		return viewer;
 	}
-	
+
 	public void updateFoldingStructure(List<Position> positions)
 	{
-		Annotation[] annotations = new Annotation[positions.size()];
-		
+		ProjectionAnnotation[] annotations = new ProjectionAnnotation[positions.size()];
+
 		//this will hold the new annotations along
 		//with their corresponding positions
 		HashMap<ProjectionAnnotation, Position> newAnnotations = new HashMap<ProjectionAnnotation, Position>();
-		
+
 		for(int i =0;i<positions.size();i++)
 		{
 			ProjectionAnnotation annotation = new ProjectionAnnotation();
 			newAnnotations.put(annotation,positions.get(i));
 			annotations[i]=annotation;
+			if (annotationCollapsedState != null && annotationCollapsedState.length > i && annotationCollapsedState[i]) {
+				annotation.markCollapsed();
+			}
 		}
-		
+
 		annotationModel.modifyAnnotations(oldAnnotations,newAnnotations,null);
-		
+
 		oldAnnotations=annotations;
 	}
 
 	public JsonContentOutlinePage getFOutlinePage() {
 		return fOutlinePage;
 	}
-	
+
 	public void updateContentOutlinePage(List<JsonNode> jsonNodes) {
 		if (fOutlinePage != null) {
 			fOutlinePage.setJsonNodes(jsonNodes);
+		}
+	}
+
+	public void storeOutlineState() {
+		if (oldAnnotations != null) {
+			annotationCollapsedState = new boolean[oldAnnotations.length];
+			for (int i = 0; i < oldAnnotations.length; i++) {
+				annotationCollapsedState[i] = oldAnnotations[i].isCollapsed();
+			}
 		}
 	}
 }
