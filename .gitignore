@@ -9,6 +9,11 @@ org.sourceforge.jsonedit.core/target/*
 org.sourceforge.jsonedit.test/target/*
 
 org.sourceforge.jsonedit.feature/target/*
+org.sourceforge.jsonedit.core/.project
+org.sourceforge.jsonedit.test/.project
+org.sourceforge.jsonedit.core/.classpath
+org.sourceforge.jsonedit.test/.classpath
+org.sourceforge.jsonedit.feature/.project
 
 /.project
 /.settings/*
