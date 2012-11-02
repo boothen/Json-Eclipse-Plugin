@@ -1,45 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.sourceforge.jsonedit</groupId>
-  <artifactId>parent</artifactId>
-  <version>0.9.51</version>
-  <packaging>pom</packaging>
-  <modules>
-    <module>org.sourceforge.jsonedit.core</module>
-    <module>org.sourceforge.jsonedit.test</module>
-    <module>org.sourceforge.jsonedit.feature</module>
-  </modules>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.boothen</groupId>
+	<artifactId>jsonedit-parent</artifactId>
+	<version>0.9.5</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>jsonedit-core</module>
+		<module>jsonedit-test</module>
+		<module>jsonedit-feature</module>
+	</modules>
 
-  <properties>
-    <tycho-version>0.13.0</tycho-version>
-  </properties>
+	<properties>
+		<tycho.version>0.16.0</tycho.version>
+		<hamcrest.version>1.3</hamcrest.version>
+		<junit.version>4.10</junit.version>
+		<mockito.version>1.9.0</mockito.version>
+		<google.guava.version>12.0.1</google.guava.version>
+	</properties>
 
-  <repositories>	  
-   <repository>
-     <id>indigo</id>
-     <layout>p2</layout>
-     <url>http://download.eclipse.org/releases/indigo</url>
-   </repository>	
-  </repositories>
+	<repositories>
+		<repository>
+			<id>guava</id>
+			<layout>p2</layout>
+			<url>http://guava-osgi.googlecode.com/svn/trunk/repository</url>
+		</repository>
+		<repository>
+			<id>indigo</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/releases/indigo</url>
+		</repository>
+	</repositories>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-maven-plugin</artifactId>
-        <version>${tycho-version}</version>
-        <extensions>true</extensions>
-      </plugin>
-      <plugin>
-	    <groupId>org.eclipse.tycho</groupId>
-	    <artifactId>tycho-compiler-plugin</artifactId>
-	    <version>${tycho-version}</version>
-	    <configuration>
-		  <source>1.6</source>
-		  <target>1.6</target>
-	    </configuration>
-      </plugin>
-    </plugins>
-  </build>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-compiler-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
