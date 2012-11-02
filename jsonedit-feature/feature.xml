@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.boothen.jsonedit.feature"
+      id="jsonedit-feature"
       label="Json Editor Plugin"
       version="0.9.5"
       provider-name="Boothen Technology">
