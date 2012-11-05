@@ -204,6 +204,8 @@ public class JsonTextEditor extends TextEditor {
 		if (fOutlinePage != null) {
 			fOutlinePage.setJsonNodes(jsonNodes);
 		}
+
+		restoreTextLocation();
 	}
 
 	public void storeOutlineState() {
@@ -224,6 +226,7 @@ public class JsonTextEditor extends TextEditor {
 				if (node.getPosition().includes(textLocation)) {
 					nodePosition = i;
 					nodePositionOffset = textLocation - node.getPosition().getOffset();
+					break;
 				}
 			}
 		}

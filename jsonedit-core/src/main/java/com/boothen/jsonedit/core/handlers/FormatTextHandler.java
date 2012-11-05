@@ -50,7 +50,6 @@ public class FormatTextHandler implements IHandler {
 		textEditor.storeTextLocation();
 		textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).set(textFormatter.formatText());
 		textEditor.getFOutlinePage().update();
-		textEditor.restoreTextLocation();
 		return null;
 	}
 
