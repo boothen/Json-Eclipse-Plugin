@@ -1,6 +1,5 @@
 package com.boothen.jsonedit.core.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,12 +25,6 @@ IReconcilingStrategyExtension {
 
 	private IDocument fDocument;
 
-	List<Node> nodes;
-
-	List<JsonNode> jsonNodes;
-
-	protected final List<Position> fPositions = new ArrayList<Position>();
-
 	@Override
 	public void reconcile(IRegion partition) {
 		initialReconcile();
@@ -56,26 +49,21 @@ IReconcilingStrategyExtension {
 
 	@Override
 	public void setProgressMonitor(IProgressMonitor monitor) {
-		// TODO Auto-generated method stub
 
 	}
 
 	private void parse() {
 
-		nodes = new NodeBuilder(fDocument).buildNodes();
-		for (Node node : nodes) {
-			System.out.println(node);
-		}
+		final List<Node> nodes = new NodeBuilder(fDocument).buildNodes();
 
-		jsonNodes = new JsonNodeBuilder(fDocument, nodes).buildJsonNodes();
-		fPositions.clear();
-		fPositions.addAll(new JsonFoldingPositionsBuilder(jsonNodes).buildFoldingPositions());
+		final List<JsonNode> jsonNodes = new JsonNodeBuilder(fDocument, nodes).buildJsonNodes();
+		final List<Position> fPositions = new JsonFoldingPositionsBuilder(jsonNodes).buildFoldingPositions();
 
 		if (textEditor != null) {
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					textEditor.updateFoldingStructure(fPositions);
-					textEditor.updateContentOutlinePage(jsonNodes);
+					textEditor.updateContentOutlinePage(jsonNodes, nodes);
 				}
 
 			});

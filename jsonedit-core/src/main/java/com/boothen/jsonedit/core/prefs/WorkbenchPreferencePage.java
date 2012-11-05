@@ -37,13 +37,14 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 	/**
 	 * @param title
 	 */
+
 	public WorkbenchPreferencePage(String title) {
 		super(FieldEditorPreferencePage.GRID);
-		// TODO Auto-generated constructor stub
+
 	}
 
+	@Override
 	public void init(IWorkbench workbench) {
-		// TODO Auto-generated method stub
 
 	}
 

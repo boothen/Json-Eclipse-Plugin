@@ -158,9 +158,6 @@ public class JsonIndentLineAutoEditStrategy extends DefaultIndentLineAutoEditStr
 	 */
 	public void customizeDocumentCommand(IDocument d, DocumentCommand c) {
 
-		// TODO: Added in perferences to enable/disable.
-		//super.customizeDocumentCommand(d, c);
-
 		if (c.length == 0 && c.text != null && TextUtilities.endsWith(d.getLegalLineDelimiters(), c.text) != -1) {
 			autoIndentAfterNewLine(d, c);
 		}

@@ -199,7 +199,7 @@ public class NodeBuilder {
 				addErrorNode(text, offset, length, index);
 			}
 		} catch (BadLocationException e) {
-			//System.out.println("BadlocationException");
+
 		}
 	}
 
@@ -214,8 +214,7 @@ public class NodeBuilder {
 				addNode(text, offset, length, index, Type.String);
 			}
 		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
+
 		}
 
 	}

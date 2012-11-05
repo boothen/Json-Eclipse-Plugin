@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.text.ITextOperationTarget;
+import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.DefaultCharacterPairMatcher;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -21,6 +24,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.boothen.jsonedit.core.JsonEditorPlugin;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
+import com.boothen.jsonedit.core.model.node.Node;
 import com.boothen.jsonedit.core.outline.JsonContentOutlinePage;
 
 /**
@@ -33,13 +37,21 @@ public class JsonTextEditor extends TextEditor {
 
 	private JsonSourceViewerConfiguration viewerConfiguration;
 
-	protected final static char[] PAIRS= { '{', '}', '[', ']' };
+	private final static char[] PAIRS= { '{', '}', '[', ']' };
 
 	private DefaultCharacterPairMatcher pairsMatcher = new DefaultCharacterPairMatcher(PAIRS);
 
 
 	/** The outline page */
 	private JsonContentOutlinePage fOutlinePage;
+	private ProjectionAnnotationModel annotationModel;
+	private ProjectionSupport projectionSupport;
+	private ProjectionAnnotation[] oldAnnotations;
+	private boolean[] annotationCollapsedState;
+	private int nodePositionOffset = 0;
+	private int nodePosition = 0;
+	private List<JsonNode> jsonNodes;
+	private List<Node> nodes;
 
 	public JsonTextEditor() {
 		super();
@@ -131,18 +143,12 @@ public class JsonTextEditor extends TextEditor {
 		return super.getAdapter(required);
 	}
 
-	private ProjectionAnnotationModel annotationModel;
-	private ProjectionSupport projectionSupport;
-	private ProjectionAnnotation[] oldAnnotations;
-	private boolean[] annotationCollapsedState;
-
 	@Override
 	public void createPartControl(Composite parent) {
-		// TODO Auto-generated method stub
 		super.createPartControl(parent);
 		ProjectionViewer viewer =(ProjectionViewer)getSourceViewer();
 
-        projectionSupport = new ProjectionSupport(viewer,getAnnotationAccess(),getSharedColors());
+		projectionSupport = new ProjectionSupport(viewer,getAnnotationAccess(),getSharedColors());
 		projectionSupport.install();
 
 		//turn projection mode on
@@ -177,7 +183,7 @@ public class JsonTextEditor extends TextEditor {
 		{
 			ProjectionAnnotation annotation = new ProjectionAnnotation();
 			newAnnotations.put(annotation,positions.get(i));
-			annotations[i]=annotation;
+			annotations[i] = annotation;
 			if (annotationCollapsedState != null && annotationCollapsedState.length > i && annotationCollapsedState[i]) {
 				annotation.markCollapsed();
 			}
@@ -185,14 +191,16 @@ public class JsonTextEditor extends TextEditor {
 
 		annotationModel.modifyAnnotations(oldAnnotations,newAnnotations,null);
 
-		oldAnnotations=annotations;
+		oldAnnotations = annotations;
 	}
 
 	public JsonContentOutlinePage getFOutlinePage() {
 		return fOutlinePage;
 	}
 
-	public void updateContentOutlinePage(List<JsonNode> jsonNodes) {
+	public void updateContentOutlinePage(List<JsonNode> jsonNodes, List<Node> nodes) {
+		this.jsonNodes = jsonNodes;
+		this.nodes = nodes;
 		if (fOutlinePage != null) {
 			fOutlinePage.setJsonNodes(jsonNodes);
 		}
@@ -203,6 +211,35 @@ public class JsonTextEditor extends TextEditor {
 			annotationCollapsedState = new boolean[oldAnnotations.length];
 			for (int i = 0; i < oldAnnotations.length; i++) {
 				annotationCollapsedState[i] = oldAnnotations[i].isCollapsed();
+			}
+		}
+	}
+
+	public void storeTextLocation() {
+		ITextSelection iTextSelection = (ITextSelection) this.getSite().getSelectionProvider().getSelection();
+		int textLocation = iTextSelection.getOffset();
+		if (nodes != null) {
+			for (int i = 0; i < nodes.size(); i++) {
+				Node node = nodes.get(i);
+				if (node.getPosition().includes(textLocation)) {
+					nodePosition = i;
+					nodePositionOffset = textLocation - node.getPosition().getOffset();
+				}
+			}
+		}
+	}
+
+	public void restoreTextLocation() {
+		ITextOperationTarget target = (ITextOperationTarget) this.getAdapter(ITextOperationTarget.class);
+		if (!(target instanceof ITextViewer)) {
+			return ;
+		}
+		ITextViewer textViewer = (ITextViewer) target;
+		if (nodes != null) {
+			Node node = nodes.get(nodePosition);
+			if (node != null) {
+				int textLocation = node.getPosition().getOffset() + nodePositionOffset;
+				textViewer.getTextWidget().setSelection(textLocation);
 			}
 		}
 	}

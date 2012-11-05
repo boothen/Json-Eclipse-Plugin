@@ -46,8 +46,11 @@ import com.boothen.jsonedit.core.util.reader.JsonReaderException;
  * representing the Json Text. Used by the outline view.
  *
  * @author Matt Garner
+ * @deprecated use model instead
+ *
  *
  */
+@Deprecated
 public class JsonTextOutlineParser {
 
 	private JsonReader parser;
@@ -421,7 +424,6 @@ public class JsonTextOutlineParser {
 		do {
 			ch = parser.getNextChar();
 
-			// TODO check format in values as well.
 			if (ch == eof || (ch == quote && parser.getPrevious() != slash)) {
 				jsonString.setLength(parser.getPosition() - start + 1);
 				ch = parser.getNextClean();

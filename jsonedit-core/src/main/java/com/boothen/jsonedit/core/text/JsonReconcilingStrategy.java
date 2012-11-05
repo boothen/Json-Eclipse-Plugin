@@ -50,8 +50,10 @@ import com.boothen.jsonedit.core.util.reader.JsonReaderException;
  * the folding of the text.
  *
  * @author Matt Garner
+ * @deprecated Use model instead
  *
  */
+@Deprecated
 public class JsonReconcilingStrategy implements IReconcilingStrategy,
 		IReconcilingStrategyExtension {
 
@@ -383,8 +385,6 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy,
 		do {
 			ch = parser.getNextChar();
 
-			// TODO check format in values as well.
-
 			if (ch != quote || parser.getPrevious() == slash) {
 
 				continue;
@@ -474,11 +474,7 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy,
 		return keyBuilder.toString();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.text.reconciler.IReconcilingStrategyExtension#setProgressMonitor(org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	public void setProgressMonitor(IProgressMonitor monitor) {
-		// TODO Auto-generated method stub
 
 	}
 

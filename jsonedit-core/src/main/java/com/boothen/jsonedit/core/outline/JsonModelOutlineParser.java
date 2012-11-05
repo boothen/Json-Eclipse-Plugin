@@ -80,11 +80,9 @@ public class JsonModelOutlineParser {
 		try {
 			Integer childIter = 0;
 			for (JsonNode jsonNode : jsonNodes) {
-				//System.out.println(jsonNode);
 
 				if (isNodeOfType(jsonNode, JsonType.End)) {
 
-					// TODO: Check no more children if so remove
 					List<JsonTreeNode> nodesToRemove = new LinkedList<JsonTreeNode>();
 					while(childIter < parent.getChildren().size()) {
 						head = parent.getChildren().get(childIter);
@@ -92,7 +90,6 @@ public class JsonModelOutlineParser {
 						childIter++;
 					}
 
-					//System.out.println(nodesToRemove.size());
 					for (JsonTreeNode nodeToRemove: nodesToRemove) {
 						nodeToRemove.removeFromParent();
 					}
@@ -112,10 +109,8 @@ public class JsonModelOutlineParser {
 
 				if (parent != null && childIter < parent.getChildren().size()) {
 					head = parent.getChildren().get(childIter);
-					//System.out.println("Next");
 					childIter++;
 				} else if (head != root || (head == root && parent != null)) {
-					//System.out.println("Null");
 					head = null;
 				}
 
@@ -139,9 +134,7 @@ public class JsonModelOutlineParser {
 					}
 				}
 			}
-		//	System.out.println("returning");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return root;

@@ -47,11 +47,13 @@ public class FormatTextHandler implements IHandler {
 		JsonTextFormatter textFormatter = new JsonTextFormatter(text);
 
 		textEditor.storeOutlineState();
+		textEditor.storeTextLocation();
 		textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).set(textFormatter.formatText());
 		textEditor.getFOutlinePage().update();
-
+		textEditor.restoreTextLocation();
 		return null;
 	}
+
 
 	public boolean isEnabled() {
 		return true;
