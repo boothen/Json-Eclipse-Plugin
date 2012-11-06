@@ -75,7 +75,6 @@ public class JsonFoldingPositionsBuilder {
 		}
 
 		if (endNode == null) {
-			//System.out.println("Error Node has no end: " + jsonNode.getJsonType());
 			return 0;
 		}
 		return endNode.getEnd();

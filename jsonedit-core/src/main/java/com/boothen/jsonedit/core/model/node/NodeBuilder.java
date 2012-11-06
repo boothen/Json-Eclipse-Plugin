@@ -42,8 +42,6 @@ public class NodeBuilder {
 			}
 			while (ch != eof);
 		} catch (JsonReaderException e) {
-		//	System.out.println("Exception");
-		//	e.printStackTrace();
 			return null;
 		}
 

@@ -19,8 +19,9 @@
 				<artifactId>tycho-p2-repository-plugin</artifactId>
 				<version>${tycho.version}</version>
 				<configuration>
-					<includeAllDependencies>true</includeAllDependencies>
-					<compress>truie</compress>
+					<includeAllDependencies>false</includeAllDependencies>
+					<compress>false</compress>
+					<repositoryName>eclipse-json-editor</repositoryName>
 				</configuration>
 			</plugin>
 			<plugin>

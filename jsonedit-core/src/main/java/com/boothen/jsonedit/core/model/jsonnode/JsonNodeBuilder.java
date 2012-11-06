@@ -32,13 +32,8 @@ public class JsonNodeBuilder {
 		try {
 			return privateBuildJsonNodes();
 		} catch (Exception e) {
-//			e.printStackTrace();
-//			for (Node node : nodes) {
-//				System.out.println(node);
-//			}
+			return null;
 		}
-
-		return null;
 	}
 
 	private List<JsonNode> privateBuildJsonNodes() {

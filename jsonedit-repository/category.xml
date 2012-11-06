@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/jsonedit-feature_0.9.5.jar" id="jsonedit-feature" version="0.9.5">
+      <category name="Editors"/>
+   </feature>
+   <category-def name="Editors" label="Editors"/>
+</site>

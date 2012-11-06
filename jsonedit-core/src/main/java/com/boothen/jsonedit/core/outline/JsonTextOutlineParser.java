@@ -79,7 +79,6 @@ public class JsonTextOutlineParser {
 	 */
 	public JsonParent parse() {
 
-		//System.out.println("Parse Text");
 		try {
 
 			char current = parser.getNextClean();
