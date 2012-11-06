@@ -9,6 +9,8 @@ jsonedit-test/.project
 jsonedit-core/.classpath
 jsonedit-test/.classpath
 jsonedit-feature/.project
+jsonedit-repository/.project
+jsonedit-repository/.settings/*
 /.project
 /.settings/*
 target

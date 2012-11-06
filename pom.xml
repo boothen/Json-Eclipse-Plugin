@@ -10,6 +10,7 @@
 		<module>jsonedit-core</module>
 		<module>jsonedit-test</module>
 		<module>jsonedit-feature</module>
+		<module>jsonedit-repository</module>
 	</modules>
 
 	<properties>
