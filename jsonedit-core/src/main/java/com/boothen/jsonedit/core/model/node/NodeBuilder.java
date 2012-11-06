@@ -226,11 +226,11 @@ public class NodeBuilder {
 			String text = fDocument.get(offset, length);
 			String trimmedText = text.trim();
 
-			if ("null".equalsIgnoreCase(trimmedText)) {
+			if ("null".equals(trimmedText)) {
 				addNode(trimmedText, offset, length, index, Type.Null);
-			} else if ("true".equalsIgnoreCase(trimmedText)) {
+			} else if ("true".equals(trimmedText)) {
 				addNode(trimmedText, offset, length, index, Type.True);
-			} else if ("false".equalsIgnoreCase(trimmedText)) {
+			} else if ("false".equals(trimmedText)) {
 				addNode(trimmedText, offset, length, index, Type.False);
 			} else if (isANumber(trimmedText)) {
 				addNode(trimmedText, offset, length, index, Type.Number);
@@ -239,8 +239,7 @@ public class NodeBuilder {
 			}
 
 		} catch (BadLocationException e) {
-
-			//e.printStackTrace();
+			return;
 		}
 	}
 

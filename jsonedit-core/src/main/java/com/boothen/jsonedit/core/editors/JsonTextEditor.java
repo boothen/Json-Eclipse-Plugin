@@ -50,7 +50,6 @@ public class JsonTextEditor extends TextEditor {
 	private boolean[] annotationCollapsedState;
 	private int nodePositionOffset = 0;
 	private int nodePosition = 0;
-	private List<JsonNode> jsonNodes;
 	private List<Node> nodes;
 
 	public JsonTextEditor() {
@@ -199,7 +198,6 @@ public class JsonTextEditor extends TextEditor {
 	}
 
 	public void updateContentOutlinePage(List<JsonNode> jsonNodes, List<Node> nodes) {
-		this.jsonNodes = jsonNodes;
 		this.nodes = nodes;
 		if (fOutlinePage != null) {
 			fOutlinePage.setJsonNodes(jsonNodes);
@@ -238,7 +236,7 @@ public class JsonTextEditor extends TextEditor {
 			return ;
 		}
 		ITextViewer textViewer = (ITextViewer) target;
-		if (nodes != null) {
+		if (nodes != null && nodes.size() > nodePosition) {
 			Node node = nodes.get(nodePosition);
 			if (node != null) {
 				int textLocation = node.getPosition().getOffset() + nodePositionOffset;

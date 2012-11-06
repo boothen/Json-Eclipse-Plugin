@@ -9,8 +9,8 @@ import java.util.List;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
+import org.eclipse.jface.text.rules.MultiLineRule;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
-import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.jface.text.rules.WordRule;
@@ -37,8 +37,8 @@ public class JsonScanner extends RuleBasedScanner {
 
 		List<IRule> rules= new LinkedList<IRule>();
 
-		rules.add(new SingleLineRule(":\"", "\"", value, '\\'));
-		rules.add(new SingleLineRule("\"", "\"", string, '\\')); //$NON-NLS-2$ //$NON-NLS-1$
+		rules.add(new MultiLineRule(":\"", "\"", value, '\\'));
+		rules.add(new MultiLineRule("\"", "\"", string, '\\')); //$NON-NLS-2$ //$NON-NLS-1$
 		WordRule wordRule= new WordRule(new JsonWordDetector(), defaultText);
 		wordRule.addWord("null", nullValue);
 		rules.add(wordRule);
