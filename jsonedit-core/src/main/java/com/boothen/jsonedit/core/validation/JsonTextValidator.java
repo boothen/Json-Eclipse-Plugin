@@ -3,6 +3,7 @@
  */
 package com.boothen.jsonedit.core.validation;
 
+import static com.boothen.jsonedit.core.util.JsonCharUtility.E;
 import static com.boothen.jsonedit.core.util.JsonCharUtility.a;
 import static com.boothen.jsonedit.core.util.JsonCharUtility.closeCurly;
 import static com.boothen.jsonedit.core.util.JsonCharUtility.closeSquare;
@@ -19,6 +20,7 @@ import static com.boothen.jsonedit.core.util.JsonCharUtility.minus;
 import static com.boothen.jsonedit.core.util.JsonCharUtility.n;
 import static com.boothen.jsonedit.core.util.JsonCharUtility.openCurly;
 import static com.boothen.jsonedit.core.util.JsonCharUtility.openSquare;
+import static com.boothen.jsonedit.core.util.JsonCharUtility.plus;
 import static com.boothen.jsonedit.core.util.JsonCharUtility.point;
 import static com.boothen.jsonedit.core.util.JsonCharUtility.quote;
 import static com.boothen.jsonedit.core.util.JsonCharUtility.r;
@@ -352,6 +354,7 @@ public class JsonTextValidator {
 	private void doJsonNumber() throws JsonReaderException, JsonValidationException {
 
 		boolean decimalPointSet = false;
+		boolean exponentialSet = false;
 		char ch;
 		do {
 			ch = parser.getNextChar();
@@ -365,6 +368,16 @@ public class JsonTextValidator {
 
 			if (!decimalPointSet && ch == point) {
 				decimalPointSet = true;
+				continue;
+			}
+
+			if (!exponentialSet && (ch == e || ch == E)) {
+				exponentialSet = true;
+
+				continue;
+			}
+
+			if ((ch == plus || ch == minus) && (parser.getPrevious() == e || parser.getPrevious() == E)) {
 				continue;
 			}
 

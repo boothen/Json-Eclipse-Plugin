@@ -176,7 +176,7 @@ public class IncrementalJsonValidator extends IncrementalProjectBuilder {
 				public boolean visit(IResourceDelta delta) throws CoreException {
 					if (!delta.getResource().isDerived()) {
 						String filename = delta.getProjectRelativePath().getFileExtension();
-						if (filename != null && filename.equalsIgnoreCase("org.sourceforge.jsonedit.core.core")) {
+						if (filename != null && filename.equalsIgnoreCase("json")) {
 							IFile file = getProject().getFile(delta.getProjectRelativePath());
 							validateFiles.add(file);
 						}

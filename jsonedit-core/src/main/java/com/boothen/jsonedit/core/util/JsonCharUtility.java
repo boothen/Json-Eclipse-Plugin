@@ -21,6 +21,7 @@ public final class JsonCharUtility {
 	public static final char colon = ':';
 	public static final char slash = '\\';
 	public static final char minus = '-';
+	public static final char plus = '+';
 	public static final char point = '.';
 	public static final char n = 'n';
 	public static final char u = 'u';
@@ -31,6 +32,7 @@ public final class JsonCharUtility {
 	public static final char e = 'e';
 	public static final char t = 't';
 	public static final char r = 'r';
+	public static final char E = 'E';
 	public static final char eof = (char) -1;
 	public static final int space = ' ';
 	public static final int eol = '\n';

@@ -3,7 +3,8 @@
       id="jsonedit-feature"
       label="Json Editor Plugin"
       version="0.9.5"
-      provider-name="Boothen Technology">
+      provider-name="Boothen Technology"
+      plugin="jsonedit-core">
 
    <description>
       An Eclipse Json Editor
