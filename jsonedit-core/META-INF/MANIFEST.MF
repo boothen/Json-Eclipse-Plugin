@@ -12,7 +12,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide,
  org.eclipse.ui.views,
  jsonedit-model;bundle-version="0.9.5",
- jsonedit-reader;bundle-version="0.9.5"
+ jsonedit-reader;bundle-version="0.9.5",
+ jsonedit-outline;bundle-version="0.9.5"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Boothen Technology

@@ -3,16 +3,18 @@
  */
 package com.boothen.jsonedit.core.outline.node;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
 
-import com.boothen.jsonedit.core.JsonEditorPlugin;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.core.model.jsonnode.JsonType;
 import com.boothen.jsonedit.core.model.node.Node;
@@ -139,13 +141,17 @@ public class JsonTreeNode {
 	}
 
 	private Image createMyImage(String urlPath) {
-		ImageDescriptor imgDescriptor = null;
-		imgDescriptor = JsonEditorPlugin.imageDescriptorFromPlugin(JsonEditorPlugin.getDefault().getBundle().getSymbolicName(), urlPath);
+		try {
+			URL url = FileLocator.toFileURL(JsonTreeNode.class.getResource("/" + urlPath));
+			ImageDescriptor imgDescriptor = ImageDescriptor.createFromURL(url);
+			if (imgDescriptor != null) {
+				return imgDescriptor.createImage();
+			}
+		} catch (IOException e) {
 
-		if (imgDescriptor == null)
-		    return null;
+		}
 
-		return imgDescriptor.createImage();
+		return null;
 	}
 
 	public int getStart() {

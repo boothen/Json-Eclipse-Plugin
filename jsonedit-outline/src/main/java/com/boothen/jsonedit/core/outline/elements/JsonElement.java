@@ -3,7 +3,6 @@ package com.boothen.jsonedit.core.outline.elements;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPositionCategoryException;
 import org.eclipse.jface.text.IDocument;
@@ -11,7 +10,6 @@ import org.eclipse.jface.text.Position;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
 
-import com.boothen.jsonedit.core.JsonEditorPlugin;
 import com.boothen.jsonedit.core.outline.JsonContentProvider;
 
 public abstract class JsonElement {
@@ -39,9 +37,10 @@ public abstract class JsonElement {
 	public abstract Image getImage();
 
 	protected Image createMyImage(String urlPath) {
-		ImageDescriptor imgDescriptor = null;
-		imgDescriptor = JsonEditorPlugin.imageDescriptorFromPlugin(JsonEditorPlugin.getDefault().getBundle().getSymbolicName(), urlPath);
-		return imgDescriptor.createImage();
+//		ImageDescriptor imgDescriptor = null;
+//		imgDescriptor = JsonEditorPlugin.imageDescriptorFromPlugin(JsonEditorPlugin.getDefault().getBundle().getSymbolicName(), urlPath);
+//		return imgDescriptor.createImage();
+		return null;
 	}
 
 	@Deprecated

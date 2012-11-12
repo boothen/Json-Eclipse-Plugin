@@ -9,6 +9,7 @@
 	<modules>
 		<module>jsonedit-reader</module>
 		<module>jsonedit-model</module>
+		<module>jsonedit-outline</module>
 		<module>jsonedit-core</module>
 		<module>jsonedit-test</module>
 		<module>jsonedit-feature</module>

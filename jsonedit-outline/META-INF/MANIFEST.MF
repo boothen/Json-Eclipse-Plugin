@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Json Editor Outline View
+Bundle-SymbolicName: jsonedit-outline
+Bundle-Version: 0.9.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: Boothen Technology
+Require-Bundle: org.eclipse.jface.text,
+ org.eclipse.ui,
+ org.eclipse.ui.views,
+ org.eclipse.ui.editors,
+ org.eclipse.core.runtime,
+ jsonedit-model;bundle-version="0.9.5"
+Export-Package: com.boothen.jsonedit.core.outline
