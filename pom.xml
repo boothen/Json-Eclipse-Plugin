@@ -7,6 +7,8 @@
 	<version>0.9.5</version>
 	<packaging>pom</packaging>
 	<modules>
+		<module>jsonedit-reader</module>
+		<module>jsonedit-model</module>
 		<module>jsonedit-core</module>
 		<module>jsonedit-test</module>
 		<module>jsonedit-feature</module>
@@ -49,6 +51,14 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<format>'${build.qualifier}'</format>
 				</configuration>
 			</plugin>
 		</plugins>

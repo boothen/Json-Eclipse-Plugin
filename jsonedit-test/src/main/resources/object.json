@@ -1,0 +1,12 @@
+{
+  "key":"value",
+  "key":1.1e-3,
+  "key":null,
+  "key":true,
+  "key":false,
+  "key": {
+  		"key":"value"
+  		},
+  "key": [ 1.1e-3, "value", null, true, false]
+
+}

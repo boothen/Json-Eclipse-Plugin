@@ -15,3 +15,10 @@ jsonedit-repository/.settings/*
 /.settings/*
 target
 *.class
+jsonedit-model/.classpath
+jsonedit-model/.project
+jsonedit-model/.settings/*
+jsonedit-reader/.classpath
+jsonedit-reader/.project
+jsonedit-reader/.settings/*
+

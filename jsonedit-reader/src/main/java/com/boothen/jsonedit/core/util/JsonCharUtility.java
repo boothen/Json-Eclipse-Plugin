@@ -1,6 +1,5 @@
 package com.boothen.jsonedit.core.util;
 
-import com.boothen.jsonedit.core.model.node.Type;
 
 
 
@@ -78,40 +77,5 @@ public final class JsonCharUtility {
 		}
 
 		return false;
-	}
-
-	public static Type getJsonCharType(char ch) {
-
-		if (ch == comma) {
-
-			return Type.Comma;
-		}
-
-		if (ch == openCurly) {
-			return Type.OpenObject;
-		}
-
-		if (ch == closeCurly) {
-			return Type.CloseObject;
-		}
-
-		if (ch == openSquare) {
-			return Type.OpenArray;
-		}
-
-		if (ch == closeSquare) {
-			return Type.CloseArray;
-		}
-
-
-		if (ch == colon) {
-			return Type.Colon;
-		}
-
-		if (ch == quote) {
-			return Type.Quote;
-		}
-
-		return null;
 	}
 }

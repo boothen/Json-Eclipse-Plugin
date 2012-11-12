@@ -53,7 +53,7 @@ public class NodeBuilder {
 	private Node buildNode(char ch) {
 
 		if (JsonCharUtility.isJsonChar(ch, parser.getPrevious())) {
-			Node node = new Node(JsonCharUtility.getJsonCharType(ch));
+			Node node = new Node(getJsonCharType(ch));
 			node.setPosition(parser.getPosition(), 1);
 			node.setValue(String.valueOf(ch));
 			return node;
@@ -277,5 +277,40 @@ public class NodeBuilder {
 		errorNode.setValue(text.trim());
 		nodes.add(index + 1, errorNode);
 	//	errorNodeIndex.add(index + 1);
+	}
+
+	public static Type getJsonCharType(char ch) {
+
+		if (ch == JsonCharUtility.comma) {
+
+			return Type.Comma;
+		}
+
+		if (ch == JsonCharUtility.openCurly) {
+			return Type.OpenObject;
+		}
+
+		if (ch == JsonCharUtility.closeCurly) {
+			return Type.CloseObject;
+		}
+
+		if (ch == JsonCharUtility.openSquare) {
+			return Type.OpenArray;
+		}
+
+		if (ch == JsonCharUtility.closeSquare) {
+			return Type.CloseArray;
+		}
+
+
+		if (ch == JsonCharUtility.colon) {
+			return Type.Colon;
+		}
+
+		if (ch == JsonCharUtility.quote) {
+			return Type.Quote;
+		}
+
+		return null;
 	}
 }
