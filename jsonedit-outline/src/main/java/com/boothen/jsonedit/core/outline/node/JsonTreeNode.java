@@ -141,17 +141,13 @@ public class JsonTreeNode {
 	}
 
 	private Image createMyImage(String urlPath) {
-		try {
-			URL url = FileLocator.toFileURL(JsonTreeNode.class.getResource("/" + urlPath));
-			ImageDescriptor imgDescriptor = ImageDescriptor.createFromURL(url);
-			if (imgDescriptor != null) {
-				return imgDescriptor.createImage();
-			}
-		} catch (IOException e) {
-
+		URL resource = JsonTreeNode.class.getResource(urlPath);
+		ImageDescriptor imgDescriptor = ImageDescriptor.createFromURL(resource);
+		if (imgDescriptor == null) {
+			return null;
 		}
 
-		return null;
+		return imgDescriptor.createImage();
 	}
 
 	public int getStart() {
