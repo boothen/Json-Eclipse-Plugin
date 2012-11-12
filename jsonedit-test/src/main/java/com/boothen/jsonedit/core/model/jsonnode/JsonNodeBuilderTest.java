@@ -11,6 +11,7 @@ import com.boothen.jsonedit.core.model.node.Node;
 import com.boothen.jsonedit.core.model.node.NodeBuilder;
 import com.boothen.jsonedit.core.util.FileToDocUtility;
 
+@Ignore
 public class JsonNodeBuilderTest {
 
 
@@ -204,37 +205,31 @@ public class JsonNodeBuilderTest {
 	}
 
 	@Test
-	@Ignore
 	public void testFile37() {
 		test("test37.json", 8);
 	}
 
 	@Test
-	@Ignore
 	public void testFile38() {
 		test("test38.json", 8);
 	}
 
 	@Test
-	@Ignore
 	public void testFile39() {
 		test("test39.json", 3);
 	}
 
 	@Test
-	@Ignore
 	public void testFile40() {
 		test("test40.json", 8);
 	}
 
 	@Test
-	@Ignore
 	public void testFile41() {
 		test("test41.json", 6);
 	}
 
 	@Test
-	@Ignore
 	public void testFile42() {
 		test("test42.json", 4);
 	}

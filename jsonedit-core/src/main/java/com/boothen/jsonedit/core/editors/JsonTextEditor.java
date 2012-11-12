@@ -48,6 +48,7 @@ public class JsonTextEditor extends TextEditor {
 	private ProjectionSupport projectionSupport;
 	private ProjectionAnnotation[] oldAnnotations;
 	private boolean[] annotationCollapsedState;
+	private boolean restoreCursorLocation = false;
 	private int nodePositionOffset = 0;
 	private int nodePosition = 0;
 	private List<Node> nodes;
@@ -216,6 +217,7 @@ public class JsonTextEditor extends TextEditor {
 	}
 
 	public void storeTextLocation() {
+
 		ITextSelection iTextSelection = (ITextSelection) this.getSite().getSelectionProvider().getSelection();
 		int textLocation = iTextSelection.getOffset();
 		if (nodes != null) {
@@ -228,9 +230,18 @@ public class JsonTextEditor extends TextEditor {
 				}
 			}
 		}
+
+		restoreCursorLocation = true;
 	}
 
 	public void restoreTextLocation() {
+
+		if (!restoreCursorLocation) {
+			return;
+		}
+
+		restoreCursorLocation = false;
+
 		ITextOperationTarget target = (ITextOperationTarget) this.getAdapter(ITextOperationTarget.class);
 		if (!(target instanceof ITextViewer)) {
 			return ;

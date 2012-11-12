@@ -196,7 +196,6 @@ public class NodeBuilderTest {
 	}
 
 	@Test
-	@Ignore
 	public void testFile39() {
 		test("test39.json", 5);
 	}
