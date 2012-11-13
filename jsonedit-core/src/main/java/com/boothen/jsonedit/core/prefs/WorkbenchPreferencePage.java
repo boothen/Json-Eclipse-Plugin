@@ -19,9 +19,7 @@ import com.boothen.jsonedit.core.JsonEditorPlugin;
  * @author Matt Garner
  *
  */
-public class WorkbenchPreferencePage extends FieldEditorPreferencePage
- implements
-		IWorkbenchPreferencePage {
+public class WorkbenchPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 
 	/**

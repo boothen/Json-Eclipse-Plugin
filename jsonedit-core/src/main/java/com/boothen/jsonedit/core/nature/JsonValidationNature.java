@@ -33,9 +33,7 @@ public class JsonValidationNature implements IProjectNature {
 
 	private IProject project;
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.core.resources.IProjectNature#configure()
-	 */
+	@Override
 	public void configure() throws CoreException {
 		IncrementalJsonValidator.addBuilderToProject(project);
 		new Job("Validating Json Files") {
@@ -51,24 +49,18 @@ public class JsonValidationNature implements IProjectNature {
 		}.schedule();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.core.resources.IProjectNature#deconfigure()
-	 */
+	@Override
 	public void deconfigure() throws CoreException {
 		IncrementalJsonValidator.removeBuilderFromProject(project);
 		IncrementalJsonValidator.deleteValidationMarkers(project);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.core.resources.IProjectNature#getProject()
-	 */
+	@Override
 	public IProject getProject() {
 		return project;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.core.resources.IProjectNature#setProject(org.eclipse.core.resources.IProject)
-	 */
+	@Override
 	public void setProject(IProject project) {
 		this.project = project;
 	}

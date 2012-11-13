@@ -34,9 +34,6 @@ public class ProjectPropertiesPage extends PropertyPage implements
 	public ProjectPropertiesPage() {
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.preference.PreferencePage#createContents(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	protected Control createContents(Composite parent) {
 
@@ -46,15 +43,12 @@ public class ProjectPropertiesPage extends PropertyPage implements
 		layout.marginWidth = 0;
 		panel.setLayout(layout);
 
-
-
 		checkbox = new Button(panel,SWT.CHECK);
 		checkbox.setLayoutData(new GridData());
 		checkbox.setText("Enable JSON validation in project");
 
 		checkbox.setSelection(getValidationEnabled());
 		return panel;
-
 	}
 
 	/**

@@ -66,6 +66,7 @@ public class JsonTextEditor extends TextEditor {
 		super.configureSourceViewerDecorationSupport(support);
 	}
 
+	@Override
 	protected void initializeEditor() {
 		super.initializeEditor();
 		setEditorContextMenuId("#JsonTextEditorContext"); //$NON-NLS-1$
@@ -74,6 +75,7 @@ public class JsonTextEditor extends TextEditor {
 		setSourceViewerConfiguration(viewerConfiguration);
 	}
 
+	@Override
 	public void dispose() {
 		if (fOutlinePage != null)
 			fOutlinePage.setInput(null);
@@ -86,12 +88,14 @@ public class JsonTextEditor extends TextEditor {
 		super.dispose();
 	}
 
+	@Override
 	public void doRevertToSaved() {
 		super.doRevertToSaved();
 		if (fOutlinePage != null)
 			fOutlinePage.update();
 	}
 
+	@Override
 	public void doSave(IProgressMonitor monitor) {
 		super.doSave(monitor);
 		if (fOutlinePage != null)
@@ -102,6 +106,7 @@ public class JsonTextEditor extends TextEditor {
 	 * <code>AbstractTextEditor</code> method performs any extra
 	 * save as behavior required by the java editor.
 	 */
+	@Override
 	public void doSaveAs() {
 		super.doSaveAs();
 		if (fOutlinePage != null)
@@ -115,6 +120,7 @@ public class JsonTextEditor extends TextEditor {
 	 * @param input the editor input
 	 * @throws CoreException in case the input can not be set
 	 */
+	@Override
 	public void doSetInput(IEditorInput input) throws CoreException {
 		super.doSetInput(input);
 		if (fOutlinePage != null)
@@ -170,6 +176,7 @@ public class JsonTextEditor extends TextEditor {
 		getSourceViewerDecorationSupport(viewer);
 		return viewer;
 	}
+
 
 	public void updateFoldingStructure(List<Position> positions)
 	{

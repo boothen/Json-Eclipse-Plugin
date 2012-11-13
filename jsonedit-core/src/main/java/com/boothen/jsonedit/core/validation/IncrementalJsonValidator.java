@@ -127,9 +127,6 @@ public class IncrementalJsonValidator extends IncrementalProjectBuilder {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.core.resources.IncrementalProjectBuilder#build(int, java.util.Map, org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	@Override
 	protected IProject[] build(final int kind, Map<String,String> args, IProgressMonitor monitor)
 	throws CoreException {

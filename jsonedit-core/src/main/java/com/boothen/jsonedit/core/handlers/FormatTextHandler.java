@@ -21,12 +21,12 @@ import com.boothen.jsonedit.core.text.JsonTextFormatter;
 public class FormatTextHandler implements IHandler {
 
 
-
+	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {
 
 	}
 
-
+	@Override
 	public void dispose() {
 
 	}
@@ -34,6 +34,7 @@ public class FormatTextHandler implements IHandler {
 	/**
 	 * Execute the text formatting request.
 	 */
+	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 
 		IEditorPart editor = HandlerUtil.getActiveEditor(event);
@@ -53,17 +54,18 @@ public class FormatTextHandler implements IHandler {
 		return null;
 	}
 
-
+	@Override
 	public boolean isEnabled() {
 		return true;
 	}
 
+	@Override
 	public boolean isHandled() {
 		return true;
 	}
 
+	@Override
 	public void removeHandlerListener(IHandlerListener handlerListener) {
 
 	}
-
 }

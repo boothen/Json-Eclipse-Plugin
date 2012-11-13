@@ -30,9 +30,7 @@ public class JsonSourceViewerConfiguration extends SourceViewerConfiguration {
 		this.textEditor = textEditor;
 	}
 
-	/* (non-Javadoc)
-	 * Method declared on SourceViewerConfiguration
-	 */
+	@Override
 	public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
 
 		PresentationReconciler reconciler= new PresentationReconciler();

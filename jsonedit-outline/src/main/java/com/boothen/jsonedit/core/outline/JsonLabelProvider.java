@@ -20,7 +20,7 @@ import com.boothen.jsonedit.core.outline.node.JsonTreeNode;
  * @author Matt Garner
  *
  */
-public class JsonLabelProvider extends ColumnLabelProvider  implements IStyledLabelProvider  {
+public class JsonLabelProvider extends ColumnLabelProvider implements IStyledLabelProvider  {
 
 	static {
 		ColorRegistry colorRegistry = JFaceResources.getColorRegistry();
@@ -36,6 +36,7 @@ public class JsonLabelProvider extends ColumnLabelProvider  implements IStyledLa
 	 * Returns the text contained in the tree element.
 	 *
 	 */
+	@Override
 	public String getText(Object element) {
 		return getStyledText(element).toString();
 
@@ -46,6 +47,7 @@ public class JsonLabelProvider extends ColumnLabelProvider  implements IStyledLa
 	 * <code>ILabelProvider</code> method returns <code>null</code>.
 	 * Subclasses may override.
 	 */
+	@Override
 	public Image getImage(Object element) {
 		if (element instanceof JsonTreeNode) {
 			JsonTreeNode node = (JsonTreeNode) element;
@@ -57,6 +59,7 @@ public class JsonLabelProvider extends ColumnLabelProvider  implements IStyledLa
 	/**
 	 * Returns the styled text contained in the tree element.
 	 */
+	@Override
 	public StyledString getStyledText(Object element) {
 		StyledString styledString = new StyledString();
 		if (element instanceof JsonTreeNode) {

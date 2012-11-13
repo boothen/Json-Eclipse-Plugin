@@ -39,6 +39,7 @@ public class JsonIndentLineAutoEditStrategy extends DefaultIndentLineAutoEditStr
 	 * @return the offset in the specified range whose character is not a space or tab
 	 * @exception BadLocationException if position is an invalid range in the given document
 	 */
+	@Override
 	protected int findEndOfWhiteSpace(IDocument document, int offset, int end) throws BadLocationException {
 		while (offset < end) {
 			char c= document.getChar(offset);
@@ -153,9 +154,7 @@ public class JsonIndentLineAutoEditStrategy extends DefaultIndentLineAutoEditStr
 
 	}
 
-	/*
-	 * @see org.eclipse.jface.text.IAutoEditStrategy#customizeDocumentCommand(org.eclipse.jface.text.IDocument, org.eclipse.jface.text.DocumentCommand)
-	 */
+	@Override
 	public void customizeDocumentCommand(IDocument d, DocumentCommand c) {
 
 		if (c.length == 0 && c.text != null && TextUtilities.endsWith(d.getLegalLineDelimiters(), c.text) != -1) {

@@ -81,6 +81,7 @@ public class JsonContentOutlinePage extends ContentOutlinePage implements ISelec
 	 * Selects the text in the editor associated with the item selected in the
 	 * outline view tree.
 	 */
+	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
 
 		ISelection selection= event.getSelection();
@@ -136,6 +137,7 @@ public class JsonContentOutlinePage extends ContentOutlinePage implements ISelec
 	 * Moves the outline view to show the element where the cursor in the
 	 * text editor is placed.
 	 */
+	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 
 		if (selection instanceof ITextSelection) {
