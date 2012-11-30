@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.boothen.jsonedit.core.outline.node;
+package com.boothen.jsonedit.outline.node;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -194,10 +194,6 @@ public class JsonTreeNode {
 		} else if (!jsonNode.equals(other.jsonNode))
 			return false;
 		return true;
-	}
-
-	public JsonType getType() {
-		return jsonNode.getJsonType();
 	}
 
 	public JsonNode getJsonNode() {

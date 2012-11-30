@@ -11,4 +11,4 @@ Require-Bundle: org.eclipse.jface.text,
  org.eclipse.ui.editors,
  org.eclipse.core.runtime,
  jsonedit-model;bundle-version="0.9.5"
-Export-Package: com.boothen.jsonedit.core.outline
+Export-Package: com.boothen.jsonedit.outline

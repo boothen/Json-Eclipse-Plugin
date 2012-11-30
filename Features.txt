@@ -1,0 +1,12 @@
+Road map
+========
+
+Multi objects in file
+Color selection
+Multi errors in outline
+Multi errors in validation
+Single file validation
+Generate Java objects
+Http Client
+Use file encoding instead of system default.
+

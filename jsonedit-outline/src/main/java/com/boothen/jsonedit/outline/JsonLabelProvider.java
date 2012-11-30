@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.boothen.jsonedit.core.outline;
+package com.boothen.jsonedit.outline;
 
 
 import org.eclipse.jface.resource.ColorRegistry;
@@ -12,7 +12,7 @@ import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 
-import com.boothen.jsonedit.core.outline.node.JsonTreeNode;
+import com.boothen.jsonedit.outline.node.JsonTreeNode;
 
 /**
  * JsonLabelProvider provides the label format for each element in the tree.

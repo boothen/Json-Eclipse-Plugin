@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.boothen.jsonedit.core.outline;
+package com.boothen.jsonedit.outline;
 
 
 import java.util.List;
@@ -23,7 +23,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
-import com.boothen.jsonedit.core.outline.node.JsonTreeNode;
+import com.boothen.jsonedit.outline.node.JsonTreeNode;
 
 /**
  * JsonContentOutlinePage manages the outline view of the Json.

@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.boothen.jsonedit.core.outline;
+package com.boothen.jsonedit.outline;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.core.model.jsonnode.JsonType;
-import com.boothen.jsonedit.core.outline.node.JsonTreeNode;
+import com.boothen.jsonedit.outline.node.JsonTreeNode;
 
 
 /**

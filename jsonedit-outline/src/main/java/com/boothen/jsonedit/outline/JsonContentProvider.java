@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.boothen.jsonedit.core.outline;
+package com.boothen.jsonedit.outline;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
-import com.boothen.jsonedit.core.outline.node.JsonTreeNode;
+import com.boothen.jsonedit.outline.node.JsonTreeNode;
 
 /**
  * JsonContentProvider provides the Tree Structure for the outline view.

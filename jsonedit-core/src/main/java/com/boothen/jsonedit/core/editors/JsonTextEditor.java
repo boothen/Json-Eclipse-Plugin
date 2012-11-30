@@ -25,7 +25,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import com.boothen.jsonedit.core.JsonEditorPlugin;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.core.model.node.Node;
-import com.boothen.jsonedit.core.outline.JsonContentOutlinePage;
+import com.boothen.jsonedit.outline.JsonContentOutlinePage;
 
 /**
  * JsonTextEditor is the TextEditor instance used by the plugin.

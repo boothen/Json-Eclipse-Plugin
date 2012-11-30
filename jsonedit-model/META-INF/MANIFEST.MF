@@ -6,6 +6,10 @@ Bundle-Version: 0.9.5
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Boothen Technology
 Require-Bundle: org.eclipse.jface.text,
- jsonedit-reader;bundle-version="0.9.5"
+ jsonedit-reader;bundle-version="0.9.5",
+ org.slf4j.api;visibility:=reexport,
+ ch.qos.logback.classic;visibility:=reexport
 Export-Package: com.boothen.jsonedit.core.model.jsonnode,
- com.boothen.jsonedit.core.model.node
+ com.boothen.jsonedit.core.model.node,
+ com.boothen.jsonedit.model,
+ com.boothen.jsonedit.model.single
