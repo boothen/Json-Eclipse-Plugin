@@ -90,4 +90,26 @@ All Recipient&apos;s rights under this Agreement shall terminate if it fails
          version="0.9.5"
          unpack="false"/>
 
+   <plugin
+         id="jsonedit-model"
+         download-size="0"
+         install-size="0"
+         version="0.9.5"
+         unpack="false"/>
+
+
+   <plugin
+         id="jsonedit-outline"
+         download-size="0"
+         install-size="0"
+         version="0.9.5"
+         unpack="false"/>
+
+   <plugin
+         id="jsonedit-reader"
+         download-size="0"
+         install-size="0"
+         version="0.9.5"
+         unpack="false"/>
+
 </feature>
