@@ -21,7 +21,7 @@ public class JsonNumberBuilder implements JsonModelBuilder {
 	@Override
 	public JsonNumber buildModel(JsonReader parser) throws JsonReaderException {
 
-
+		int openingOffset = parser.getPosition();
 		StringBuilder stringBuilder = new StringBuilder("" + parser.getCurrent());
 		stringBuilder.append(doDigit(parser));
 		char current = parser.getCurrent();
@@ -35,7 +35,8 @@ public class JsonNumberBuilder implements JsonModelBuilder {
 			stringBuilder.append(doExp(parser));
 		}
 		LOG.debug("JsonNumberBuilder: " + stringBuilder.toString());
-		return new JsonNumber(stringBuilder.toString(), new Position(0, 0), new Position(0, 0));
+		return new JsonNumber(stringBuilder.toString(), new Position(openingOffset, parser.getPosition() - openingOffset),
+				new Position(openingOffset, parser.getPosition() - openingOffset));
 	}
 
 	private StringBuilder doExp(JsonReader parser) throws JsonReaderException {

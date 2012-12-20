@@ -32,6 +32,7 @@ public class JsonObjectBuilder implements JsonModelBuilder {
 		char ch;
 		List<JsonModel> pairModels = new LinkedList<JsonModel>();
 		boolean success = true;
+		int openingOffset = parser.getPosition();
 		do {
 			ch = parser.getNextClean();
 			JsonModelBuilder jsonModelBuilder = JSON_MODEL_BUILDER_FACTORY.getPairModelBuilder(ch);
@@ -50,14 +51,15 @@ public class JsonObjectBuilder implements JsonModelBuilder {
 
 		if (success && ch != CLOSE_OBJECT) {
 			success = false;
-			pairModels.add(new JsonModel(JsonModelType.Error, new Position(0, 0), new Position(0, 0)));
+			pairModels.add(new JsonModel(JsonModelType.Error, new Position(parser.getPosition(), 0), new Position(openingOffset, parser.getPosition() - openingOffset)));
 		}
 
 		if (success) {
 			ch = parser.getNextClean();
 		}
 
-		return new JsonObject(pairModels, new Position(0, 0), new Position(0, 0));
+		return new JsonObject(pairModels, new Position(openingOffset, parser.getPosition() - openingOffset),
+				new Position(openingOffset, parser.getPosition() - openingOffset));
 	}
 
 

@@ -17,6 +17,6 @@ public class JsonErrorBuilder implements JsonModelBuilder {
 	public JsonModel buildModel(JsonReader parser) throws JsonReaderException {
 		LOG.debug("JsonErrorBuilder");
 
-		return new JsonModel(JsonModelType.Error, new Position(0, 0), new Position(0, 0));
+		return new JsonModel(JsonModelType.Error, new Position(parser.getPosition(), 0), new Position(parser.getPosition(), 0));
 	}
 }

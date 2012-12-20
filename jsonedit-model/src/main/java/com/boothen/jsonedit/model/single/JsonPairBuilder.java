@@ -27,13 +27,16 @@ public class JsonPairBuilder implements JsonModelBuilder {
 
 		char ch = parser.getNextClean();
 		JsonModel valueModel = null;
+		int openingOffset = parser.getPosition();
 		if (ch != ':') {
-			valueModel = new JsonModel(JsonModelType.Error, new Position(0, 0), new Position(0, 0));
+			valueModel = new JsonModel(JsonModelType.Error, new Position(parser.getPosition(), 0),
+					new Position(openingOffset, parser.getPosition() - openingOffset));
 		} else {
 			JsonModelBuilder jsonModelBuilder = JSON_MODEL_BUILDER_FACTORY.getValueModelBuilder(ch);
 			valueModel = jsonModelBuilder.buildModel(parser);
 		}
-		return new JsonPair(stringModel, valueModel, new Position(0, 0), new Position(0, 0));
+		return new JsonPair(stringModel, valueModel, new Position(openingOffset, parser.getPosition() - openingOffset),
+				new Position(openingOffset, parser.getPosition() - openingOffset));
 	}
 
 }

@@ -21,6 +21,7 @@ public class JsonStringBuilder implements JsonModelBuilder {
 	@Override
 	public JsonModel buildModel(JsonReader parser) throws JsonReaderException {
 
+		int openingOffset = parser.getPosition();
 		char ch = eof;
 		StringBuilder stringBuilder = new StringBuilder("" + parser.getCurrent());
 		do {
@@ -29,12 +30,13 @@ public class JsonStringBuilder implements JsonModelBuilder {
 		} while ((ch != '"' && parser.getPrevious() != '\\') && ch != eof);
 
 		if (ch == eof) {
-			return new JsonModel(JsonModelType.Error, new Position(0, 0), new Position(0, 0));
+			return new JsonModel(JsonModelType.Error, new Position(parser.getPosition(), 0), new Position(openingOffset, parser.getPosition() - openingOffset));
 		}
 
 		ch = parser.getNextChar();
 
 		LOG.debug("JsonStringBuilder: " + stringBuilder.toString());
-		return new JsonString(stringBuilder.toString(), new Position(0, 0), new Position(0, 0));
+		return new JsonString(stringBuilder.toString(), new Position(openingOffset, parser.getPosition() - openingOffset),
+				new Position(openingOffset, parser.getPosition() - openingOffset));
 	}
 }

@@ -22,17 +22,17 @@ public class JsonNullBuilder implements JsonModelBuilder {
 	@Override
 	public JsonModel buildModel(JsonReader parser) throws JsonReaderException {
 		LOG.debug("JsonNullBuilder");
-
+		int openingOffset = parser.getPosition();
 		for (int i = 0; i < NAME.length; i++) {
 			char ch = parser.getNextClean();
 			if (ch != NAME[i]) {
-				return new JsonModel(JsonModelType.Error, new Position(0, 0), new Position(0, 0));
+				return new JsonModel(JsonModelType.Error, new Position(parser.getPosition(), 0), new Position(openingOffset, parser.getPosition() - openingOffset));
 			}
 		}
 
 		parser.getNextClean();
 
-		return new JsonModel(JsonModelType.Null, new Position(0, 0), new Position(0, 0));
+		return new JsonModel(JsonModelType.Null, new Position(openingOffset, 4), new Position(openingOffset, 4));
 	}
 
 }

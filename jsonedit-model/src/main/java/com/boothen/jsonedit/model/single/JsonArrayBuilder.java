@@ -29,6 +29,7 @@ public class JsonArrayBuilder implements JsonModelBuilder {
 		char ch;
 		List<JsonModel> valueModels = new LinkedList<JsonModel>();
 		boolean success = true;
+		int openingOffset = parser.getPosition();
 		do {
 			ch = parser.getNextClean();
 
@@ -48,13 +49,14 @@ public class JsonArrayBuilder implements JsonModelBuilder {
 
 		if (success && ch != CLOSE_ARRAY) {
 			success = false;
-			valueModels.add(new JsonModel(JsonModelType.Error, new Position(0, 0), new Position(0, 0)));
+			valueModels.add(new JsonModel(JsonModelType.Error, new Position(parser.getPosition(), 0), new Position(openingOffset, parser.getPosition() - openingOffset)));
 		}
 
 		if (success) {
 			ch = parser.getNextClean();
 		}
 
-		return new JsonArray(valueModels, new Position(0, 0), new Position(0, 0));
+		return new JsonArray(valueModels, new Position(openingOffset, parser.getPosition() - openingOffset),
+				new Position(openingOffset, parser.getPosition() - openingOffset));
 	}
 }
