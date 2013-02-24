@@ -2,7 +2,7 @@
 <feature
       id="org.sourceforge.jsonedit.feature"
       label="Json EditorFeature"
-      version="0.9.51">
+      version="0.9.52.qualifier">
 
    <description url="http://www.example.com/description">
       An Eclipse Json Editor
@@ -20,7 +20,7 @@
          id="org.sourceforge.jsonedit.core"
          download-size="0"
          install-size="0"
-         version="0.9.51"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>
