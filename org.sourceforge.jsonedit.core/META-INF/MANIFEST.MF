@@ -14,3 +14,17 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Matt Garner
+Export-Package: org.sourceforge.jsonedit.core,
+ org.sourceforge.jsonedit.core.editors;
+  uses:="org.eclipse.ui.texteditor,
+   org.eclipse.jface.text.reconciler,
+   org.eclipse.core.runtime,
+   org.eclipse.jface.text.source,
+   org.sourceforge.jsonedit.core.outline,
+   org.eclipse.ui,
+   org.eclipse.ui.part,
+   org.eclipse.jface.action,
+   org.eclipse.jface.text.presentation,
+   org.eclipse.core.resources,
+   org.eclipse.swt.widgets,
+   org.eclipse.ui.editors.text"
