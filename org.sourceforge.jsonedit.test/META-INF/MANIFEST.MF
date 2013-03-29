@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JsonEdit Test Fragment
 Bundle-SymbolicName: org.sourceforge.jsonedit.test
-Bundle-Version: 0.9.52.qualifier
+Bundle-Version: 0.9.53.qualifier
 Fragment-Host: org.sourceforge.jsonedit.core;bundle-version="0.9.52"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit;bundle-version="4.8.2"
