@@ -18,6 +18,7 @@ import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.editors.text.TextFileDocumentProvider;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.sourceforge.jsonedit.core.JsonEditorPlugin;
@@ -44,7 +45,7 @@ public class JsonTextEditor extends TextEditor {
 	
 	public JsonTextEditor() {
 		super();
-		
+		setDocumentProvider(new TextFileDocumentProvider());
 	}
 	
 	@Override
