@@ -8,3 +8,7 @@ org.sourceforge.jsonedit.test/target/*
 
 org.sourceforge.jsonedit.feature/target/*
 
+.project
+.classpath
+.settings/
+

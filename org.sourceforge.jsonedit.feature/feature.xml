@@ -2,7 +2,7 @@
 <feature
       id="org.sourceforge.jsonedit.feature"
       label="Json EditorFeature"
-      version="0.9.53.qualifier">
+      version="0.9.54.qualifier">
 
    <description url="http://www.example.com/description">
       An Eclipse Json Editor
