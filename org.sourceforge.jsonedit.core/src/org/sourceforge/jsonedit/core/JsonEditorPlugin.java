@@ -109,13 +109,6 @@ public class JsonEditorPlugin extends AbstractUIPlugin {
 	 * @return IPreferenceStore
 	 */
 	public static IPreferenceStore getJsonPreferenceStore() {
-		IPreferenceStore store =
-			getDefault().getPreferenceStore();
-		JsonColorProvider provider = getDefault().getColorProvider();
-		store.setDefault(SPACES_FOR_TABS, true);
-		store.setDefault(NUM_SPACES, 4);
-		store.setDefault(EDITOR_MATCHING_BRACKETS, true);
-		store.setDefault(EDITOR_MATCHING_BRACKETS_COLOR, provider.getColor(JsonColorProvider.STRING).toString());
-		return store;
+		return getDefault().getPreferenceStore();
 	}
 }

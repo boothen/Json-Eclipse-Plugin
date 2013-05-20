@@ -150,5 +150,11 @@
             priority="high">
       </content-type>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.sourceforge.jsonedit.core.prefs.PreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>

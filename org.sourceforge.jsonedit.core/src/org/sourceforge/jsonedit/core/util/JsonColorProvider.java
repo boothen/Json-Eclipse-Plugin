@@ -7,9 +7,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
+import org.sourceforge.jsonedit.core.JsonEditorPlugin;
 
 /**
  * Provides the coloring for the text editor.
@@ -19,12 +20,12 @@ import org.eclipse.swt.widgets.Display;
  */
 public class JsonColorProvider {
 	
-	public static final RGB STRING = new RGB(0, 128, 0);
-	public static final RGB DEFAULT = new RGB(0, 0, 0);
-	public static final RGB VALUE = new RGB(0, 0, 128);
-	public static final RGB NULL = new RGB(128, 0, 128);
+	public static final String STRING = "colorString";
+	public static final String DEFAULT = "colorDefault";
+	public static final String VALUE = "colorValue";
+	public static final String NULL = "colorNull";
 	
-	protected Map<RGB, Color> fColorTable= new HashMap<RGB, Color>(10);
+	protected Map<String, Color> fColorTable= new HashMap<String, Color>(10);
 	
 	/**
 	 * Release all of the color resources held onto by the receiver.
@@ -42,12 +43,15 @@ public class JsonColorProvider {
 	 * @param rgb the RGB value
 	 * @return the color stored in the color table for the given RGB value
 	 */
-	public Color getColor(RGB rgb) {
+	public Color getColor(String rgb) {
+		
 		Color color= (Color) fColorTable.get(rgb);
+		
 		if (color == null) {
-			color= new Color(Display.getCurrent(), rgb);
+			color= new Color(Display.getCurrent(), PreferenceConverter.getColor(JsonEditorPlugin.getJsonPreferenceStore(), rgb));
 			fColorTable.put(rgb, color);
 		}
+		
 		return color;
 	}
 }
