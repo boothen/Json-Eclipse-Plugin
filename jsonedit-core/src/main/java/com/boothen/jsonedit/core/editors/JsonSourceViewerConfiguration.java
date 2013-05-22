@@ -1,6 +1,7 @@
 package com.boothen.jsonedit.core.editors;
 
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
@@ -11,9 +12,10 @@ import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
-import com.boothen.jsonedit.core.JsonEditorPlugin;
 import com.boothen.jsonedit.core.model.JsonReconcilingStrategy;
-import com.boothen.jsonedit.core.text.JsonIndentLineAutoEditStrategy;
+import com.boothen.jsonedit.preferences.JsonPreferenceStore;
+import com.boothen.jsonedit.text.JsonIndentLineAutoEditStrategy;
+import com.boothen.jsonedit.text.JsonScanner;
 
 /**
  * JsonSourceViewerConfiguration manages the coloring of the text.
@@ -24,10 +26,19 @@ import com.boothen.jsonedit.core.text.JsonIndentLineAutoEditStrategy;
 public class JsonSourceViewerConfiguration extends SourceViewerConfiguration {
 
 	private JsonTextEditor textEditor;
+	private JsonIndentLineAutoEditStrategy jsonIndentLineAutoEditStrategy;
+	private JsonScanner jsonScanner;
+	private IPreferenceStore store;
 
-	public JsonSourceViewerConfiguration(JsonTextEditor textEditor) {
+
+	public JsonSourceViewerConfiguration(JsonTextEditor textEditor, IPreferenceStore iPreferenceStore) {
 		super();
+		this.store = iPreferenceStore;
 		this.textEditor = textEditor;
+		boolean spaces = store.getBoolean(JsonPreferenceStore.SPACES_FOR_TABS);
+		int numSpaces = store.getInt(JsonPreferenceStore.NUM_SPACES);
+		jsonIndentLineAutoEditStrategy = new JsonIndentLineAutoEditStrategy(spaces, numSpaces);
+		jsonScanner = new JsonScanner(store);
 	}
 
 	@Override
@@ -35,7 +46,8 @@ public class JsonSourceViewerConfiguration extends SourceViewerConfiguration {
 
 		PresentationReconciler reconciler= new PresentationReconciler();
 
-		DefaultDamagerRepairer dr= new DefaultDamagerRepairer(JsonEditorPlugin.getDefault().getJsonScanner());
+
+		DefaultDamagerRepairer dr= new DefaultDamagerRepairer(jsonScanner);
 		reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
 		reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 
@@ -55,7 +67,14 @@ public class JsonSourceViewerConfiguration extends SourceViewerConfiguration {
 
 	@Override
 	public IAutoEditStrategy[] getAutoEditStrategies(ISourceViewer sourceViewer, String contentType) {
-		return new IAutoEditStrategy[] { new JsonIndentLineAutoEditStrategy() };
+		return new IAutoEditStrategy[] { jsonIndentLineAutoEditStrategy };
+	}
+
+	public void handlePreferenceStoreChanged() {
+		boolean spaces = store.getBoolean(JsonPreferenceStore.SPACES_FOR_TABS);
+		int numSpaces = store.getInt(JsonPreferenceStore.NUM_SPACES);
+		jsonIndentLineAutoEditStrategy.initPreferences(spaces, numSpaces);
+		jsonScanner.reinitScanner();
 	}
 
 }

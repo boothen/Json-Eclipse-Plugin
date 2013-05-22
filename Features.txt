@@ -1,12 +1,40 @@
 Road map
 ========
 
+Use file encoding instead of system default.
+Fix Workbench initialisation when plugin not open.
+
+
+Single file validation
+Single error outline
+
+Allow editor to open for .js ending + validation
+UTF-8 characters not show in outline
+Use workbench default setting for tabs & spaces instead of own preference value
+
+Auto format on save option - done (update ticket)
+Color selection - done update ticket.
+Fix auto indent/format on new file. (fixed) add bug ticket.
+Fix auto bracket creation on repeated add. - no fix see isNextBracket. Need to determine better if it actually needs a bracket
+Validator not reporting 1.1e as an error, but outline is. (Fixed) Raise and Fix ticket.
+
+
 Multi objects in file
-Color selection
 Multi errors in outline
 Multi errors in validation
-Single file validation
 Generate Java objects
+Mock JSON from Java Object
 Http Client
-Use file encoding instead of system default.
 
+JSON Schema
+Upgrade to 4.2
+
+
+Current Features
+================
+
+1) Outline
+2) Text Coloring
+3) Project Validation
+4) Text format
+5) Text folding

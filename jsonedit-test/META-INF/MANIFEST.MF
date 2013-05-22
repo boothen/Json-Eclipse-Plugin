@@ -7,4 +7,5 @@ Fragment-Host: jsonedit-core;bundle-version="0.9.5"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit;bundle-version="4.8.2",
  jsonedit-model;bundle-version="0.9.5",
+ jsonedit-validator;bundle-version="0.9.5",
  ch.qos.logback.core

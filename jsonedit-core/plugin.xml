@@ -74,7 +74,7 @@
       </handler>
    </extension>
    <extension
-         id="com.boothen.jsonedit.core.validation.builder"
+         id="com.boothen.jsonedit.validation.builder"
          name="Json Validator"
          point="org.eclipse.core.resources.builders">
       <builder
@@ -82,25 +82,25 @@
             hasNature="false"
             isConfigurable="false">
          <run
-               class="com.boothen.jsonedit.core.validation.IncrementalJsonValidator">
+               class="com.boothen.jsonedit.validation.IncrementalJsonValidator">
          </run>
       </builder>
    </extension>
    <extension
-         id="com.boothen.jsonedit.core.validation.nature"
+         id="com.boothen.jsonedit.validation.nature"
          name="Json Validation Nature"
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
-               class="com.boothen.jsonedit.core.nature.JsonValidationNature">
+               class="com.boothen.jsonedit.validation.nature.JsonValidationNature">
          </run>
       </runtime>
       <builder
-            id="com.boothen.jsonedit.core.validation.builder">
+            id="com.boothen.jsonedit.validation.builder">
       </builder>
    </extension>
    <extension
-         id="com.boothen.jsonedit.core.validation.marker"
+         id="com.boothen.jsonedit.validation.marker"
          name="JSON Validation"
          point="org.eclipse.core.resources.markers">
       <super
@@ -122,16 +122,16 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="com.boothen.jsonedit.core.prefs.WorkbenchPreferencePage"
-            id="com.boothen.jsonedit.core.prefs.WorkbenchPrefencePage"
+            class="com.boothen.jsonedit.preferences.WorkbenchPreferencePage"
+            id="com.boothen.jsonedit.preferences.WorkbenchPrefencePage"
             name="Json Editor">
       </page>
    </extension>
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
-            class="com.boothen.jsonedit.core.prefs.ProjectPropertiesPage"
-            id="com.boothen.jsonedit.core.prefs.properties"
+            class="com.boothen.jsonedit.preferences.ProjectPropertiesPage"
+            id="com.boothen.jsonedit.preferences.properties"
             name="Json Properties">
          <enabledWhen>
             <adapt

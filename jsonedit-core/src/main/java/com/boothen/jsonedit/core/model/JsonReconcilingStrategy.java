@@ -12,11 +12,11 @@ import org.eclipse.jface.text.reconciler.IReconcilingStrategyExtension;
 import org.eclipse.swt.widgets.Display;
 
 import com.boothen.jsonedit.core.editors.JsonTextEditor;
-import com.boothen.jsonedit.core.model.folding.JsonFoldingPositionsBuilder;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNodeBuilder;
 import com.boothen.jsonedit.core.model.node.Node;
 import com.boothen.jsonedit.core.model.node.NodeBuilder;
+import com.boothen.jsonedit.folding.JsonFoldingPositionsBuilder;
 
 public class JsonReconcilingStrategy implements IReconcilingStrategy,
 IReconcilingStrategyExtension {

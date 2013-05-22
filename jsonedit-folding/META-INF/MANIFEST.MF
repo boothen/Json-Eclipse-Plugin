@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Json Editor Folding
+Bundle-SymbolicName: jsonedit-folding
+Bundle-Version: 0.9.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: Boothen Technology
+Require-Bundle: org.eclipse.jface.text,
+ jsonedit-model;bundle-version="0.9.5"
+Export-Package: com.boothen.jsonedit.folding

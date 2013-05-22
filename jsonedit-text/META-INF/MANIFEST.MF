@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Json Editor Text
+Bundle-SymbolicName: jsonedit-text
+Bundle-Version: 0.9.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: Boothen Technology
+Require-Bundle: org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.jface.text,
+ org.eclipse.ui,
+ jsonedit-preferences;bundle-version="0.9.5",
+ jsonedit-reader;bundle-version="0.9.5"
+Export-Package: com.boothen.jsonedit.text,
+ com.boothen.jsonedit.text.detector

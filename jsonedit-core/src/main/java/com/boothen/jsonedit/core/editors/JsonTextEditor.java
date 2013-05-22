@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.ITextOperationTarget;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.ITextViewer;
@@ -16,6 +17,7 @@ import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
 import org.eclipse.jface.text.source.projection.ProjectionSupport;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
@@ -23,9 +25,11 @@ import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.boothen.jsonedit.core.JsonEditorPlugin;
+import com.boothen.jsonedit.core.handlers.FormatTextHandler;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.core.model.node.Node;
 import com.boothen.jsonedit.outline.JsonContentOutlinePage;
+import com.boothen.jsonedit.preferences.JsonPreferenceStore;
 
 /**
  * JsonTextEditor is the TextEditor instance used by the plugin.
@@ -62,7 +66,8 @@ public class JsonTextEditor extends TextEditor {
 	protected void configureSourceViewerDecorationSupport(SourceViewerDecorationSupport support) {
 		support.setCharacterPairMatcher(pairsMatcher);
 
-		support.setMatchingCharacterPainterPreferenceKeys(JsonEditorPlugin.EDITOR_MATCHING_BRACKETS, JsonEditorPlugin.EDITOR_MATCHING_BRACKETS_COLOR);
+		support.setMatchingCharacterPainterPreferenceKeys(JsonPreferenceStore.EDITOR_MATCHING_BRACKETS,
+				JsonPreferenceStore.EDITOR_MATCHING_BRACKETS_COLOR);
 		super.configureSourceViewerDecorationSupport(support);
 	}
 
@@ -71,8 +76,9 @@ public class JsonTextEditor extends TextEditor {
 		super.initializeEditor();
 		setEditorContextMenuId("#JsonTextEditorContext"); //$NON-NLS-1$
 		setRulerContextMenuId("#JsonTextRulerContext"); //$NON-NLS-1$
-		viewerConfiguration = new JsonSourceViewerConfiguration(this);
+		viewerConfiguration = new JsonSourceViewerConfiguration(this, JsonEditorPlugin.getDefault().getPreferenceStore());
 		setSourceViewerConfiguration(viewerConfiguration);
+		setPreferenceStore(JsonEditorPlugin.getDefault().getPreferenceStore());
 	}
 
 	@Override
@@ -97,6 +103,7 @@ public class JsonTextEditor extends TextEditor {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
+		doAutoFormatOnSave();
 		super.doSave(monitor);
 		if (fOutlinePage != null)
 			fOutlinePage.update();
@@ -108,9 +115,20 @@ public class JsonTextEditor extends TextEditor {
 	 */
 	@Override
 	public void doSaveAs() {
+		doAutoFormatOnSave();
 		super.doSaveAs();
 		if (fOutlinePage != null)
 			fOutlinePage.update();
+	}
+
+	private void doAutoFormatOnSave() {
+		IPreferenceStore store = getPreferenceStore();
+		boolean autoFormatOnSave = store.getBoolean(JsonPreferenceStore.AUTO_FORMAT_ON_SAVE);
+		if (autoFormatOnSave) {
+			boolean spaces = store.getBoolean(JsonPreferenceStore.SPACES_FOR_TABS);
+			int numSpaces = store.getInt(JsonPreferenceStore.NUM_SPACES);
+			FormatTextHandler.formatText(this, spaces, numSpaces);
+		}
 	}
 
 	/** The <code>JavaEditor</code> implementation of this
@@ -163,12 +181,11 @@ public class JsonTextEditor extends TextEditor {
 		annotationModel = viewer.getProjectionAnnotationModel();
 
 		SourceViewerDecorationSupport support = getSourceViewerDecorationSupport(viewer);
-		support.install(JsonEditorPlugin.getJsonPreferenceStore());
+		support.install(getPreferenceStore());
 	}
 
 	@Override
-	protected ISourceViewer createSourceViewer(Composite parent,
-			IVerticalRuler ruler, int styles) {
+	protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
 
 		ISourceViewer viewer = new ProjectionViewer(parent, ruler, getOverviewRuler(), isOverviewRulerVisible(), styles);
 
@@ -177,6 +194,12 @@ public class JsonTextEditor extends TextEditor {
 		return viewer;
 	}
 
+	@Override
+	protected void handlePreferenceStoreChanged(PropertyChangeEvent event) {
+		System.out.println("Handle event");
+		((JsonSourceViewerConfiguration) viewerConfiguration).handlePreferenceStoreChanged();
+		super.handlePreferenceStoreChanged(event);
+	}
 
 	public void updateFoldingStructure(List<Position> positions)
 	{
@@ -186,7 +209,7 @@ public class JsonTextEditor extends TextEditor {
 		//with their corresponding positions
 		HashMap<ProjectionAnnotation, Position> newAnnotations = new HashMap<ProjectionAnnotation, Position>();
 
-		for(int i =0;i<positions.size();i++)
+		for (int i = 0; i < positions.size(); i++)
 		{
 			ProjectionAnnotation annotation = new ProjectionAnnotation();
 			newAnnotations.put(annotation,positions.get(i));

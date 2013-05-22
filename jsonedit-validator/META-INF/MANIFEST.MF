@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Json Editor Validator
+Bundle-SymbolicName: jsonedit-validator
+Bundle-Version: 0.9.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: Boothen Technology
+Require-Bundle: jsonedit-reader;bundle-version="0.9.5",
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime
+Export-Package: com.boothen.jsonedit.validator

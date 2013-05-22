@@ -13,7 +13,13 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.views,
  jsonedit-model;bundle-version="0.9.5",
  jsonedit-reader;bundle-version="0.9.5",
- jsonedit-outline;bundle-version="0.9.5"
+ jsonedit-outline;bundle-version="0.9.5",
+ jsonedit-validator;bundle-version="0.9.5",
+ jsonedit-validation;bundle-version="0.9.5",
+ jsonedit-folding;bundle-version="0.9.5",
+ jsonedit-preferences;bundle-version="0.9.5",
+ jsonedit-text;bundle-version="0.9.5",
+ jsonedit-log;bundle-version="0.9.5"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Boothen Technology

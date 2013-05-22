@@ -10,6 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.boothen.jsonedit.core.util.FileToDocUtility;
+import com.boothen.jsonedit.validator.JsonTextValidator;
+import com.boothen.jsonedit.validator.Location;
 
 /**
  * @author Matt Garner
