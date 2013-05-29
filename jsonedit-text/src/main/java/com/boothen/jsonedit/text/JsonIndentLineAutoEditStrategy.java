@@ -10,10 +10,6 @@ import static com.boothen.jsonedit.core.util.JsonCharUtility.openSquare;
 import static com.boothen.jsonedit.core.util.JsonCharUtility.space;
 import static com.boothen.jsonedit.core.util.JsonCharUtility.tab;
 
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.DefaultScope;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
 import org.eclipse.jface.text.DocumentCommand;
@@ -30,9 +26,10 @@ import org.eclipse.jface.text.TextUtilities;
 public class JsonIndentLineAutoEditStrategy extends DefaultIndentLineAutoEditStrategy {
 
 	private String indent;
+	private String lineEnding;
 
-	public JsonIndentLineAutoEditStrategy(boolean spaces, int numSpaces) {
-		initPreferences(spaces, numSpaces);
+	public JsonIndentLineAutoEditStrategy(boolean spaces, int numSpaces, String lineEnding) {
+		initPreferences(spaces, numSpaces, lineEnding);
 	}
 
 	/**
@@ -106,15 +103,6 @@ public class JsonIndentLineAutoEditStrategy extends DefaultIndentLineAutoEditStr
 			return;
 		}
 
-		// Create line ending based on document delimiters
-		String lineEnding = Platform.getPreferencesService().getString(Platform.PI_RUNTIME, Platform.PREF_LINE_SEPARATOR, null, new IScopeContext[] { DefaultScope.INSTANCE });
-
-		if (lineEnding == null) {
-			lineEnding = Platform.getPreferencesService().getString(Platform.PI_RUNTIME, Platform.PREF_LINE_SEPARATOR, null, new IScopeContext[] {
-					InstanceScope.INSTANCE});
-		}
-
-		System.out.println(lineEnding.length());
 		try {
 			// find start of line
 			int start = findStartOfCurrentLine(d, c);
@@ -165,8 +153,8 @@ public class JsonIndentLineAutoEditStrategy extends DefaultIndentLineAutoEditStr
 		return start;
 	}
 
-	public void initPreferences(boolean spaces, int numSpaces) {
-
+	public void initPreferences(boolean spaces, int numSpaces, String lineEnding) {
+		this.lineEnding = lineEnding;
 		if (spaces) {
 			StringBuffer strBuf = new StringBuffer();
 			for (int i = 0; i < numSpaces; i++) {

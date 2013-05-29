@@ -9,6 +9,8 @@ import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -19,8 +21,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
  * @author Matt Garner
  *
  */
-public class WorkbenchPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class WorkbenchPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage, IPropertyChangeListener {
 
+	private BooleanFieldEditor usePlatformTabSetting;
+	private BooleanFieldEditor spacesForTab;
+	private IntegerFieldEditor indentSpaces;
 
 	/**
 	 *
@@ -31,8 +36,6 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage implement
 		setPreferenceStore(store);
 
 	}
-
-
 
 	@Override
 	protected IPreferenceStore doGetPreferenceStore() {
@@ -47,7 +50,6 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage implement
 
 	public WorkbenchPreferencePage(String title) {
 		super(FieldEditorPreferencePage.GRID);
-
 	}
 
 	@Override
@@ -56,18 +58,37 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage implement
 	}
 
 	@Override
+	public void dispose() {
+		if (usePlatformTabSetting != null) {
+			usePlatformTabSetting.setPropertyChangeListener(null);
+		}
+		super.dispose();
+	}
+
+	@Override
 	protected void createFieldEditors() {
-		BooleanFieldEditor spacesForTab = new BooleanFieldEditor(
+
+		Boolean overrideTabSetting = getPreferenceStore().getBoolean(JsonPreferenceStore.OVERRIDE_TAB_SETTING);
+		usePlatformTabSetting = new BooleanFieldEditor(
+				JsonPreferenceStore.OVERRIDE_TAB_SETTING,
+				"Override Workbench Tab Setting",
+				getFieldEditorParent());
+		addField(usePlatformTabSetting);
+		usePlatformTabSetting.setPropertyChangeListener(this);
+
+		spacesForTab = new BooleanFieldEditor(
 				JsonPreferenceStore.SPACES_FOR_TABS,
 				"Insert Spaces For Tabs",
 				getFieldEditorParent());
+		spacesForTab.setEnabled(overrideTabSetting, getFieldEditorParent());
 		addField(spacesForTab);
 
-		IntegerFieldEditor indentSpaces = new IntegerFieldEditor(
+		indentSpaces = new IntegerFieldEditor(
 				JsonPreferenceStore.NUM_SPACES,
 				"&Number of spaces to indent:",
 				getFieldEditorParent(), 1);
 		indentSpaces.setValidRange(0, 10);
+		indentSpaces.setEnabled(overrideTabSetting, getFieldEditorParent());
 		addField(indentSpaces);
 
 		BooleanFieldEditor autoFormatOnSave = new BooleanFieldEditor(
@@ -87,7 +108,25 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage implement
 
 		ColorFieldEditor defaultColor = new ColorFieldEditor(JsonPreferenceStore.DEFAULT_COLOR, "&Default Color", getFieldEditorParent());
 		addField(defaultColor);
-
 	}
 
+	@Override
+	protected void performDefaults() {
+		Boolean defaultUsePlatformTabSetting = getPreferenceStore().getDefaultBoolean(JsonPreferenceStore.OVERRIDE_TAB_SETTING);
+		togglePreferences(defaultUsePlatformTabSetting);
+		super.performDefaults();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		if (event.getSource() == usePlatformTabSetting) {
+			togglePreferences((Boolean) event.getNewValue());
+		}
+		super.propertyChange(event);
+	}
+
+	private void togglePreferences(Boolean enabled) {
+		spacesForTab.setEnabled(enabled, getFieldEditorParent());
+		indentSpaces.setEnabled(enabled, getFieldEditorParent());
+	}
 }

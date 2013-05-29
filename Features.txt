@@ -1,17 +1,14 @@
 Road map
 ========
 
-Use file encoding instead of system default.
-Fix Workbench initialisation when plugin not open.
-
-
 Single file validation
 Single error outline
 
 Allow editor to open for .js ending + validation
 UTF-8 characters not show in outline
-Use workbench default setting for tabs & spaces instead of own preference value
 
+Use workbench default setting for tabs & spaces instead of own preference value. (done) create ticket
+Use file encoding instead of system default. (done) Jira ticket
 Auto format on save option - done (update ticket)
 Color selection - done update ticket.
 Fix auto indent/format on new file. (fixed) add bug ticket.

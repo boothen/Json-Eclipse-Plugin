@@ -6,7 +6,6 @@ package com.boothen.jsonedit.text;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IRule;
@@ -31,10 +30,10 @@ import com.boothen.jsonedit.text.detector.JsonWordDetector;
  */
 public class JsonScanner extends RuleBasedScanner {
 
-	private IPreferenceStore store;
+	private JsonPreferenceStore store;
 	private JsonColorProvider jsonColorProvider = new JsonColorProvider();
 
-	public JsonScanner(IPreferenceStore store) {
+	public JsonScanner(JsonPreferenceStore store) {
 		super();
 		this.store = store;
 		initScanner();
@@ -65,6 +64,6 @@ public class JsonScanner extends RuleBasedScanner {
 	}
 
 	private Color getPreferenceColor(String preferenceValue) {
-		return jsonColorProvider.getColor(StringConverter.asRGB(store.getString(preferenceValue)));
+		return jsonColorProvider.getColor(StringConverter.asRGB(store.getIPreferenceStore().getString(preferenceValue)));
 	}
 }

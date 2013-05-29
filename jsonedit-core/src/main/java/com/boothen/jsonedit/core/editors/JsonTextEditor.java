@@ -3,6 +3,7 @@ package com.boothen.jsonedit.core.editors;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -24,7 +25,7 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-import com.boothen.jsonedit.core.JsonEditorPlugin;
+import com.boothen.jsonedit.core.editors.listeners.PlatformPreferenceListener;
 import com.boothen.jsonedit.core.handlers.FormatTextHandler;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.core.model.node.Node;
@@ -39,15 +40,15 @@ import com.boothen.jsonedit.preferences.JsonPreferenceStore;
  */
 public class JsonTextEditor extends TextEditor {
 
-	private JsonSourceViewerConfiguration viewerConfiguration;
-
 	private final static char[] PAIRS= { '{', '}', '[', ']' };
 
 	private DefaultCharacterPairMatcher pairsMatcher = new DefaultCharacterPairMatcher(PAIRS);
 
-
-	/** The outline page */
+	private JsonSourceViewerConfiguration viewerConfiguration;
 	private JsonContentOutlinePage fOutlinePage;
+	private PlatformPreferenceListener platformPreferenceListener;
+
+
 	private ProjectionAnnotationModel annotationModel;
 	private ProjectionSupport projectionSupport;
 	private ProjectionAnnotation[] oldAnnotations;
@@ -59,7 +60,6 @@ public class JsonTextEditor extends TextEditor {
 
 	public JsonTextEditor() {
 		super();
-
 	}
 
 	@Override
@@ -71,14 +71,13 @@ public class JsonTextEditor extends TextEditor {
 		super.configureSourceViewerDecorationSupport(support);
 	}
 
+
 	@Override
 	protected void initializeEditor() {
 		super.initializeEditor();
 		setEditorContextMenuId("#JsonTextEditorContext"); //$NON-NLS-1$
 		setRulerContextMenuId("#JsonTextRulerContext"); //$NON-NLS-1$
-		viewerConfiguration = new JsonSourceViewerConfiguration(this, JsonEditorPlugin.getDefault().getPreferenceStore());
-		setSourceViewerConfiguration(viewerConfiguration);
-		setPreferenceStore(JsonEditorPlugin.getDefault().getPreferenceStore());
+		setPreferenceStore(JsonPreferenceStore.getJsonPreferenceStore().getIPreferenceStore());
 	}
 
 	@Override
@@ -89,6 +88,10 @@ public class JsonTextEditor extends TextEditor {
 		if (pairsMatcher != null) {
 			pairsMatcher.dispose();
 			pairsMatcher = null;
+		}
+
+		if (platformPreferenceListener != null) {
+			platformPreferenceListener.removePreferenceChangeListener();
 		}
 
 		super.dispose();
@@ -169,9 +172,12 @@ public class JsonTextEditor extends TextEditor {
 
 	@Override
 	public void createPartControl(Composite parent) {
+		JsonPreferenceStore jsonPreferenceStore = JsonPreferenceStore.getJsonPreferenceStore();
+		viewerConfiguration = new JsonSourceViewerConfiguration(this, jsonPreferenceStore);
+		setSourceViewerConfiguration(viewerConfiguration);
 		super.createPartControl(parent);
-		ProjectionViewer viewer =(ProjectionViewer)getSourceViewer();
 
+		ProjectionViewer viewer =(ProjectionViewer) getSourceViewer();
 		projectionSupport = new ProjectionSupport(viewer,getAnnotationAccess(),getSharedColors());
 		projectionSupport.install();
 
@@ -182,6 +188,11 @@ public class JsonTextEditor extends TextEditor {
 
 		SourceViewerDecorationSupport support = getSourceViewerDecorationSupport(viewer);
 		support.install(getPreferenceStore());
+
+
+		IFile file = (IFile) getEditorInput().getAdapter(IFile.class);
+		platformPreferenceListener = new PlatformPreferenceListener(viewerConfiguration, jsonPreferenceStore);
+		platformPreferenceListener.setPreferenceChangeListener(file);
 	}
 
 	@Override
@@ -196,7 +207,6 @@ public class JsonTextEditor extends TextEditor {
 
 	@Override
 	protected void handlePreferenceStoreChanged(PropertyChangeEvent event) {
-		System.out.println("Handle event");
 		((JsonSourceViewerConfiguration) viewerConfiguration).handlePreferenceStoreChanged();
 		super.handlePreferenceStoreChanged(event);
 	}
@@ -284,5 +294,9 @@ public class JsonTextEditor extends TextEditor {
 				textViewer.getTextWidget().setSelection(textLocation);
 			}
 		}
+	}
+
+	public void updateTabWidth(int tabWidth) {
+		getSourceViewer().getTextWidget().setTabs(tabWidth);
 	}
 }
