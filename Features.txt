@@ -1,6 +1,23 @@
 Road map
 ========
 
+Fix JSON Validation
+ - trailing comma is not detected
+ - not multi file stops after first object
+
+Fix JSON naming consistency some places JSON others Json.
+
+
+Multi objects in file
+
+ - format text (ok)
+ - line indent (ok)
+ - text folding (not done)
+ - outline (not done)
+ - validation (not done)
+ - text coloring (ok)
+
+
 Single file validation
 Single error outline
 
@@ -16,7 +33,7 @@ Fix auto bracket creation on repeated add. - no fix see isNextBracket. Need to d
 Validator not reporting 1.1e as an error, but outline is. (Fixed) Raise and Fix ticket.
 
 
-Multi objects in file
+
 Multi errors in outline
 Multi errors in validation
 Generate Java objects
