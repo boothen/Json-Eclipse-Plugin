@@ -7,13 +7,19 @@
 	<version>0.9.5</version>
 	<packaging>pom</packaging>
 	<modules>
-		<module>jsonedit-reader</module>
+		<module>jsonedit-core</module>
+		<module>jsonedit-feature</module>
+		<module>jsonedit-folding</module>
+		<module>jsonedit-log</module>
 		<module>jsonedit-model</module>
 		<module>jsonedit-outline</module>
-		<module>jsonedit-core</module>
-		<module>jsonedit-test</module>
-		<module>jsonedit-feature</module>
+		<module>jsonedit-preferences</module>
+		<module>jsonedit-reader</module>
 		<module>jsonedit-repository</module>
+		<module>jsonedit-test</module>
+		<module>jsonedit-text</module>
+		<module>jsonedit-validation</module>
+		<module>jsonedit-validator</module>
 	</modules>
 
 	<properties>
