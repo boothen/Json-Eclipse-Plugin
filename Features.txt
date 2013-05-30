@@ -23,7 +23,7 @@ Multi objects in file
  - line indent (ok)
  - text folding (not done)
  - outline (not done)
- - validation (not done)
+ - validation (not done) - (update parse to loop instead of checking eof)
  - text coloring (ok)
 
 
@@ -32,16 +32,6 @@ Single error outline
 
 Allow editor to open for .js ending + validation
 UTF-8 characters not show in outline
-
-Use workbench default setting for tabs & spaces instead of own preference value. (done) create ticket
-Use file encoding instead of system default. (done) Jira ticket
-Auto format on save option - done (update ticket)
-Color selection - done update ticket.
-Fix auto indent/format on new file. (fixed) add bug ticket.
-Fix auto bracket creation on repeated add. - no fix see isNextBracket. Need to determine better if it actually needs a bracket
-Validator not reporting 1.1e as an error, but outline is. (Fixed) Raise and Fix ticket.
-
-
 
 Multi errors in outline
 Multi errors in validation

@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.text.Document;
@@ -30,12 +31,9 @@ public class FileToDocUtility {
 	public static File getFile(String file) {
 
 		try {
-			URI uri = FileLocator.toFileURL(FileToDocUtility.class.getResource("/" + file)).toURI();
-			System.out.println(uri.toString());
-			return new File(uri);
+			URL resource = FileToDocUtility.class.getResource("/" + file);
+			return new File(resource.toURI());
 		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;

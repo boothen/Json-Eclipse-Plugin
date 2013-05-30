@@ -3,10 +3,13 @@
  */
 package com.boothen.jsonedit.core.validation;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.boothen.jsonedit.core.util.FileToDocUtility;
@@ -19,175 +22,265 @@ import com.boothen.jsonedit.validator.Location;
  */
 public class JsonTextValidationTest {
 
-	@Before
-	public void onSetup() {
+	public void testPassing(String fileName) throws FileNotFoundException {
+		File file = FileToDocUtility.getFile(fileName);
+		JsonTextValidator jtop = new JsonTextValidator(file) {
 
+			@Override
+			public void reportProblem(String msg, Location loc, int violation, boolean isError) {
+				fail();
+			}
+		};
+		jtop.parse();
 	}
 
+	public void testFail(String fileName, final int location) throws FileNotFoundException {
 
-	public void tearDown() {
+		File file = FileToDocUtility.getFile(fileName);
+		JsonTextValidator jtop = new JsonTextValidator(file) {
 
+			@Override
+			public void reportProblem(String msg, Location loc, int violation, boolean isError) {
+				assertEquals(location, loc.charStart);
+				throw new RuntimeException("Expected");
+			}
+		};
+
+		try {
+			jtop.parse();
+			fail();
+		} catch (RuntimeException e) {
+			Assert.assertEquals("Expected", e.getMessage());
+		}
 	}
 
 	@Test
 	public void testFile1() throws Exception {
-
-		File file = FileToDocUtility.getFile("test1.json");
-
-		JsonTextValidator jtop = new JsonTextValidator(file) {
-
-			@Override
-			public void reportProblem(String msg, Location loc, int violation, boolean isError) {
-
-				Assert.fail();
-			}
-		};
-
-		jtop.parse();
-
+		testPassing("test1.json");
 	}
 
 	@Test
 	public void testFile2() throws Exception {
-
-		File file = FileToDocUtility.getFile("test2.json");
-
-		JsonTextValidator jtop = new JsonTextValidator(file){
-
-			@Override
-			public void reportProblem(String msg, Location loc, int violation, boolean isError) {
-
-				Assert.fail();
-			}
-		};
-
-		jtop.parse();
-
+		testPassing("test2.json");
 	}
 
 	@Test
 	public void testFile3() throws Exception {
-
-		File file = FileToDocUtility.getFile("test3.json");
-
-		JsonTextValidator jtop = new JsonTextValidator(file) {
-
-			@Override
-			public void reportProblem(String msg, Location loc, int violation, boolean isError) {
-
-				Assert.fail();
-			}
-		};
-
-		jtop.parse();
-
+		testPassing("test3.json");
 	}
 
 	@Test
 	public void testFile4() throws Exception {
-
-		File file = FileToDocUtility.getFile("test4.json");
-
-		JsonTextValidator jtop = new JsonTextValidator(file) {
-
-			@Override
-			public void reportProblem(String msg, Location loc, int violation, boolean isError) {
-
-				Assert.fail();
-			}
-		};
-
-		jtop.parse();
-
+		testPassing("test4.json");
 	}
 
 	@Test
 	public void testFile5() throws Exception {
-
-		File file = FileToDocUtility.getFile("test5.json");
-
-		JsonTextValidator jtop = new JsonTextValidator(file) {
-
-			@Override
-			public void reportProblem(String msg, Location loc, int violation, boolean isError) {
-
-				Assert.assertEquals(loc.charStart, 16);
-			}
-		};
-
-		jtop.parse();
-
+		testFail("test5.json", 16);
 	}
 
 	@Test
 	public void testFile6() throws Exception {
-
-		File file = FileToDocUtility.getFile("test6.json");
-
-		JsonTextValidator jtop = new JsonTextValidator(file) {
-
-			@Override
-			public void reportProblem(String msg, Location loc, int violation, boolean isError) {
-
-				Assert.assertEquals(loc.charStart, 19);
-			}
-		};
-
-		jtop.parse();
-
+		testFail("test6.json", 19);
 	}
 
 	@Test
 	public void testFile7() throws Exception {
-
-		File file = FileToDocUtility.getFile("test7.json");
-
-		JsonTextValidator jtop = new JsonTextValidator(file) {
-
-			@Override
-			public void reportProblem(String msg, Location loc, int violation, boolean isError) {
-
-				Assert.assertEquals(loc.charStart, 20);
-			}
-		};
-
-		jtop.parse();
-
+		testFail("test7.json", 20);
 	}
 
 	@Test
 	public void testFile8() throws Exception {
-
-		File file = FileToDocUtility.getFile("test8.json");
-
-		JsonTextValidator jtop = new JsonTextValidator(file) {
-
-			@Override
-			public void reportProblem(String msg, Location loc, int violation, boolean isError) {
-
-				Assert.assertEquals(loc.charStart, 18);
-			}
-		};
-
-		jtop.parse();
-
+		testFail("test8.json", 18);
 	}
 
 	@Test
 	public void testFile9() throws Exception {
+		testPassing("test9.json");
+	}
 
-		File file = FileToDocUtility.getFile("test9.json");
+	@Test
+	public void testFile12() throws Exception {
+		testFail("test12.json", 5);
+	}
 
-		JsonTextValidator jtop = new JsonTextValidator(file) {
+	@Test
+	public void testFile13() throws Exception {
+		testPassing("test13.json");
+	}
 
-			@Override
-			public void reportProblem(String msg, Location loc, int violation, boolean isError) {
+	@Test
+	public void testFile14() throws Exception {
+		testPassing("test14.json");
+	}
 
-				Assert.fail();
-			}
-		};
+	@Test
+	public void testFile15() throws Exception {
+		testPassing("test15.json");
+	}
 
-		jtop.parse();
+	@Test
+	public void testFile16() throws Exception {
+		testPassing("test16.json");
+	}
 
+	@Test
+	public void testFile17() throws Exception {
+		testFail("test17.json", 14);
+	}
+
+	@Test
+	public void testFile18() throws Exception {
+		testFail("test18.json", 17);
+	}
+
+	@Test
+	public void testFile19() throws Exception {
+		testPassing("test19.json");
+	}
+
+	@Test
+	public void testFile20() throws Exception {
+		testFail("test20.json", 17);
+	}
+
+	@Test
+	public void testFile21() throws Exception {
+		testPassing("test21.json");
+	}
+
+	@Test
+	public void testFile22() throws Exception {
+		testFail("test22.json", 25);
+	}
+
+	@Test
+	public void testFile23() throws Exception {
+		testFail("test23.json", 12);
+	}
+
+	@Test
+	public void testFile24() throws Exception {
+		testPassing("test24.json");
+	}
+
+	@Test
+	public void testFile25() throws Exception {
+		testPassing("test25.json");
+	}
+
+	@Test
+	public void testFile26() throws Exception {
+		testPassing("test26.json");
+	}
+
+	@Test
+	public void testFile27() throws Exception {
+		testPassing("test27.json");
+	}
+
+	@Test
+	public void testFile28() throws Exception {
+		testPassing("test28.json");
+	}
+
+	@Test
+	public void testFile29() throws Exception {
+		testPassing("test29.json");
+	}
+
+	@Test
+	public void testFile30() throws Exception {
+		testPassing("test30.json");
+	}
+
+	@Test
+	public void testFile31() throws Exception {
+		testPassing("test31.json");
+	}
+
+	@Test
+	public void testFile32() throws Exception {
+		testPassing("test32.json");
+	}
+
+	@Test
+	public void testFile33() throws Exception {
+		testPassing("test33.json");
+	}
+
+	@Test
+	public void testFile34() throws Exception {
+		testPassing("test34.json");
+	}
+
+	@Test
+	public void testFile35() throws Exception {
+		testPassing("test35.json");
+	}
+
+	@Test
+	public void testFile36() throws Exception {
+		testPassing("test36.json");
+	}
+
+	@Test
+	public void testFile37() throws Exception {
+		testFail("test37.json", 50);
+	}
+
+	@Test
+	public void testFile38() throws Exception {
+		testFail("test38.json", 103);
+	}
+
+	@Test
+	public void testFile39() throws Exception {
+		testPassing("test39.json");
+	}
+
+	@Test
+	public void testFile40() throws Exception {
+		testFail("test40.json", 20);
+	}
+
+	@Test
+	public void testFile41() throws Exception {
+		testFail("test41.json", 15);
+	}
+
+	@Test
+	public void testFile42() throws Exception {
+		testFail("test42.json", 4);
+	}
+
+	@Test
+	public void testFile43() throws Exception {
+		testFail("test43.json", 21);
+	}
+
+	@Test
+	public void testFile44() throws Exception {
+		testFail("test44.json", 18);
+	}
+
+	@Test
+	public void testFile45() throws Exception {
+		testFail("test45.json", 30);
+	}
+
+	@Test
+	public void testFile46() throws Exception {
+		testFail("test46.json", 58);
+	}
+
+	@Test
+	public void testFile47() throws Exception {
+		testFail("test47.json", 21);
+	}
+
+	@Test
+	public void testFile48() throws Exception {
+		testFail("test48.json", 72);
 	}
 }

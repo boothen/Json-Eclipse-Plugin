@@ -35,6 +35,8 @@ import java.io.FileNotFoundException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.boothen.jsonedit.core.util.reader.JsonFileReader;
 import com.boothen.jsonedit.core.util.reader.JsonReaderException;
@@ -47,6 +49,8 @@ import com.boothen.jsonedit.core.util.reader.JsonReaderException;
  *
  */
 public class JsonTextValidator {
+
+	private static final Logger LOG = LoggerFactory.getLogger(JsonTextValidator.class);
 
 	private final JsonFileReader parser;
 	private final String markerId;
@@ -79,7 +83,7 @@ public class JsonTextValidator {
 	 * Parse the file and report the first error found.
 	 */
 	public void parse() {
-
+		LOG.info("Validating JSON file");
 		try {
 
 			char current = parser.getNextClean();
@@ -89,11 +93,17 @@ public class JsonTextValidator {
 			} else if (current == openSquare) {
 				doJsonArray();
 			} else {
-				reportProblem("JSON should begin with { or [", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+				reportProblemEndValidation("JSON should begin with { or [", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 			}
 
-		} catch (Exception e) {
-		//	JsonLog.logError("Read exception: ", e);
+			if (parser.getCurrent() != eof) {
+				reportProblemEndValidation("Unexpected character", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()), 0, true);
+			}
+
+		} catch (JsonValidationException e) {
+
+		} catch (JsonReaderException e) {
+			reportProblem("Unexpected end of file", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()), 0, true);
 		}
 	}
 
@@ -110,21 +120,19 @@ public class JsonTextValidator {
 			ch = parser.getNextClean();
 
 			// Check for empty object.
-			if (ch == closeCurly) {
+			if (ch == closeCurly && parser.getPrevious() != comma) {
 				parser.getNextClean();
 				break;
 			}
 
 			if (ch != quote) {
-				reportProblem("JSON key should begin with \"", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-				throw new JsonValidationException();
+				reportProblemEndValidation("JSON key should begin with \"", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 			}
 			doJsonKey();
 
 			ch = parser.getNextClean();
 			if (ch != colon) {
-				reportProblem("Expected colon key/value delimitor", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-				throw new JsonValidationException();
+				reportProblemEndValidation("Expected colon key/value delimitor", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 			}
 
 			ch = parser.getNextClean();
@@ -144,21 +152,19 @@ public class JsonTextValidator {
 			} else if (Character.isDigit(ch) || ch == minus) {
 				doJsonNumber();
 			} else {
-				reportProblem("Expected JSON value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-				throw new JsonValidationException();
+				reportProblemEndValidation("Expected JSON value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 			}
 
 			if (parser.getCurrent() == comma) {
 				continue;
 			}
 
-			if (parser.getCurrent() == closeCurly) {
+			if (parser.getCurrent() == closeCurly && parser.getPrevious() != comma) {
 				parser.getNextClean();
 				break;
 			}
 
-			reportProblem("Unexpected object character:" + ch, new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-			throw new JsonValidationException();
+			reportProblemEndValidation("Unexpected object character:" + ch, new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 		} while (ch != eof);
 	}
 
@@ -175,6 +181,11 @@ public class JsonTextValidator {
 		do {
 			ch = parser.getNextClean();
 
+			if (ch == closeSquare && parser.getPrevious() != comma) {
+				parser.getNextClean();
+				break;
+			}
+
 			if (ch == openCurly) {
 				doJsonObject();
 			} else if (ch == openSquare) {
@@ -189,12 +200,8 @@ public class JsonTextValidator {
 				doJsonFalseValue();
 			} else if (Character.isDigit(ch) || ch == minus) {
 				doJsonNumber();
-			} else if (ch == closeSquare) {
-				parser.getNextClean();
-				break;
 			} else {
-				reportProblem("Expected JSON value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-				throw new JsonValidationException();
+				reportProblemEndValidation("Expected JSON value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 			}
 
 			ch = parser.getCurrent();
@@ -202,13 +209,12 @@ public class JsonTextValidator {
 				continue;
 			}
 
-			if (ch == closeSquare) {
+			if (ch == closeSquare && parser.getPrevious() != comma) {
 				parser.getNextClean();
 				break;
 			}
 
-			reportProblem("Unexpected array character:" + ch, new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-			throw new JsonValidationException();
+			reportProblemEndValidation("Unexpected array character:" + ch, new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 		} while (ch != eof);
 	}
 
@@ -221,26 +227,22 @@ public class JsonTextValidator {
 
 		char ch = parser.getNextChar();
 		if (ch != r) {
-			reportProblem("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-			throw new JsonValidationException();
+			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextChar();
 		if (ch != u) {
-			reportProblem("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-			throw new JsonValidationException();
+			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextChar();
 		if (ch != e) {
-			reportProblem("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-			throw new JsonValidationException();
+			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextClean();
 		if (isNotClosed(ch)) {
-			reportProblem("Expected end value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-			throw new JsonValidationException();
+			reportProblemEndValidation("Expected end value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 		}
 	}
 
@@ -254,32 +256,27 @@ public class JsonTextValidator {
 
 		char ch = parser.getNextChar();
 		if (ch != a) {
-			reportProblem("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-			throw new JsonValidationException();
+			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextChar();
 		if (ch != l) {
-			reportProblem("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-			throw new JsonValidationException();
+			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextChar();
 		if (ch != s) {
-			reportProblem("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-			throw new JsonValidationException();
+			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextChar();
 		if (ch != e) {
-			reportProblem("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-			throw new JsonValidationException();
+			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextClean();
 		if (isNotClosed(ch)) {
-			reportProblem("Expected end value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-			throw new JsonValidationException();
+			reportProblemEndValidation("Expected end value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 		}
 
 	}
@@ -294,26 +291,22 @@ public class JsonTextValidator {
 
 		char ch = parser.getNextChar();
 		if (ch != u) {
-			reportProblem("Expect null value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-			throw new JsonValidationException();
+			reportProblemEndValidation("Expect null value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextChar();
 		if (ch != l) {
-			reportProblem("Expect null value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-			throw new JsonValidationException();
+			reportProblemEndValidation("Expect null value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextChar();
 		if (ch != l) {
-			reportProblem("Expect null value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-			throw new JsonValidationException();
+			reportProblemEndValidation("Expect null value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextClean();
 		if (isNotClosed(ch)) {
-			reportProblem("Expected end value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-			throw new JsonValidationException();
+			reportProblemEndValidation("Expected end value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 		}
 	}
 
@@ -330,7 +323,7 @@ public class JsonTextValidator {
 			ch = parser.getNextChar();
 
 			if (ch == eof) {
-				reportProblem("Expected quotation", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+				reportProblemEndValidation("Expected quotation", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 				break;
 			}
 
@@ -386,14 +379,12 @@ public class JsonTextValidator {
 			}
 
 			if (isNotWhiteSpace(ch)) {
-				reportProblem("Value " + ch + " not expected here", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-				throw new JsonValidationException();
+				reportProblemEndValidation("Value " + ch + " not expected here", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 			}
 
 			ch = parser.getNextClean();
 			if (isNotClosed(ch)) {
-				reportProblem("Expected end value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-				throw new JsonValidationException();
+				reportProblemEndValidation("Expected end value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 			}
 
 			break;
@@ -414,8 +405,7 @@ public class JsonTextValidator {
 			ch = parser.getNextChar();
 
 			if (ch == eof) {
-				reportProblem("Invalid JSON key, no closing \"", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
-				throw new JsonValidationException();
+				reportProblemEndValidation("Invalid JSON key, no closing \"", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
 			}
 
 			if (ch != quote) {
@@ -438,10 +428,9 @@ public class JsonTextValidator {
 	 * @param violation
 	 * @param isError
 	 */
+
 	public void reportProblem(String msg, Location loc, int violation, boolean isError) {
-
 		try {
-
 			IMarker marker = loc.file.createMarker(markerId);
 			marker.setAttribute(IMarker.MESSAGE, msg);
 			marker.setAttribute(IMarker.CHAR_START, loc.charStart);
@@ -452,6 +441,11 @@ public class JsonTextValidator {
 		} catch (CoreException e) {
 			//JsonLog.logError(e);
 		}
+	}
+
+	public void reportProblemEndValidation(String msg, Location loc, int violation, boolean isError) throws JsonValidationException {
+		reportProblem(msg, loc, violation, isError);
+		throw new JsonValidationException();
 	}
 
 }
