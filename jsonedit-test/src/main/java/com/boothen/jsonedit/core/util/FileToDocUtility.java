@@ -32,8 +32,16 @@ public class FileToDocUtility {
 
 		try {
 			URL resource = FileToDocUtility.class.getResource("/" + file);
-			return new File(resource.toURI());
+			URI uri = null;
+			if (resource.toString().startsWith("bundleresource")) {
+				uri =FileLocator.toFileURL(resource).toURI();
+			} else {
+				uri =resource.toURI();
+			}
+			return new File(uri);
 		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
