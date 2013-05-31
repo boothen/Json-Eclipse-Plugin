@@ -11,8 +11,6 @@ It manages to flag some errors sometimes (missing commas for example) but it isn
 and it doesn't catch some really glaring problems like the closing bracket being missing
 from a list or the last curly brace missing from the JSON body."
 
-Fix JSON naming consistency some places JSON others Json.
-
 Fix - [WARNING] No explicit target runtime environment configuration. Build is platform dependent
 http://wiki.eclipse.org/Tycho/Reference_Card#Examplary_parent_POM
 
