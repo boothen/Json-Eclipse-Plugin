@@ -14,6 +14,8 @@ from a list or the last curly brace missing from the JSON body."
 Fix - [WARNING] No explicit target runtime environment configuration. Build is platform dependent
 http://wiki.eclipse.org/Tycho/Reference_Card#Examplary_parent_POM
 
+Fix - Maven/Eclipse warning
+Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
 
 Multi objects in file
 
