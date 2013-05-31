@@ -11,7 +11,7 @@
             extensions="json"
             icon="src/main/resources/icons/JsonFile.gif"
             id="com.boothen.jsonedit.core.editors.JsonPageEditor"
-            name="Json Editor"
+            name="JSON Editor"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
          <contentTypeBinding
                contentTypeId="com.boothen.jsonedit.core.jsonsource">
@@ -26,7 +26,7 @@
       </category>
       <command
             categoryId="Json.format"
-            description="Format Json Text"
+            description="Format JSON Text"
             id="Json.formatText"
             name="Format Text">
       </command>
@@ -75,7 +75,7 @@
    </extension>
    <extension
          id="com.boothen.jsonedit.validation.builder"
-         name="Json Validator"
+         name="JSON Validator"
          point="org.eclipse.core.resources.builders">
       <builder
             callOnEmptyDelta="false"
@@ -88,7 +88,7 @@
    </extension>
    <extension
          id="com.boothen.jsonedit.validation.nature"
-         name="Json Validation Nature"
+         name="JSON Validation Nature"
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
@@ -124,7 +124,7 @@
       <page
             class="com.boothen.jsonedit.preferences.WorkbenchPreferencePage"
             id="com.boothen.jsonedit.preferences.WorkbenchPrefencePage"
-            name="Json Editor">
+            name="JSON Editor">
       </page>
    </extension>
    <extension
@@ -132,7 +132,7 @@
       <page
             class="com.boothen.jsonedit.preferences.ProjectPropertiesPage"
             id="com.boothen.jsonedit.preferences.properties"
-            name="Json Properties">
+            name="JSON Properties">
          <enabledWhen>
             <adapt
                   type="org.eclipse.core.resources.IProject">
@@ -146,7 +146,7 @@
             base-type="org.eclipse.core.runtime.text"
             file-extensions="json"
             id="com.boothen.jsonedit.core.jsonsource"
-            name="Json Source"
+            name="JSON Source"
             priority="high">
       </content-type>
    </extension>

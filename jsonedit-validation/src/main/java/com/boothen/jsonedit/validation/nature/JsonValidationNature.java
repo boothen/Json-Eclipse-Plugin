@@ -36,7 +36,7 @@ public class JsonValidationNature implements IProjectNature {
 	@Override
 	public void configure() throws CoreException {
 		IncrementalJsonValidator.addBuilderToProject(project);
-		new Job("Validating Json Files") {
+		new Job("Validating JSON Files") {
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
 					project.build(IncrementalJsonValidator.FULL_BUILD, IncrementalJsonValidator.BUILDER_ID, null,monitor);

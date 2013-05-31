@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Json Editor Log
+Bundle-Name: JSON Editor Log
 Bundle-SymbolicName: jsonedit-log
 Bundle-Version: 0.9.5
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

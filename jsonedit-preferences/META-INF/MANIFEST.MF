@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Json Editor Preferences
+Bundle-Name: JSON Editor Preferences
 Bundle-SymbolicName: jsonedit-preferences
 Bundle-Version: 0.9.5
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

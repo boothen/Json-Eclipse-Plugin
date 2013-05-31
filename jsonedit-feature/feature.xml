@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="jsonedit-feature"
-      label="Json Editor Plugin"
+      label="JSON Editor Plugin"
       version="0.9.5"
       provider-name="Boothen Technology"
       plugin="jsonedit-core">
 
    <description>
-      An Eclipse Json Editor
+      An Eclipse JSON Editor
    </description>
 
    <license url="http://www.eclipse.org/org/documents/epl-v10.html">
@@ -91,15 +91,35 @@ All Recipient&apos;s rights under this Agreement shall terminate if it fails
          unpack="false"/>
 
    <plugin
+         id="jsonedit-folding"
+         download-size="0"
+         install-size="0"
+         version="0.9.5"
+         unpack="false"/>
+
+   <plugin
+         id="jsonedit-log"
+         download-size="0"
+         install-size="0"
+         version="0.9.5"
+         unpack="false"/>
+
+   <plugin
          id="jsonedit-model"
          download-size="0"
          install-size="0"
          version="0.9.5"
          unpack="false"/>
 
-
    <plugin
          id="jsonedit-outline"
+         download-size="0"
+         install-size="0"
+         version="0.9.5"
+         unpack="false"/>
+
+   <plugin
+         id="jsonedit-preferences"
          download-size="0"
          install-size="0"
          version="0.9.5"
@@ -112,4 +132,24 @@ All Recipient&apos;s rights under this Agreement shall terminate if it fails
          version="0.9.5"
          unpack="false"/>
 
+   <plugin
+         id="jsonedit-text"
+         download-size="0"
+         install-size="0"
+         version="0.9.5"
+         unpack="false"/>
+
+   <plugin
+         id="jsonedit-validation"
+         download-size="0"
+         install-size="0"
+         version="0.9.5"
+         unpack="false"/>
+
+   <plugin
+         id="jsonedit-validator"
+         download-size="0"
+         install-size="0"
+         version="0.9.5"
+         unpack="false"/>
 </feature>

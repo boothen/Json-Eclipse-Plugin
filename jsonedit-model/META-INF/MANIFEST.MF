@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Json Editor Model Generator
+Bundle-Name: JSON Editor Model Generator
 Bundle-SymbolicName: jsonedit-model
 Bundle-Version: 0.9.5
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
