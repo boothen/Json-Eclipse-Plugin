@@ -12,3 +12,5 @@ c) Write readme
 9) Create new github repository from sourceforge - don't add readme.md
 10) Add new readme.md
 11) Update travis to point to new github location.
+
+-Dtycho.localArtifacts=ignore

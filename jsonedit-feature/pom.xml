@@ -32,7 +32,7 @@
 											tycho-packaging-plugin
 										</artifactId>
 										<versionRange>
-											[0.16.0,)
+											[0.18.0,)
 										</versionRange>
 										<goals>
 											<goal>

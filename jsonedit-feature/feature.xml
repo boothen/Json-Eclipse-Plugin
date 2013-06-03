@@ -80,7 +80,7 @@ All Recipient&apos;s rights under this Agreement shall terminate if it fails
    </license>
 
    <url>
-      <update label="Json Editor Plugin Latest" url="http://eclipsejsonedit.svn.sourceforge.net/viewvc/eclipsejsonedit/trunk/Json%20Editor%20Plugin/"/>
+      <update label="Json Editor Plugin Latest" url="http://eclipsejsonedit.svn.sourceforge.net/viewvc/eclipsejsonedit/trunk/repository/"/>
    </url>
 
    <plugin

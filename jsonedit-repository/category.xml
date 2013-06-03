@@ -3,5 +3,9 @@
    <feature url="features/jsonedit-feature_0.9.5.jar" id="jsonedit-feature" version="0.9.5">
       <category name="Editors"/>
    </feature>
-   <category-def name="Editors" label="Editors"/>
+   <category-def name="Editors" label="Editors">
+      <description>
+         Editors Category
+      </description>
+   </category-def>
 </site>
