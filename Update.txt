@@ -10,3 +10,25 @@ c) Write readme
 11) Update travis to point to new github location.
 
 -Dtycho.localArtifacts=ignore
+
+Bug Fixes
+---------
+
+20	Use workbench default setting for tabs & spaces instead of own preference value	0.9.5	closed	Boothen Technology	 6 days ago	 15 hours ago
+18	Validator is not reporting 1.1e as an invalid number.	0.9.5	closed	Boothen Technology	 2013-05-24	 15 hours ago
+17	Auto indent does not work on new file.	0.9.5	closed	Boothen Technology	 2013-05-24	 15 hours ago
+16	Use Project line ending when different from system.	0.9.5	closed	Boothen Technology	 2013-05-24	 15 hours ago
+14	Maintain cursor position and folding states after text format.	0.9.5	closed	Boothen Technology	 2012-11-06	 15 hours ago
+13	Exponential values are reported as errors.	0.9.5	closed	Boothen Technology	 2012-11-06	 15 hours ago
+12	String containing {} reports an error in the Outline view.	0.9.5	closed	Boothen Technology	 2012-11-06	 15 hours ago
+11	Boolean validation is case insensitive.	0.9.5	closed	Boothen Technology	 2012-11-06	 15 hours ago
+7	syntax highlighting should support multiline comments	0.9.5	closed	Boothen Technology	 2010-10-06	 15 hours ago
+1	Validation highlighting error	0.9.5	closed	Boothen Technology	 2009-06-02	 15 hours ago
+
+
+Features
+--------
+
+5	Provide text highlight color preferences	0.9.5	closed	Boothen Technology	 2013-05-24	 15 hours ago
+4	auto-format on save option	0.9.5	closed	Boothen Technology	 2013-05-15	 4 minutes ago
+
