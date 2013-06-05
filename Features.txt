@@ -1,22 +1,6 @@
 Road map
 ========
 
-Fix JSON Validation
- - trailing comma is not detected
- - not multi file stops after first object
-
-
-"The validation just does not work consistently and frankly that is the most valuable part.
-It manages to flag some errors sometimes (missing commas for example) but it isn't consistent
-and it doesn't catch some really glaring problems like the closing bracket being missing
-from a list or the last curly brace missing from the JSON body."
-
-Fix - [WARNING] No explicit target runtime environment configuration. Build is platform dependent
-http://wiki.eclipse.org/Tycho/Reference_Card#Examplary_parent_POM
-
-Fix - Maven/Eclipse warning
-Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
-
 Multi objects in file
 
  - format text (ok)
@@ -38,6 +22,9 @@ Multi errors in validation
 Generate Java objects
 Mock JSON from Java Object
 Http Client
+Get incorporated into Eclipse Color Themes
+Fix coloring for String value with space after :
+
 
 JSON Schema
 Upgrade to 4.2

@@ -1,7 +1,3 @@
-5) Deploy to update site
-6) Add to sourceforge download
-a) Update sourceforge news section
-b) Close bugs and features.
 c) Write readme
 7) Update Eclipse plugin page
 8) Add source code to sourceforge. - don't add readme.md
