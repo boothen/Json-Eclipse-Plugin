@@ -93,17 +93,17 @@ public class JsonTextValidator {
 			} else if (current == openSquare) {
 				doJsonArray();
 			} else {
-				reportProblemEndValidation("JSON should begin with { or [", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+				reportProblemEndValidation("JSON should begin with { or [", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 			}
 
 			if (parser.getCurrent() != eof) {
-				reportProblemEndValidation("Unexpected character", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()), 0, true);
+				reportProblemEndValidation("Unexpected character", new Location(parser.getIFile(),"", parser.getPosition()), 0, true);
 			}
 
 		} catch (JsonValidationException e) {
 
 		} catch (JsonReaderException e) {
-			reportProblem("Unexpected end of file", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()), 0, true);
+			reportProblem("Unexpected end of file", new Location(parser.getIFile(),"", parser.getPosition()), 0, true);
 		}
 	}
 
@@ -126,13 +126,13 @@ public class JsonTextValidator {
 			}
 
 			if (ch != quote) {
-				reportProblemEndValidation("JSON key should begin with \"", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+				reportProblemEndValidation("JSON key should begin with \"", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 			}
 			doJsonKey();
 
 			ch = parser.getNextClean();
 			if (ch != colon) {
-				reportProblemEndValidation("Expected colon key/value delimitor", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+				reportProblemEndValidation("Expected colon key/value delimitor", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 			}
 
 			ch = parser.getNextClean();
@@ -152,7 +152,7 @@ public class JsonTextValidator {
 			} else if (Character.isDigit(ch) || ch == minus) {
 				doJsonNumber();
 			} else {
-				reportProblemEndValidation("Expected JSON value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+				reportProblemEndValidation("Expected JSON value", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 			}
 
 			if (parser.getCurrent() == comma) {
@@ -164,7 +164,7 @@ public class JsonTextValidator {
 				break;
 			}
 
-			reportProblemEndValidation("Unexpected object character:" + ch, new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+			reportProblemEndValidation("Unexpected object character:" + ch, new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 		} while (ch != eof);
 	}
 
@@ -201,7 +201,7 @@ public class JsonTextValidator {
 			} else if (Character.isDigit(ch) || ch == minus) {
 				doJsonNumber();
 			} else {
-				reportProblemEndValidation("Expected JSON value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+				reportProblemEndValidation("Expected JSON value", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 			}
 
 			ch = parser.getCurrent();
@@ -214,7 +214,7 @@ public class JsonTextValidator {
 				break;
 			}
 
-			reportProblemEndValidation("Unexpected array character:" + ch, new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+			reportProblemEndValidation("Unexpected array character:" + ch, new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 		} while (ch != eof);
 	}
 
@@ -227,22 +227,22 @@ public class JsonTextValidator {
 
 		char ch = parser.getNextChar();
 		if (ch != r) {
-			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextChar();
 		if (ch != u) {
-			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextChar();
 		if (ch != e) {
-			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextClean();
 		if (isNotClosed(ch)) {
-			reportProblemEndValidation("Expected end value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+			reportProblemEndValidation("Expected end value", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 		}
 	}
 
@@ -256,27 +256,27 @@ public class JsonTextValidator {
 
 		char ch = parser.getNextChar();
 		if (ch != a) {
-			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextChar();
 		if (ch != l) {
-			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextChar();
 		if (ch != s) {
-			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextChar();
 		if (ch != e) {
-			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+			reportProblemEndValidation("Expect true value", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextClean();
 		if (isNotClosed(ch)) {
-			reportProblemEndValidation("Expected end value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+			reportProblemEndValidation("Expected end value", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 		}
 
 	}
@@ -291,22 +291,22 @@ public class JsonTextValidator {
 
 		char ch = parser.getNextChar();
 		if (ch != u) {
-			reportProblemEndValidation("Expect null value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+			reportProblemEndValidation("Expect null value", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextChar();
 		if (ch != l) {
-			reportProblemEndValidation("Expect null value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+			reportProblemEndValidation("Expect null value", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextChar();
 		if (ch != l) {
-			reportProblemEndValidation("Expect null value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+			reportProblemEndValidation("Expect null value", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 		}
 
 		ch = parser.getNextClean();
 		if (isNotClosed(ch)) {
-			reportProblemEndValidation("Expected end value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+			reportProblemEndValidation("Expected end value", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 		}
 	}
 
@@ -323,7 +323,7 @@ public class JsonTextValidator {
 			ch = parser.getNextChar();
 
 			if (ch == eof) {
-				reportProblemEndValidation("Expected quotation", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+				reportProblemEndValidation("Expected quotation", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 				break;
 			}
 
@@ -379,12 +379,12 @@ public class JsonTextValidator {
 			}
 
 			if (isNotWhiteSpace(ch)) {
-				reportProblemEndValidation("Value " + ch + " not expected here", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+				reportProblemEndValidation("Value " + ch + " not expected here", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 			}
 
 			ch = parser.getNextClean();
 			if (isNotClosed(ch)) {
-				reportProblemEndValidation("Expected end value", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+				reportProblemEndValidation("Expected end value", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 			}
 
 			break;
@@ -405,7 +405,7 @@ public class JsonTextValidator {
 			ch = parser.getNextChar();
 
 			if (ch == eof) {
-				reportProblemEndValidation("Invalid JSON key, no closing \"", new Location(parser.getIFile(),"", parser.getPosition(), parser.getPosition()),0, true);
+				reportProblemEndValidation("Invalid JSON key, no closing \"", new Location(parser.getIFile(),"", parser.getPosition()),0, true);
 			}
 
 			if (ch != quote) {

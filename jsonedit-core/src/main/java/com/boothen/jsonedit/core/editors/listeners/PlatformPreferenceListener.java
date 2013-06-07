@@ -37,6 +37,7 @@ public class PlatformPreferenceListener implements IEclipsePreferences.IPreferen
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
 		viewerConfiguration.handlePreferenceStoreChanged();
+		jsonPreferenceStore.updateEditorPreferences();
 	}
 
 	public void setPreferenceChangeListener(IFile file) {

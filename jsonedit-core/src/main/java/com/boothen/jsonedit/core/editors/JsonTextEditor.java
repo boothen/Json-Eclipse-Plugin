@@ -50,7 +50,6 @@ public class JsonTextEditor extends TextEditor {
 
 
 	private ProjectionAnnotationModel annotationModel;
-	private ProjectionSupport projectionSupport;
 	private ProjectionAnnotation[] oldAnnotations;
 	private boolean[] annotationCollapsedState;
 	private boolean restoreCursorLocation = false;
@@ -65,7 +64,6 @@ public class JsonTextEditor extends TextEditor {
 	@Override
 	protected void configureSourceViewerDecorationSupport(SourceViewerDecorationSupport support) {
 		support.setCharacterPairMatcher(pairsMatcher);
-
 		support.setMatchingCharacterPainterPreferenceKeys(JsonPreferenceStore.EDITOR_MATCHING_BRACKETS,
 				JsonPreferenceStore.EDITOR_MATCHING_BRACKETS_COLOR);
 		super.configureSourceViewerDecorationSupport(support);
@@ -178,7 +176,7 @@ public class JsonTextEditor extends TextEditor {
 		super.createPartControl(parent);
 
 		ProjectionViewer viewer =(ProjectionViewer) getSourceViewer();
-		projectionSupport = new ProjectionSupport(viewer,getAnnotationAccess(),getSharedColors());
+		ProjectionSupport projectionSupport = new ProjectionSupport(viewer,getAnnotationAccess(),getSharedColors());
 		projectionSupport.install();
 
 		//turn projection mode on
@@ -197,9 +195,7 @@ public class JsonTextEditor extends TextEditor {
 
 	@Override
 	protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
-
 		ISourceViewer viewer = new ProjectionViewer(parent, ruler, getOverviewRuler(), isOverviewRulerVisible(), styles);
-
 		// ensure decoration support has been created and configured.
 		getSourceViewerDecorationSupport(viewer);
 		return viewer;
@@ -230,7 +226,6 @@ public class JsonTextEditor extends TextEditor {
 		}
 
 		annotationModel.modifyAnnotations(oldAnnotations,newAnnotations,null);
-
 		oldAnnotations = annotations;
 	}
 

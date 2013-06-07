@@ -10,14 +10,18 @@ public class Location {
 	public final int charEnd;
 
 	public Location(IFile file, String key, int charStart, int charEnd) {
-		super();
 		this.file = file;
 		this.key = key;
 		this.charStart = charStart;
 		this.charEnd = charEnd;
 	}
 
-
+	public Location(IFile file, String key, int charStart) {
+		this.file = file;
+		this.key = key;
+		this.charStart = charStart;
+		this.charEnd = charStart + 1;
+	}
 }
 
 

@@ -30,6 +30,10 @@ public class JsonPreferenceStore {
 	public static final String VALUE_COLOR = "valueColor"; //$NON-NLS-1$
 	public static final String NULL_COLOR = "nullColor"; //$NON-NLS-1$
 	public static final String DEFAULT_COLOR = "defaultColor"; //$NON-NLS-1$
+	public static final String ERROR_TEXT_STYLE = "errorTextStyle"; //$NON-NLS-1$
+	public static final String ERROR_INDICATION = "errorIndication"; //$NON-NLS-1$
+	public static final String ERROR_INDICATION_COLOR = "errorIndicationColor"; //$NON-NLS-1$
+
 
 	private IPreferenceStore preferenceStore;
 	private IPreferenceStore editorPreferenceStore;
@@ -51,6 +55,9 @@ public class JsonPreferenceStore {
 		this.preferenceStore.setDefault(VALUE_COLOR, StringConverter.asString(JsonColorProvider.VALUE));
 		this.preferenceStore.setDefault(NULL_COLOR, StringConverter.asString(JsonColorProvider.NULL));
 		this.preferenceStore.setDefault(DEFAULT_COLOR, StringConverter.asString(JsonColorProvider.DEFAULT));
+		this.preferenceStore.setDefault(ERROR_TEXT_STYLE, editorPreferenceStore.getDefaultString(ERROR_TEXT_STYLE));
+		this.preferenceStore.setDefault(ERROR_INDICATION, editorPreferenceStore.getDefaultString(ERROR_INDICATION));
+		this.preferenceStore.setDefault(ERROR_INDICATION_COLOR, editorPreferenceStore.getDefaultString(ERROR_INDICATION_COLOR));
 		jsonPreferenceStore = this;
 	}
 
@@ -83,5 +90,11 @@ public class JsonPreferenceStore {
 			return preferenceStore.getInt(NUM_SPACES);
 		}
 		return editorPreferenceStore.getInt("tabWidth");
+	}
+
+	public void updateEditorPreferences() {
+		this.preferenceStore.setValue(ERROR_TEXT_STYLE, editorPreferenceStore.getString(ERROR_TEXT_STYLE));
+		this.preferenceStore.setValue(ERROR_INDICATION, editorPreferenceStore.getBoolean(ERROR_INDICATION));
+		this.preferenceStore.setValue(ERROR_INDICATION_COLOR, editorPreferenceStore.getString(ERROR_INDICATION_COLOR));
 	}
 }
