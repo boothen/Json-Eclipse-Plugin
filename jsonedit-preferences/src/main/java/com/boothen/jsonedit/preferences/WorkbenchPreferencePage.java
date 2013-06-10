@@ -32,14 +32,14 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage implement
 	 */
 	public WorkbenchPreferencePage() {
 		super(FieldEditorPreferencePage.GRID);
-		IPreferenceStore store = JsonPreferenceStore.getJsonPreferenceStore().getIPreferenceStore();
+		IPreferenceStore store = JsonPreferenceStore.getIPreferenceStore();
 		setPreferenceStore(store);
 
 	}
 
 	@Override
 	protected IPreferenceStore doGetPreferenceStore() {
-		return JsonPreferenceStore.getJsonPreferenceStore().getIPreferenceStore();
+		return JsonPreferenceStore.getIPreferenceStore();
 	}
 
 

@@ -39,7 +39,7 @@ public class JsonSourceViewerConfiguration extends SourceViewerConfiguration {
 		int numSpaces = store.getTabWidth();
 		String lineEnding = getTextEditorLineEnding();
 		jsonIndentLineAutoEditStrategy = new JsonIndentLineAutoEditStrategy(spaces, numSpaces, lineEnding);
-		jsonScanner = new JsonScanner(store);
+		jsonScanner = new JsonScanner();
 	}
 
 	@Override

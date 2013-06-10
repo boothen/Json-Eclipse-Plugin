@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.7"?>
 <plugin>
-
+   <extension point="org.eclipse.core.runtime.preferences">
+      <initializer class="com.boothen.jsonedit.preferences.JsonPreferenceStore"/>
+   </extension>
    <extension
          point="org.eclipse.ui.editors">
       <editor
@@ -147,8 +149,6 @@
             file-extensions="json"
             id="com.boothen.jsonedit.core.jsonsource"
             name="JSON Source"
-            priority="high">
-      </content-type>
+            priority="high"/>
    </extension>
-
 </plugin>

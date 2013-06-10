@@ -20,7 +20,6 @@ public class PlatformPreferenceListener implements IEclipsePreferences.IPreferen
 	public PlatformPreferenceListener(JsonSourceViewerConfiguration viewerConfiguration, JsonPreferenceStore jsonPreferenceStore) {
 		this.viewerConfiguration = viewerConfiguration;
 		this.jsonPreferenceStore = jsonPreferenceStore;
-
 	}
 
 	/**
@@ -43,13 +42,13 @@ public class PlatformPreferenceListener implements IEclipsePreferences.IPreferen
 	public void setPreferenceChangeListener(IFile file) {
 		iEclipsePreferences = new ProjectScope(file.getProject()).getNode(Platform.PI_RUNTIME);
 		iEclipsePreferences.addPreferenceChangeListener(this);
-		jsonPreferenceStore.getEditorPreferenceStore().addPropertyChangeListener(this);
+		JsonPreferenceStore.getEditorPreferenceStore().addPropertyChangeListener(this);
 	}
 
 	public void removePreferenceChangeListener() {
 		if (iEclipsePreferences != null) {
 			iEclipsePreferences.removePreferenceChangeListener(this);
-			jsonPreferenceStore.getEditorPreferenceStore().removePropertyChangeListener(this);
+			JsonPreferenceStore.getEditorPreferenceStore().removePropertyChangeListener(this);
 		}
 	}
 }

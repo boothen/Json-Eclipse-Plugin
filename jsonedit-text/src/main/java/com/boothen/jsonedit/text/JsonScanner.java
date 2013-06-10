@@ -30,12 +30,10 @@ import com.boothen.jsonedit.text.detector.JsonWordDetector;
  */
 public class JsonScanner extends RuleBasedScanner {
 
-	private JsonPreferenceStore store;
 	private JsonColorProvider jsonColorProvider = new JsonColorProvider();
 
-	public JsonScanner(JsonPreferenceStore store) {
+	public JsonScanner() {
 		super();
-		this.store = store;
 		initScanner();
 	}
 
@@ -64,6 +62,6 @@ public class JsonScanner extends RuleBasedScanner {
 	}
 
 	private Color getPreferenceColor(String preferenceValue) {
-		return jsonColorProvider.getColor(StringConverter.asRGB(store.getIPreferenceStore().getString(preferenceValue)));
+		return jsonColorProvider.getColor(StringConverter.asRGB(JsonPreferenceStore.getIPreferenceStore().getString(preferenceValue)));
 	}
 }

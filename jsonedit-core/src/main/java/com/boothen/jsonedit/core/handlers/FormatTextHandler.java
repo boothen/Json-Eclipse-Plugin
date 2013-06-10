@@ -48,7 +48,7 @@ public class FormatTextHandler implements IHandler {
 
 		JsonTextEditor textEditor = (JsonTextEditor) ((JsonPageEditor) editor).getEditor();
 
-		JsonPreferenceStore store = JsonPreferenceStore.getJsonPreferenceStore();
+		JsonPreferenceStore store = new JsonPreferenceStore();
 		boolean spaces = store.getSpacesForTab();
 		int numSpaces = store.getTabWidth();
 

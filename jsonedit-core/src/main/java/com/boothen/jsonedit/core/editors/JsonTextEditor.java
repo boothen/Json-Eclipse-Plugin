@@ -75,7 +75,7 @@ public class JsonTextEditor extends TextEditor {
 		super.initializeEditor();
 		setEditorContextMenuId("#JsonTextEditorContext"); //$NON-NLS-1$
 		setRulerContextMenuId("#JsonTextRulerContext"); //$NON-NLS-1$
-		setPreferenceStore(JsonPreferenceStore.getJsonPreferenceStore().getIPreferenceStore());
+		setPreferenceStore(JsonPreferenceStore.getIPreferenceStore());
 	}
 
 	@Override
@@ -170,7 +170,7 @@ public class JsonTextEditor extends TextEditor {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		JsonPreferenceStore jsonPreferenceStore = JsonPreferenceStore.getJsonPreferenceStore();
+		JsonPreferenceStore jsonPreferenceStore = new JsonPreferenceStore();
 		viewerConfiguration = new JsonSourceViewerConfiguration(this, jsonPreferenceStore);
 		setSourceViewerConfiguration(viewerConfiguration);
 		super.createPartControl(parent);
