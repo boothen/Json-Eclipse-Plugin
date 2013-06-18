@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JSON Editor Plugin
 Bundle-SymbolicName: jsonedit-core;singleton:=true
-Bundle-Version: 0.9.5
+Bundle-Version: 0.9.6
 Bundle-Activator: com.boothen.jsonedit.core.JsonEditorPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -11,15 +11,15 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.editors,
  org.eclipse.ui.ide,
  org.eclipse.ui.views,
- jsonedit-model;bundle-version="0.9.5",
- jsonedit-reader;bundle-version="0.9.5",
- jsonedit-outline;bundle-version="0.9.5",
- jsonedit-validator;bundle-version="0.9.5",
- jsonedit-validation;bundle-version="0.9.5",
- jsonedit-folding;bundle-version="0.9.5",
- jsonedit-preferences;bundle-version="0.9.5",
- jsonedit-text;bundle-version="0.9.5",
- jsonedit-log;bundle-version="0.9.5"
+ jsonedit-model,
+ jsonedit-reader,
+ jsonedit-outline,
+ jsonedit-validator,
+ jsonedit-validation,
+ jsonedit-folding,
+ jsonedit-preferences,
+ jsonedit-text,
+ jsonedit-log
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Boothen Technology

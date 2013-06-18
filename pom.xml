@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.boothen</groupId>
 	<artifactId>jsonedit-parent</artifactId>
-	<version>0.9.5</version>
+	<version>0.9.6</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>jsonedit-core</module>
@@ -23,7 +23,7 @@
 	</modules>
 
 	<properties>
-	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<tycho.version>0.18.0</tycho.version>
 		<hamcrest.version>1.3</hamcrest.version>
 		<junit.version>4.10</junit.version>
@@ -107,6 +107,11 @@
 				<configuration>
 					<format>'${build.qualifier}'</format>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-versions-plugin</artifactId>
+				<version>${tycho.version}</version>
 			</plugin>
 		</plugins>
 	</build>
