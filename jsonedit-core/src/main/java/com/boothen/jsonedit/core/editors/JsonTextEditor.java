@@ -43,7 +43,6 @@ public class JsonTextEditor extends TextEditor {
 	private final static char[] PAIRS= { '{', '}', '[', ']' };
 
 	private DefaultCharacterPairMatcher pairsMatcher = new DefaultCharacterPairMatcher(PAIRS);
-
 	private JsonSourceViewerConfiguration viewerConfiguration;
 	private JsonContentOutlinePage fOutlinePage;
 	private PlatformPreferenceListener platformPreferenceListener;

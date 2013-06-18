@@ -70,10 +70,6 @@ IReconcilingStrategyExtension {
 		}
 	}
 
-	public JsonTextEditor getTextEditor() {
-		return textEditor;
-	}
-
 	public void setTextEditor(JsonTextEditor textEditor) {
 		this.textEditor = textEditor;
 	}

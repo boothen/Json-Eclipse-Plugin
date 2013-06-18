@@ -10,6 +10,7 @@ Multi objects in file
  - validation (not done) - (update parse to loop instead of checking eof)
  - text coloring (ok)
 
+Pair matching in editor {} or [] goes a miss if String contains any of those characters.
 
 Single file validation
 Single error outline
