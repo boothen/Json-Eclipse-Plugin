@@ -10,7 +10,7 @@ import org.eclipse.jface.text.reconciler.IReconciler;
 import org.eclipse.jface.text.reconciler.MonoReconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.jface.text.source.SourceViewerConfiguration;
+import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
 import com.boothen.jsonedit.core.model.JsonReconcilingStrategy;
 import com.boothen.jsonedit.preferences.JsonPreferenceStore;
@@ -24,7 +24,7 @@ import com.boothen.jsonedit.text.LineEndingUtil;
  * @author Matt Garner
  *
  */
-public class JsonSourceViewerConfiguration extends SourceViewerConfiguration {
+public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration {
 
 	private JsonTextEditor textEditor;
 	private JsonIndentLineAutoEditStrategy jsonIndentLineAutoEditStrategy;

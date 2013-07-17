@@ -12,6 +12,21 @@ Multi objects in file
 
 Pair matching in editor {} or [] goes a miss if String contains any of those characters.
 
+ctrl-f to format
+when formatting don't remove trailing space
+allow formatting to include whitespace before and after colon.
+
+allow folding to be turned off
+
+
+
+done
+----
+show print margin
+show line numbers
+
+
+
 Single file validation
 Single error outline
 

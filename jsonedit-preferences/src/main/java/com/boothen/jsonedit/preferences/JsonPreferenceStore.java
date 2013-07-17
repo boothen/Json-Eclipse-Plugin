@@ -5,6 +5,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
+import org.eclipse.ui.texteditor.ChainedPreferenceStore;
 
 import com.boothen.jsonedit.coloring.JsonColorProvider;
 
@@ -34,6 +35,7 @@ public class JsonPreferenceStore extends AbstractPreferenceInitializer {
 
 	private static IPreferenceStore preferenceStore;
 	private static IPreferenceStore editorPreferenceStore;
+	private static IPreferenceStore chainedPreferenceStore;
 
 	public JsonPreferenceStore() {
 
@@ -81,6 +83,13 @@ public class JsonPreferenceStore extends AbstractPreferenceInitializer {
 		preferenceStore.setDefault(ERROR_TEXT_STYLE, editorPreferenceStore.getDefaultString(ERROR_TEXT_STYLE));
 		preferenceStore.setDefault(ERROR_INDICATION, editorPreferenceStore.getDefaultString(ERROR_INDICATION));
 		preferenceStore.setDefault(ERROR_INDICATION_COLOR, editorPreferenceStore.getDefaultString(ERROR_INDICATION_COLOR));
+	}
+
+	public static IPreferenceStore getChainedPreferenceStore() {
+		if (chainedPreferenceStore == null) {
+			chainedPreferenceStore = new ChainedPreferenceStore(new IPreferenceStore[]{ getIPreferenceStore(), getEditorPreferenceStore()});
+		}
+		return chainedPreferenceStore;
 	}
 
 	public static IPreferenceStore getIPreferenceStore() {

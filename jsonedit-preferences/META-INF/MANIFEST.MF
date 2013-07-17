@@ -8,6 +8,7 @@ Bundle-Vendor: Boothen Technology
 Require-Bundle: org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.ui,
+ org.eclipse.ui.editors,
  jsonedit-validation
 Export-Package: com.boothen.jsonedit.preferences,
  com.boothen.jsonedit.coloring

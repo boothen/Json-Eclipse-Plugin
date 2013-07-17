@@ -74,7 +74,7 @@ public class JsonTextEditor extends TextEditor {
 		super.initializeEditor();
 		setEditorContextMenuId("#JsonTextEditorContext"); //$NON-NLS-1$
 		setRulerContextMenuId("#JsonTextRulerContext"); //$NON-NLS-1$
-		setPreferenceStore(JsonPreferenceStore.getIPreferenceStore());
+		setPreferenceStore(JsonPreferenceStore.getChainedPreferenceStore());
 	}
 
 	@Override
@@ -194,6 +194,10 @@ public class JsonTextEditor extends TextEditor {
 
 	@Override
 	protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
+
+		fAnnotationAccess = getAnnotationAccess();
+		fOverviewRuler = createOverviewRuler(getSharedColors());
+
 		ISourceViewer viewer = new ProjectionViewer(parent, ruler, getOverviewRuler(), isOverviewRulerVisible(), styles);
 		// ensure decoration support has been created and configured.
 		getSourceViewerDecorationSupport(viewer);
