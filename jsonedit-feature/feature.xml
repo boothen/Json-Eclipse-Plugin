@@ -2,7 +2,7 @@
 <feature
       id="jsonedit-feature"
       label="JSON Editor Plugin"
-      version="0.9.6"
+      version="0.9.7"
       provider-name="Boothen Technology"
       plugin="jsonedit-core">
 
@@ -87,69 +87,69 @@ All Recipient&apos;s rights under this Agreement shall terminate if it fails
          id="jsonedit-core"
          download-size="0"
          install-size="0"
-         version="0.9.6"
+         version="0.9.7"
          unpack="false"/>
 
    <plugin
          id="jsonedit-folding"
          download-size="0"
          install-size="0"
-         version="0.9.6"
+         version="0.9.7"
          unpack="false"/>
 
    <plugin
          id="jsonedit-log"
          download-size="0"
          install-size="0"
-         version="0.9.6"
+         version="0.9.7"
          unpack="false"/>
 
    <plugin
          id="jsonedit-model"
          download-size="0"
          install-size="0"
-         version="0.9.6"
+         version="0.9.7"
          unpack="false"/>
 
    <plugin
          id="jsonedit-outline"
          download-size="0"
          install-size="0"
-         version="0.9.6"
+         version="0.9.7"
          unpack="false"/>
 
    <plugin
          id="jsonedit-preferences"
          download-size="0"
          install-size="0"
-         version="0.9.6"
+         version="0.9.7"
          unpack="false"/>
 
    <plugin
          id="jsonedit-reader"
          download-size="0"
          install-size="0"
-         version="0.9.6"
+         version="0.9.7"
          unpack="false"/>
 
    <plugin
          id="jsonedit-text"
          download-size="0"
          install-size="0"
-         version="0.9.6"
+         version="0.9.7"
          unpack="false"/>
 
    <plugin
          id="jsonedit-validation"
          download-size="0"
          install-size="0"
-         version="0.9.6"
+         version="0.9.7"
          unpack="false"/>
 
    <plugin
          id="jsonedit-validator"
          download-size="0"
          install-size="0"
-         version="0.9.6"
+         version="0.9.7"
          unpack="false"/>
 </feature>
