@@ -4,10 +4,12 @@
 package com.boothen.jsonedit.core;
 
 
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import com.boothen.jsonedit.log.JsonLog;
+import com.boothen.jsonedit.outline.node.JsonTreeNode;
 
 /**
  * Main plug class that integrates with Eclipse.
@@ -22,6 +24,7 @@ public class JsonEditorPlugin extends AbstractUIPlugin {
 
 	public JsonEditorPlugin() {
 		JsonLog.getInstance(PLUGIN_ID, super.getLog());
+		getImageRegistry();
 	}
 
 	@Override
@@ -33,4 +36,12 @@ public class JsonEditorPlugin extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
 	}
+
+	@Override
+	protected void initializeImageRegistry(ImageRegistry reg) {
+		JsonTreeNode.initializeImageRegistry(reg);
+		super.initializeImageRegistry(reg);
+	}
+	
+	
 }

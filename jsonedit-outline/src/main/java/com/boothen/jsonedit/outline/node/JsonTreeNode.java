@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
 
@@ -30,10 +31,10 @@ public class JsonTreeNode {
 
 	private boolean textSelection;
 
-	private Image image;
-
 	private static final Map<JsonType, String> imageMap = new HashMap<JsonType, String>();
 	private static final Map<JsonType, StyledString.Styler> styleMap = new HashMap<JsonType, StyledString.Styler>();
+	
+	private static ImageRegistry imageRegistry;
 
 	static {
 		imageMap.put(JsonType.Array, "/icons/JsonArray.gif");
@@ -130,15 +131,18 @@ public class JsonTreeNode {
 	}
 
 	public Image getImage() {
-		if (image != null) {
-			return image;
-		}
-
-		image = createMyImage(imageMap.get(jsonNode.getJsonType()));
-		return image;
+		return imageRegistry.get(jsonNode.getJsonType().toString());
 	}
 
-	private Image createMyImage(String urlPath) {
+	public static void initializeImageRegistry(ImageRegistry reg) {
+		imageRegistry = reg;
+		for (Map.Entry<JsonType, String> entry : imageMap.entrySet()) {
+			Image image = createMyImage(entry.getValue());
+			imageRegistry.put(entry.getKey().toString(), image);
+		}
+	}
+	
+	private static Image createMyImage(String urlPath) {
 		URL resource = JsonTreeNode.class.getResource(urlPath);
 		ImageDescriptor imgDescriptor = ImageDescriptor.createFromURL(resource);
 		if (imgDescriptor == null) {
@@ -201,7 +205,6 @@ public class JsonTreeNode {
 	}
 
 	public void setJsonNode(JsonNode jsonNode) {
-		image = null;
 		this.jsonNode = jsonNode;
 	}
 

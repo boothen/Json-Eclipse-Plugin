@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JSON Editor Log
 Bundle-SymbolicName: jsonedit-log
-Bundle-Version: 0.9.7
+Bundle-Version: 0.9.8
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Boothen Technology
 Require-Bundle: org.eclipse.core.resources,
