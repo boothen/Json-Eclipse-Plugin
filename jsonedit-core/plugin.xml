@@ -7,12 +7,12 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.boothen.jsonedit.core.editors.JsonPageEditor"
-            contributorClass="com.boothen.jsonedit.core.editors.JsonPageEditorContributor"
+            class="com.boothen.jsonedit.core.editors.JsonTextEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             default="true"
             extensions="json"
             icon="src/main/resources/icons/JsonFile.gif"
-            id="com.boothen.jsonedit.core.editors.JsonPageEditor"
+            id="com.boothen.jsonedit.core.editors.JsonTextEditor"
             name="JSON Editor"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
          <contentTypeBinding
@@ -45,7 +45,7 @@
                <with
                      variable="activeEditorId">
                   <equals
-                        value="com.boothen.jsonedit.core.editors.JsonPageEditor">
+                        value="com.boothen.jsonedit.core.editors.JsonTextEditor">
                   </equals>
                </with>
             </visibleWhen>
@@ -61,7 +61,7 @@
                <with
                      variable="activeEditorId">
                   <equals
-                        value="com.boothen.jsonedit.core.editors.JsonPageEditor">
+                        value="com.boothen.jsonedit.core.editors.JsonTextEditor">
                   </equals>
                </with>
             </visibleWhen>

@@ -190,6 +190,7 @@ public class JsonTextEditor extends TextEditor {
 		IFile file = (IFile) getEditorInput().getAdapter(IFile.class);
 		platformPreferenceListener = new PlatformPreferenceListener(viewerConfiguration, jsonPreferenceStore);
 		platformPreferenceListener.setPreferenceChangeListener(file);
+		
 	}
 
 	@Override

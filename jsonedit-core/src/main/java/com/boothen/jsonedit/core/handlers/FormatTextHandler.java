@@ -10,7 +10,6 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.boothen.jsonedit.core.editors.JsonPageEditor;
 import com.boothen.jsonedit.core.editors.JsonTextEditor;
 import com.boothen.jsonedit.preferences.JsonPreferenceStore;
 import com.boothen.jsonedit.text.JsonTextFormatter;
@@ -42,11 +41,11 @@ public class FormatTextHandler implements IHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 
 		IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		if (!(editor instanceof JsonPageEditor)) {
+		if (!(editor instanceof JsonTextEditor)) {
 			return null;
 		}
 
-		JsonTextEditor textEditor = (JsonTextEditor) ((JsonPageEditor) editor).getEditor();
+		JsonTextEditor textEditor = (JsonTextEditor) editor;
 
 		JsonPreferenceStore store = new JsonPreferenceStore();
 		boolean spaces = store.getSpacesForTab();

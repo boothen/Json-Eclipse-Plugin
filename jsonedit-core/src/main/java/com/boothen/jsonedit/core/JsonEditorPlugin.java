@@ -5,6 +5,8 @@ package com.boothen.jsonedit.core;
 
 
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -24,7 +26,9 @@ public class JsonEditorPlugin extends AbstractUIPlugin {
 
 	public JsonEditorPlugin() {
 		JsonLog.getInstance(PLUGIN_ID, super.getLog());
-		getImageRegistry();
+		if (PlatformUI.isWorkbenchRunning() || Display.getCurrent() != null) {
+			getImageRegistry();
+		}
 	}
 
 	@Override
