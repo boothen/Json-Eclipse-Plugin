@@ -14,13 +14,11 @@ import org.eclipse.jface.text.rules.MultiLineRule;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
-import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.graphics.Color;
 
 import com.boothen.jsonedit.coloring.JsonColorProvider;
 import com.boothen.jsonedit.preferences.JsonPreferenceStore;
 import com.boothen.jsonedit.text.detector.JsonWhitespaceDetector;
-import com.boothen.jsonedit.text.detector.JsonWordDetector;
 
 /**
  * JsonScanner is used to scan the JSON and apply coloring.
