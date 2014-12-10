@@ -23,6 +23,7 @@ public class JsonColorProvider {
 	public static final RGB DEFAULT = new RGB(0, 0, 0);
 	public static final RGB VALUE = new RGB(0, 0, 128);
 	public static final RGB NULL = new RGB(128, 0, 128);
+	public static final RGB ERROR = new RGB(255, 0, 0);
 
 	protected Map<RGB, Color> fColorTable= new HashMap<RGB, Color>(10);
 

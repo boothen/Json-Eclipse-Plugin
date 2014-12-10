@@ -4,11 +4,17 @@ Road map
 Multi objects in file
 
  - format text (ok)
- - line indent (ok)
- - text folding (not done)
  - outline (not done)
  - validation (not done) - (update parse to loop instead of checking eof)
- - text coloring (ok)
+ 
+ 
+ - JsonIndentLineAutoEditStrategy
+ - JsonReconcilingStrategy
+ 	- Text Folding
+ 	- Outline
+ - JsonTextFormatter
+ 
+ 
 
 Pair matching in editor {} or [] goes a miss if String contains any of those characters.
 

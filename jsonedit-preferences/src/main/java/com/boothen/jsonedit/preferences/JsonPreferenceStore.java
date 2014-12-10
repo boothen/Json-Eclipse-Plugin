@@ -27,6 +27,7 @@ public class JsonPreferenceStore extends AbstractPreferenceInitializer {
 	public static final String STRING_COLOR = "stringColor"; //$NON-NLS-1$
 	public static final String VALUE_COLOR = "valueColor"; //$NON-NLS-1$
 	public static final String NULL_COLOR = "nullColor"; //$NON-NLS-1$
+	public static final String ERROR_COLOR = "errorColor"; //$NON-NLS-1$
 	public static final String DEFAULT_COLOR = "defaultColor"; //$NON-NLS-1$
 	public static final String ERROR_TEXT_STYLE = "errorTextStyle"; //$NON-NLS-1$
 	public static final String ERROR_INDICATION = "errorIndication"; //$NON-NLS-1$
@@ -79,6 +80,7 @@ public class JsonPreferenceStore extends AbstractPreferenceInitializer {
 		preferenceStore.setDefault(STRING_COLOR, StringConverter.asString(JsonColorProvider.STRING));
 		preferenceStore.setDefault(VALUE_COLOR, StringConverter.asString(JsonColorProvider.VALUE));
 		preferenceStore.setDefault(NULL_COLOR, StringConverter.asString(JsonColorProvider.NULL));
+		preferenceStore.setDefault(ERROR_COLOR, StringConverter.asString(JsonColorProvider.ERROR));
 		preferenceStore.setDefault(DEFAULT_COLOR, StringConverter.asString(JsonColorProvider.DEFAULT));
 		preferenceStore.setDefault(ERROR_TEXT_STYLE, editorPreferenceStore.getDefaultString(ERROR_TEXT_STYLE));
 		preferenceStore.setDefault(ERROR_INDICATION, editorPreferenceStore.getDefaultString(ERROR_INDICATION));

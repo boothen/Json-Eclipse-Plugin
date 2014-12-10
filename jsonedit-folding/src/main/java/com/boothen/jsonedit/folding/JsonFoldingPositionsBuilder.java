@@ -10,7 +10,6 @@ import org.eclipse.jface.text.Position;
 
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.core.model.jsonnode.JsonType;
-import com.boothen.jsonedit.core.model.node.Node;
 
 /**
  * @author garner_m
@@ -31,7 +30,7 @@ public class JsonFoldingPositionsBuilder {
 		if (jsonNodes != null) {
 			for (JsonNode jsonNode : jsonNodes) {
 				if (isJsonNodeType(jsonNode, JsonType.Array, JsonType.Object)) {
-					Position position = new Position(getStart(jsonNode));
+					Position position = new Position(jsonNode.getStart());
 					positionsStack.add(0, position);
 					positions.add(position);
 				}
@@ -39,7 +38,7 @@ public class JsonFoldingPositionsBuilder {
 				if (isJsonNodeType(jsonNode, JsonType.End)) {
 					if (positionsStack.size() > 0) {
 						Position position = positionsStack.remove(0);
-						position.setLength(getEnd(jsonNode) - position.getOffset());
+						position.setLength(jsonNode.getEnd() - position.getOffset());
 					}
 				}
 			}
@@ -58,25 +57,5 @@ public class JsonFoldingPositionsBuilder {
 		return false;
 	}
 
-	public int getStart(JsonNode jsonNode) {
-		Node startNode = jsonNode.getKey();
-		if (startNode == null) {
-			startNode = jsonNode.getValue();
-		}
 
-		return startNode.getStart();
-	}
-
-	public int getEnd(JsonNode jsonNode) {
-
-		Node endNode = jsonNode.getValue();
-		if (endNode == null) {
-			endNode = jsonNode.getKey();
-		}
-
-		if (endNode == null) {
-			return 0;
-		}
-		return endNode.getEnd();
-	}
 }

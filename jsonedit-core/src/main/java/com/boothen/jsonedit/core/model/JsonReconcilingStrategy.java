@@ -62,7 +62,7 @@ IReconcilingStrategyExtension {
 		if (textEditor != null) {
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
-					textEditor.updateFoldingStructure(fPositions);
+//					textEditor.updateFoldingStructure(fPositions);
 					textEditor.updateContentOutlinePage(jsonNodes, nodes);
 				}
 

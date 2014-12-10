@@ -34,6 +34,29 @@ public class JsonNode {
 	public void setJsonType(JsonType jsonType) {
 		this.jsonType = jsonType;
 	}
+	
+	public int getStart() {
+		Node startNode = this.getKey();
+		if (startNode == null) {
+			startNode = this.getValue();
+		}
+
+		return startNode.getStart();
+	}
+
+	public int getEnd() {
+
+		Node endNode = this.getValue();
+		if (endNode == null) {
+			endNode = this.getKey();
+		}
+
+		if (endNode == null) {
+			return 0;
+		}
+		return endNode.getEnd();
+	}
+	
 
 	@Override
 	public String toString() {

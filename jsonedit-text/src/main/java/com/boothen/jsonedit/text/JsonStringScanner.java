@@ -28,37 +28,37 @@ import com.boothen.jsonedit.text.detector.JsonWordDetector;
  * @author Matt Garner
  *
  */
-public class JsonScanner extends RuleBasedScanner {
+public class JsonStringScanner extends RuleBasedScanner implements Reinitable {
 
 	private JsonColorProvider jsonColorProvider = new JsonColorProvider();
 
-	public JsonScanner() {
+	public JsonStringScanner() {
 		super();
 		initScanner();
 	}
 
-	public void reinitScanner() {
+	@Override
+	public void reinit() {
 		initScanner();
 	}
 
 	private void initScanner() {
 		IToken string = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.STRING_COLOR)));
-		IToken value = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.VALUE_COLOR)));
-		IToken defaultText = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.DEFAULT_COLOR)));
-		IToken nullValue = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.NULL_COLOR)));
+//		IToken value = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.VALUE_COLOR)));
+//		IToken defaultText = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.DEFAULT_COLOR)));
+//		IToken nullValue = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.NULL_COLOR)));
 
 		List<IRule> rules= new LinkedList<IRule>();
 
-		rules.add(new MultiLineRule(":\"", "\"", value, '\\'));
+//		rules.add(new MultiLineRule(":\"", "\"", value, '\\'));
 		rules.add(new MultiLineRule("\"", "\"", string, '\\')); //$NON-NLS-2$ //$NON-NLS-1$
-		WordRule wordRule= new WordRule(new JsonWordDetector(), defaultText);
-		wordRule.addWord("null", nullValue);
-		rules.add(wordRule);
+//		WordRule wordRule= new WordRule(new JsonWordDetector(), defaultText);
+//		wordRule.addWord("null", nullValue);
+//		rules.add(wordRule);
 		rules.add(new WhitespaceRule(new JsonWhitespaceDetector()));
 
 		IRule[] result= new IRule[rules.size()];
-		rules.toArray(result);
-		setRules(result);
+		setRules(rules.toArray(result));
 	}
 
 	private Color getPreferenceColor(String preferenceValue) {
