@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2014 Boothen Technology Ltd.
+ *
+ * Licensed under the Eclipse Public License, Version 1.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *   
+ * https://eclipse.org/org/documents/epl-v10.html
+ *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 package com.boothen.jsonedit.core.editors;
 
 import java.util.HashMap;
@@ -55,7 +70,6 @@ public class JsonTextEditor extends TextEditor {
 	private boolean restoreCursorLocation = false;
 	private int nodePositionOffset = 0;
 	private int nodePosition = 0;
-	private List<Node> nodes;
 
 	public JsonTextEditor() {
 		super();
@@ -240,8 +254,8 @@ public class JsonTextEditor extends TextEditor {
 		return fOutlinePage;
 	}
 
-	public void updateContentOutlinePage(List<JsonNode> jsonNodes, List<Node> nodes) {
-		this.nodes = nodes;
+	public void updateContentOutlinePage(List<JsonNode> jsonNodes) {
+
 		if (fOutlinePage != null) {
 			fOutlinePage.setJsonNodes(jsonNodes);
 		}
@@ -260,42 +274,42 @@ public class JsonTextEditor extends TextEditor {
 
 	public void storeTextLocation() {
 
-		ITextSelection iTextSelection = (ITextSelection) this.getSite().getSelectionProvider().getSelection();
-		int textLocation = iTextSelection.getOffset();
-		if (nodes != null) {
-			for (int i = 0; i < nodes.size(); i++) {
-				Node node = nodes.get(i);
-				if (node.getPosition().includes(textLocation)) {
-					nodePosition = i;
-					nodePositionOffset = textLocation - node.getPosition().getOffset();
-					break;
-				}
-			}
-		}
-
-		restoreCursorLocation = true;
+//		ITextSelection iTextSelection = (ITextSelection) this.getSite().getSelectionProvider().getSelection();
+//		int textLocation = iTextSelection.getOffset();
+//		if (nodes != null) {
+//			for (int i = 0; i < nodes.size(); i++) {
+//				Node node = nodes.get(i);
+//				if (node.getPosition().includes(textLocation)) {
+//					nodePosition = i;
+//					nodePositionOffset = textLocation - node.getPosition().getOffset();
+//					break;
+//				}
+//			}
+//		}
+//
+//		restoreCursorLocation = true;
 	}
 
 	public void restoreTextLocation() {
 
-		if (!restoreCursorLocation) {
-			return;
-		}
-
-		restoreCursorLocation = false;
-
-		ITextOperationTarget target = (ITextOperationTarget) this.getAdapter(ITextOperationTarget.class);
-		if (!(target instanceof ITextViewer)) {
-			return ;
-		}
-		ITextViewer textViewer = (ITextViewer) target;
-		if (nodes != null && nodes.size() > nodePosition) {
-			Node node = nodes.get(nodePosition);
-			if (node != null) {
-				int textLocation = node.getPosition().getOffset() + nodePositionOffset;
-				textViewer.getTextWidget().setSelection(textLocation);
-			}
-		}
+//		if (!restoreCursorLocation) {
+//			return;
+//		}
+//
+//		restoreCursorLocation = false;
+//
+//		ITextOperationTarget target = (ITextOperationTarget) this.getAdapter(ITextOperationTarget.class);
+//		if (!(target instanceof ITextViewer)) {
+//			return ;
+//		}
+//		ITextViewer textViewer = (ITextViewer) target;
+//		if (nodes != null && nodes.size() > nodePosition) {
+//			Node node = nodes.get(nodePosition);
+//			if (node != null) {
+//				int textLocation = node.getPosition().getOffset() + nodePositionOffset;
+//				textViewer.getTextWidget().setSelection(textLocation);
+//			}
+//		}
 	}
 
 	public void updateTabWidth(int tabWidth) {

@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2014 Boothen Technology Ltd.
+ *
+ * Licensed under the Eclipse Public License, Version 1.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *   
+ * https://eclipse.org/org/documents/epl-v10.html
+ *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 package com.boothen.jsonedit.core.model;
 
 import java.util.List;
@@ -54,16 +69,14 @@ IReconcilingStrategyExtension {
 
 	private void parse() {
 
-		final List<Node> nodes = new NodeBuilder(fDocument).buildNodes();
-
-		final List<JsonNode> jsonNodes = new JsonNodeBuilder(fDocument, nodes).buildJsonNodes();
+		final List<JsonNode> jsonNodes = new JsonNodeBuilder(fDocument).buildJsonNodes();
 		final List<Position> fPositions = new JsonFoldingPositionsBuilder(jsonNodes).buildFoldingPositions();
 
 		if (textEditor != null) {
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 //					textEditor.updateFoldingStructure(fPositions);
-					textEditor.updateContentOutlinePage(jsonNodes, nodes);
+					textEditor.updateContentOutlinePage(jsonNodes);
 				}
 
 			});

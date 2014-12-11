@@ -8,13 +8,19 @@ Multi objects in file
  - validation (not done) - (update parse to loop instead of checking eof)
  
  
- - JsonIndentLineAutoEditStrategy
  - JsonReconcilingStrategy
  	- Text Folding
  	- Outline
  - JsonTextFormatter
  
- 
+Add copyright to pages.
+
+Fix colouring when using folding annotations
+Fix \" in values
+Fix colouring after format - possible same issue as folding
+Fix store and restore cursor location
+Fix pair matching.
+Fix validation.
 
 Pair matching in editor {} or [] goes a miss if String contains any of those characters.
 
@@ -24,12 +30,6 @@ allow formatting to include whitespace before and after colon.
 
 allow folding to be turned off
 
-
-
-done
-----
-show print margin
-show line numbers
 
 
 
