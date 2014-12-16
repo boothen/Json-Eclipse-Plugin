@@ -27,7 +27,6 @@ import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
-import com.boothen.jsonedit.core.model.JsonPartitionScanner;
 import com.boothen.jsonedit.core.model.JsonReconcilingStrategy;
 import com.boothen.jsonedit.core.text.JsonIndentLineAutoEditStrategy;
 import com.boothen.jsonedit.preferences.JsonPreferenceStore;

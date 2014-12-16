@@ -33,8 +33,7 @@ import com.boothen.jsonedit.folding.JsonFoldingPositionsBuilder;
 import com.boothen.jsonedit.model.entry.JsonEntry;
 import com.boothen.jsonedit.model.entry.JsonEntryBuilder;
 
-public class JsonReconcilingStrategy implements IReconcilingStrategy,
-IReconcilingStrategyExtension {
+public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcilingStrategyExtension {
 
 	private JsonTextEditor textEditor;
 
