@@ -7,7 +7,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Boothen Technology
 Require-Bundle: jsonedit-reader,
  org.eclipse.core.resources,
- org.eclipse.core.runtime,
- org.slf4j.api;visibility:=reexport,
- ch.qos.logback.classic;visibility:=reexport
+ org.eclipse.core.runtime
 Export-Package: com.boothen.jsonedit.validator

@@ -3,8 +3,6 @@ Road map
 
 Multi objects in file
 
- - format text (ok)
- - outline (not done)
  - validation (not done) - (update parse to loop instead of checking eof)
  
  

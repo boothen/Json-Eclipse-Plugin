@@ -43,12 +43,11 @@ import static com.boothen.jsonedit.core.util.JsonCharUtility.u;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.boothen.jsonedit.core.util.reader.JsonFileReader;
 import com.boothen.jsonedit.core.util.reader.JsonReaderException;
@@ -62,7 +61,7 @@ import com.boothen.jsonedit.core.util.reader.JsonReaderException;
  */
 public class JsonTextValidator {
 
-	private static final Logger LOG = LoggerFactory.getLogger(JsonTextValidator.class);
+	private static final Logger LOG = Logger.getLogger(JsonTextValidator.class.toString());
 
 	private final JsonFileReader parser;
 	private final String markerId;
