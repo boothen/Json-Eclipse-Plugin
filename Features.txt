@@ -10,7 +10,6 @@ Multi objects in file
 Fix colouring when using folding annotations
 Fix \" in values
 Fix colouring after format - possible same issue as folding
-Fix store and restore cursor location
 Fix pair matching.
 Fix validation.
 

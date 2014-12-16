@@ -58,6 +58,10 @@ public class JsonNode {
 		return value.getOffset() + value.getLength();
 	}
 	
+	public boolean containsLocation(int offset) {
+	    return offset >= getStart() && offset <= getEnd();
+	}
+	
 
 	@Override
 	public String toString() {

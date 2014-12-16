@@ -22,6 +22,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.text.ITextOperationTarget;
+import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.DefaultCharacterPairMatcher;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -66,6 +69,7 @@ public class JsonTextEditor extends TextEditor {
 	private boolean restoreCursorLocation = false;
 	private int nodePositionOffset = 0;
 	private int nodePosition = 0;
+	private List<JsonNode> jsonNodes;
 
 	public JsonTextEditor() {
 		super();
@@ -251,7 +255,7 @@ public class JsonTextEditor extends TextEditor {
 	}
 
 	public void updateContentOutlinePage(List<JsonNode> jsonNodes) {
-
+	    this.jsonNodes = jsonNodes;
 		if (fOutlinePage != null) {
 			fOutlinePage.setJsonNodes(jsonNodes);
 		}
@@ -270,42 +274,42 @@ public class JsonTextEditor extends TextEditor {
 
 	public void storeTextLocation() {
 
-//		ITextSelection iTextSelection = (ITextSelection) this.getSite().getSelectionProvider().getSelection();
-//		int textLocation = iTextSelection.getOffset();
-//		if (nodes != null) {
-//			for (int i = 0; i < nodes.size(); i++) {
-//				Node node = nodes.get(i);
-//				if (node.getPosition().includes(textLocation)) {
-//					nodePosition = i;
-//					nodePositionOffset = textLocation - node.getPosition().getOffset();
-//					break;
-//				}
-//			}
-//		}
-//
-//		restoreCursorLocation = true;
+		ITextSelection iTextSelection = (ITextSelection) this.getSite().getSelectionProvider().getSelection();
+		int textLocation = iTextSelection.getOffset();
+		if (jsonNodes != null) {
+			for (int i = 0; i < jsonNodes.size(); i++) {
+				JsonNode jsonNode = jsonNodes.get(i);
+				if (jsonNode.containsLocation(textLocation)) {
+					nodePosition = i;
+					nodePositionOffset = textLocation - jsonNode.getStart();
+					break;
+				}
+			}
+		}
+
+		restoreCursorLocation = true;
 	}
 
 	public void restoreTextLocation() {
 
-//		if (!restoreCursorLocation) {
-//			return;
-//		}
-//
-//		restoreCursorLocation = false;
-//
-//		ITextOperationTarget target = (ITextOperationTarget) this.getAdapter(ITextOperationTarget.class);
-//		if (!(target instanceof ITextViewer)) {
-//			return ;
-//		}
-//		ITextViewer textViewer = (ITextViewer) target;
-//		if (nodes != null && nodes.size() > nodePosition) {
-//			Node node = nodes.get(nodePosition);
-//			if (node != null) {
-//				int textLocation = node.getPosition().getOffset() + nodePositionOffset;
-//				textViewer.getTextWidget().setSelection(textLocation);
-//			}
-//		}
+		if (!restoreCursorLocation) {
+			return;
+		}
+
+		restoreCursorLocation = false;
+
+		ITextOperationTarget target = (ITextOperationTarget) this.getAdapter(ITextOperationTarget.class);
+		if (!(target instanceof ITextViewer)) {
+			return ;
+		}
+		ITextViewer textViewer = (ITextViewer) target;
+		if (jsonNodes != null && jsonNodes.size() > nodePosition) {
+			JsonNode node = jsonNodes.get(nodePosition);
+			if (node != null) {
+				int textLocation = node.getStart() + nodePositionOffset;
+				textViewer.getTextWidget().setSelection(textLocation);
+			}
+		}
 	}
 
 	public void updateTabWidth(int tabWidth) {
