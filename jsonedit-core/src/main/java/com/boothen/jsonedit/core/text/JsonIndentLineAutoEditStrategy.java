@@ -31,7 +31,7 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.TextUtilities;
 
-import com.boothen.jsonedit.core.model.JsonPartitionScanner;
+import com.boothen.jsonedit.type.JsonDocumentType;
 
 /**
  * Auto indent strategy for Json Text format.
@@ -89,8 +89,8 @@ public class JsonIndentLineAutoEditStrategy extends DefaultIndentLineAutoEditStr
 
 	private boolean createClosingBracket(IDocument document, int offset, char bracket) throws BadLocationException {
 
-		String openCategory = bracket == closeCurly ? JsonPartitionScanner.JSON_OBJECT_OPEN : JsonPartitionScanner.JSON_ARRAY_OPEN;
-		String closeCategory = bracket == closeCurly ? JsonPartitionScanner.JSON_OBJECT_CLOSE : JsonPartitionScanner.JSON_ARRAY_CLOSE;
+		String openCategory = bracket == closeCurly ? JsonDocumentType.JSON_OBJECT_OPEN : JsonDocumentType.JSON_ARRAY_OPEN;
+		String closeCategory = bracket == closeCurly ? JsonDocumentType.JSON_OBJECT_CLOSE : JsonDocumentType.JSON_ARRAY_CLOSE;
 		
 		ITypedRegion[] partitions;
 		try {

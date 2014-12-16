@@ -35,6 +35,7 @@ import com.boothen.jsonedit.text.JsonConstantWordScanner;
 import com.boothen.jsonedit.text.JsonNumberScanner;
 import com.boothen.jsonedit.text.JsonStringScanner;
 import com.boothen.jsonedit.text.LineEndingUtil;
+import com.boothen.jsonedit.type.JsonDocumentType;
 
 /**
  * JsonSourceViewerConfiguration manages the coloring of the text.
@@ -73,24 +74,24 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
 		PresentationReconciler reconciler= new PresentationReconciler();
 		
 		DefaultDamagerRepairer dr= new DefaultDamagerRepairer(jsonStringScanner);	
-		reconciler.setDamager(dr, JsonPartitionScanner.JSON_STRING);
-		reconciler.setRepairer(dr, JsonPartitionScanner.JSON_STRING);
+		reconciler.setDamager(dr, JsonDocumentType.JSON_STRING);
+		reconciler.setRepairer(dr, JsonDocumentType.JSON_STRING);
 		
 		dr= new DefaultDamagerRepairer(jsonTrueScanner);	
-		reconciler.setDamager(dr, JsonPartitionScanner.JSON_TRUE);
-		reconciler.setRepairer(dr, JsonPartitionScanner.JSON_TRUE);
+		reconciler.setDamager(dr, JsonDocumentType.JSON_TRUE);
+		reconciler.setRepairer(dr, JsonDocumentType.JSON_TRUE);
 		
 		dr= new DefaultDamagerRepairer(jsonFalseScanner);	
-		reconciler.setDamager(dr, JsonPartitionScanner.JSON_FALSE);
-		reconciler.setRepairer(dr, JsonPartitionScanner.JSON_FALSE);
+		reconciler.setDamager(dr, JsonDocumentType.JSON_FALSE);
+		reconciler.setRepairer(dr, JsonDocumentType.JSON_FALSE);
 		
 		dr= new DefaultDamagerRepairer(jsonNullScanner);	
-		reconciler.setDamager(dr, JsonPartitionScanner.JSON_NULL);
-		reconciler.setRepairer(dr, JsonPartitionScanner.JSON_NULL);
+		reconciler.setDamager(dr, JsonDocumentType.JSON_NULL);
+		reconciler.setRepairer(dr, JsonDocumentType.JSON_NULL);
 		
 		dr= new DefaultDamagerRepairer(jsonNumberScanner);	
-		reconciler.setDamager(dr, JsonPartitionScanner.JSON_NUMBER);
-		reconciler.setRepairer(dr, JsonPartitionScanner.JSON_NUMBER);
+		reconciler.setDamager(dr, JsonDocumentType.JSON_NUMBER);
+		reconciler.setRepairer(dr, JsonDocumentType.JSON_NUMBER);
 		
 		return reconciler;
 	}
@@ -101,17 +102,17 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
 	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
 		return new String[] { 
 				IDocument.DEFAULT_CONTENT_TYPE,
-				JsonPartitionScanner.JSON_OBJECT_CLOSE,
-				JsonPartitionScanner.JSON_OBJECT_OPEN,
-				JsonPartitionScanner.JSON_ARRAY_CLOSE,
-				JsonPartitionScanner.JSON_ARRAY_OPEN,
-				JsonPartitionScanner.JSON_STRING,
-				JsonPartitionScanner.JSON_NUMBER,
-				JsonPartitionScanner.JSON_TRUE,
-				JsonPartitionScanner.JSON_FALSE,
-				JsonPartitionScanner.JSON_NULL,
-				JsonPartitionScanner.JSON_COMMA,
-				JsonPartitionScanner.JSON_COLON};
+				JsonDocumentType.JSON_OBJECT_CLOSE,
+				JsonDocumentType.JSON_OBJECT_OPEN,
+				JsonDocumentType.JSON_ARRAY_CLOSE,
+				JsonDocumentType.JSON_ARRAY_OPEN,
+				JsonDocumentType.JSON_STRING,
+				JsonDocumentType.JSON_NUMBER,
+				JsonDocumentType.JSON_TRUE,
+				JsonDocumentType.JSON_FALSE,
+				JsonDocumentType.JSON_NULL,
+				JsonDocumentType.JSON_COMMA,
+				JsonDocumentType.JSON_COLON};
 	}
 
 	@Override

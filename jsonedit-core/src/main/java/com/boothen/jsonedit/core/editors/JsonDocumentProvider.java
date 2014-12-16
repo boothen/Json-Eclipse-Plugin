@@ -22,6 +22,7 @@ import org.eclipse.ui.editors.text.FileDocumentProvider;
 
 import com.boothen.jsonedit.core.model.JsonPartitionScanner;
 import com.boothen.jsonedit.core.model.JsonPartitioner;
+import com.boothen.jsonedit.type.JsonDocumentType;
 
 public class JsonDocumentProvider extends FileDocumentProvider {
 
@@ -32,18 +33,17 @@ public class JsonDocumentProvider extends FileDocumentProvider {
 		if (document != null) {
 			IDocumentPartitioner partitioner = new JsonPartitioner(
 					new JsonPartitionScanner(), new String[] {
-							JsonPartitionScanner.JSON_OBJECT_CLOSE,
-							JsonPartitionScanner.JSON_OBJECT_OPEN,
-							JsonPartitionScanner.JSON_ARRAY_CLOSE,
-							JsonPartitionScanner.JSON_ARRAY_OPEN,
-							JsonPartitionScanner.JSON_STRING,
-							JsonPartitionScanner.JSON_NUMBER,
-							JsonPartitionScanner.JSON_TRUE,
-							JsonPartitionScanner.JSON_FALSE,
-							JsonPartitionScanner.JSON_NULL,
-							JsonPartitionScanner.JSON_COMMA,
-							JsonPartitionScanner.JSON_COLON
-							});
+							JsonDocumentType.JSON_OBJECT_CLOSE,
+							JsonDocumentType.JSON_OBJECT_OPEN,
+							JsonDocumentType.JSON_ARRAY_CLOSE,
+							JsonDocumentType.JSON_ARRAY_OPEN,
+							JsonDocumentType.JSON_STRING,
+							JsonDocumentType.JSON_NUMBER,
+							JsonDocumentType.JSON_TRUE,
+							JsonDocumentType.JSON_FALSE,
+							JsonDocumentType.JSON_NULL,
+							JsonDocumentType.JSON_COMMA,
+							JsonDocumentType.JSON_COLON });
 			partitioner.connect(document);
 			document.setDocumentPartitioner(partitioner);
 		}

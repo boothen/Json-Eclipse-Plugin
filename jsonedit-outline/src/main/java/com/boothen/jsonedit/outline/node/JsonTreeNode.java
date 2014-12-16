@@ -30,8 +30,7 @@ import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
 
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
-import com.boothen.jsonedit.core.model.jsonnode.JsonType;
-import com.boothen.jsonedit.core.model.node.Node;
+import com.boothen.jsonedit.type.JsonDocumentType;
 
 
 /**
@@ -46,29 +45,29 @@ public class JsonTreeNode {
 
 	private boolean textSelection;
 
-	private static final Map<JsonType, String> imageMap = new HashMap<JsonType, String>();
-	private static final Map<JsonType, StyledString.Styler> styleMap = new HashMap<JsonType, StyledString.Styler>();
+	private static final Map<String, String> imageMap = new HashMap<String, String>();
+	private static final Map<String, StyledString.Styler> styleMap = new HashMap<String, StyledString.Styler>();
 	
 	private static ImageRegistry imageRegistry;
 
 	static {
-		imageMap.put(JsonType.Array, "/icons/JsonArray.gif");
-		imageMap.put(JsonType.Object, "/icons/JsonObject.gif");
-		imageMap.put(JsonType.True, "/icons/JsonBoolean.gif");
-		imageMap.put(JsonType.False, "/icons/JsonBoolean.gif");
-		imageMap.put(JsonType.Value, "/icons/JsonNumber.gif");
-		imageMap.put(JsonType.Null, "/icons/JsonNull.gif");
-		imageMap.put(JsonType.String, "/icons/JsonString.gif");
-		imageMap.put(JsonType.Error, "/icons/JsonError.gif");
+		imageMap.put(JsonDocumentType.JSON_ARRAY_OPEN, "/icons/JsonArray.gif");
+		imageMap.put(JsonDocumentType.JSON_OBJECT_OPEN, "/icons/JsonObject.gif");
+		imageMap.put(JsonDocumentType.JSON_TRUE, "/icons/JsonBoolean.gif");
+		imageMap.put(JsonDocumentType.JSON_FALSE, "/icons/JsonBoolean.gif");
+		imageMap.put(JsonDocumentType.JSON_NUMBER, "/icons/JsonNumber.gif");
+		imageMap.put(JsonDocumentType.JSON_NULL, "/icons/JsonNull.gif");
+		imageMap.put(JsonDocumentType.JSON_STRING, "/icons/JsonString.gif");
+		imageMap.put(JsonDocumentType.JSON_ERROR, "/icons/JsonError.gif");
 
-		styleMap.put(JsonType.String, StyledString.createColorRegistryStyler("GREEN", "WHITE"));
-		styleMap.put(JsonType.True, StyledString.createColorRegistryStyler("BLACK", "WHITE"));
-		styleMap.put(JsonType.False, StyledString.createColorRegistryStyler("BLACK", "WHITE"));
-		styleMap.put(JsonType.Error, StyledString.createColorRegistryStyler("RED", "WHITE"));
-		styleMap.put(JsonType.Value, StyledString.createColorRegistryStyler("BLUE", "WHITE"));
-		styleMap.put(JsonType.Null, StyledString.createColorRegistryStyler("BLUE", "WHITE"));
-		styleMap.put(JsonType.Object, StyledString.createColorRegistryStyler("BLUE", "WHITE"));
-		styleMap.put(JsonType.Array, StyledString.createColorRegistryStyler("BLUE", "WHITE"));
+		styleMap.put(JsonDocumentType.JSON_STRING, StyledString.createColorRegistryStyler("GREEN", "WHITE"));
+		styleMap.put(JsonDocumentType.JSON_TRUE, StyledString.createColorRegistryStyler("BLACK", "WHITE"));
+		styleMap.put(JsonDocumentType.JSON_FALSE, StyledString.createColorRegistryStyler("BLACK", "WHITE"));
+		styleMap.put(JsonDocumentType.JSON_ERROR, StyledString.createColorRegistryStyler("RED", "WHITE"));
+		styleMap.put(JsonDocumentType.JSON_NUMBER, StyledString.createColorRegistryStyler("BLUE", "WHITE"));
+		styleMap.put(JsonDocumentType.JSON_NULL, StyledString.createColorRegistryStyler("BLUE", "WHITE"));
+		styleMap.put(JsonDocumentType.JSON_OBJECT_OPEN, StyledString.createColorRegistryStyler("BLUE", "WHITE"));
+		styleMap.put(JsonDocumentType.JSON_ARRAY_OPEN, StyledString.createColorRegistryStyler("BLUE", "WHITE"));
 	}
 
 	public JsonTreeNode(JsonNode jsonNode, JsonTreeNode parent) {
@@ -133,27 +132,28 @@ public class JsonTreeNode {
 		StyledString styledString = new StyledString();
 		if (jsonNode.getKey() != null) {
 			StyledString.Styler style1 = StyledString.createColorRegistryStyler("BLACK", "WHITE");
-			styledString.append(jsonNode.getKey().getValue(), style1);
+			styledString.append(jsonNode.getKey(), style1);
 			StyledString.Styler style2 = StyledString.createColorRegistryStyler("BLACK", "WHITE");
 			styledString.append(" : ", style2);
 		}
 
-		if (jsonNode.getValue() != null && (jsonNode.getJsonType() != JsonType.Object && jsonNode.getJsonType() != JsonType.Array)) {
+		if (jsonNode.getValue() != null && (!jsonNode.getJsonType().equals(JsonDocumentType.JSON_ARRAY_OPEN )
+				&& !jsonNode.getJsonType().equals(JsonDocumentType.JSON_OBJECT_OPEN))) {
 			StyledString.Styler style3 = styleMap.get(jsonNode.getJsonType());
-			styledString.append(jsonNode.getValue().getValue(), style3);
+			styledString.append(jsonNode.getValue(), style3);
 		}
 		return styledString;
 	}
 
 	public Image getImage() {
-		return imageRegistry.get(jsonNode.getJsonType().toString());
+		return imageRegistry.get(jsonNode.getJsonType());
 	}
 
 	public static void initializeImageRegistry(ImageRegistry reg) {
 		imageRegistry = reg;
-		for (Map.Entry<JsonType, String> entry : imageMap.entrySet()) {
+		for (Map.Entry<String, String> entry : imageMap.entrySet()) {
 			Image image = createMyImage(entry.getValue());
-			imageRegistry.put(entry.getKey().toString(), image);
+			imageRegistry.put(entry.getKey(), image);
 		}
 	}
 	
@@ -168,25 +168,11 @@ public class JsonTreeNode {
 	}
 
 	public int getStart() {
-		Node startNode = jsonNode.getKey();
-		if (startNode == null) {
-			startNode = jsonNode.getValue();
-		}
-
-		return startNode.getStart();
+		return jsonNode.getStart();
 	}
 
 	public int getLength() {
-		Node startNode = jsonNode.getKey();
-		if (startNode == null) {
-			startNode = jsonNode.getValue();
-		}
-		Node endNode = jsonNode.getValue();
-		if (endNode == null) {
-			endNode = jsonNode.getKey();
-		}
-
-		return endNode.getEnd() - startNode.getStart();
+		return jsonNode.getEnd() - jsonNode.getStart();
 	}
 
 	@Override

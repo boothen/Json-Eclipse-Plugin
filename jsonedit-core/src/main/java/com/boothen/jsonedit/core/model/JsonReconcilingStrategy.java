@@ -29,9 +29,9 @@ import org.eclipse.swt.widgets.Display;
 import com.boothen.jsonedit.core.editors.JsonTextEditor;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNodeBuilder;
-import com.boothen.jsonedit.core.model.node.Node;
-import com.boothen.jsonedit.core.model.node.NodeBuilder;
 import com.boothen.jsonedit.folding.JsonFoldingPositionsBuilder;
+import com.boothen.jsonedit.model.entry.JsonEntry;
+import com.boothen.jsonedit.model.entry.JsonEntryBuilder;
 
 public class JsonReconcilingStrategy implements IReconcilingStrategy,
 IReconcilingStrategyExtension {
@@ -69,7 +69,8 @@ IReconcilingStrategyExtension {
 
 	private void parse() {
 
-		final List<JsonNode> jsonNodes = new JsonNodeBuilder(fDocument).buildJsonNodes();
+		final List<JsonEntry> jsonEntries = new JsonEntryBuilder().buildJsonEntries(fDocument);
+		final List<JsonNode> jsonNodes = new JsonNodeBuilder().buildJsonNodes(jsonEntries);
 		final List<Position> fPositions = new JsonFoldingPositionsBuilder(jsonNodes).buildFoldingPositions();
 
 		if (textEditor != null) {

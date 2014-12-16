@@ -22,9 +22,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.text.ITextOperationTarget;
-import org.eclipse.jface.text.ITextSelection;
-import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.DefaultCharacterPairMatcher;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -43,7 +40,6 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import com.boothen.jsonedit.core.editors.listeners.PlatformPreferenceListener;
 import com.boothen.jsonedit.core.handlers.FormatTextHandler;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
-import com.boothen.jsonedit.core.model.node.Node;
 import com.boothen.jsonedit.outline.JsonContentOutlinePage;
 import com.boothen.jsonedit.preferences.JsonPreferenceStore;
 

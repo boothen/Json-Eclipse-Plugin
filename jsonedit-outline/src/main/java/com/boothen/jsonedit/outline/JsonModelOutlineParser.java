@@ -23,8 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
-import com.boothen.jsonedit.core.model.jsonnode.JsonType;
 import com.boothen.jsonedit.outline.node.JsonTreeNode;
+import com.boothen.jsonedit.type.JsonDocumentType;
 
 
 /**
@@ -49,7 +49,7 @@ public class JsonModelOutlineParser {
 
 		for (JsonNode jsonNode : jsonNodes) {
 
-			if (isNodeOfType(jsonNode, JsonType.End)) {
+			if (isNodeOfType(jsonNode, JsonDocumentType.JSON_ARRAY_CLOSE, JsonDocumentType.JSON_OBJECT_CLOSE)) {
 				if (parent != null) {
 					parent = parent.getParent();
 				}
@@ -67,7 +67,7 @@ public class JsonModelOutlineParser {
 				parent.addChild(treeNode);
 			}
 
-			if (isNodeOfType(jsonNode, JsonType.Object, JsonType.Array)) {
+			if (isNodeOfType(jsonNode, JsonDocumentType.JSON_ARRAY_OPEN, JsonDocumentType.JSON_OBJECT_OPEN)) {
 				parent = treeNode;
 			}
 		}
@@ -96,7 +96,7 @@ public class JsonModelOutlineParser {
 			Integer childIter = 0;
 			for (JsonNode jsonNode : jsonNodes) {
 
-				if (isNodeOfType(jsonNode, JsonType.End)) {
+				if (isNodeOfType(jsonNode, JsonDocumentType.JSON_ARRAY_CLOSE, JsonDocumentType.JSON_OBJECT_CLOSE)) {
 
 					List<JsonTreeNode> nodesToRemove = new LinkedList<JsonTreeNode>();
 					while(childIter < parent.getChildren().size()) {
@@ -139,7 +139,7 @@ public class JsonModelOutlineParser {
 					head.setJsonNode(jsonNode);
 				}
 
-				if (isNodeOfType(jsonNode, JsonType.Object, JsonType.Array)) {
+				if (isNodeOfType(jsonNode, JsonDocumentType.JSON_ARRAY_OPEN, JsonDocumentType.JSON_OBJECT_OPEN)) {
 					parent = head;
 					childIterStack.add(0, childIter);
 					childIter = 0;
@@ -155,10 +155,10 @@ public class JsonModelOutlineParser {
 		return root;
 	}
 
-	private boolean isNodeOfType(JsonNode jsonNode, JsonType ... jsonTypes) {
+	private boolean isNodeOfType(JsonNode jsonNode, String ... jsonTypes) {
 
-		for (JsonType jsonType :jsonTypes) {
-			if (jsonNode.getJsonType() == jsonType) {
+		for (String jsonType : jsonTypes) {
+			if (jsonNode.getJsonType().equals(jsonType)) {
 				return true;
 			}
 		}

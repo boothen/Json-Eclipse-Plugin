@@ -25,41 +25,27 @@ import org.eclipse.jface.text.rules.RuleBasedPartitionScanner;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WordPatternRule;
 
-public class JsonPartitionScanner extends RuleBasedPartitionScanner {
+import com.boothen.jsonedit.type.JsonDocumentType;
 
-	public final static String JSON_OBJECT_OPEN = "__json_object_open";
-	public final static String JSON_OBJECT_CLOSE = "__json_object_close";
-	
-	public final static String JSON_ARRAY_OPEN = "__json_array_open";
-	public final static String JSON_ARRAY_CLOSE = "__json_array_close";
-	
-	public final static String JSON_COLON = "__json_colon";
-	public final static String JSON_COMMA = "__json_comma";
-	
-	public final static String JSON_STRING = "__json_string";
-	public final static String JSON_NUMBER = "__json_number";
-	
-	public final static String JSON_TRUE = "__json_true";
-	public final static String JSON_FALSE = "__json_false";
-	public final static String JSON_NULL = "__json_null";
+public class JsonPartitionScanner extends RuleBasedPartitionScanner {
 
 	public JsonPartitionScanner() {
 
-		IToken jsonObjectOpen = new Token(JSON_OBJECT_OPEN);
-		IToken jsonObjectClose = new Token(JSON_OBJECT_CLOSE);
+		IToken jsonObjectOpen = new Token(JsonDocumentType.JSON_OBJECT_OPEN);
+		IToken jsonObjectClose = new Token(JsonDocumentType.JSON_OBJECT_CLOSE);
 		
-		IToken jsonArrayOpen = new Token(JSON_ARRAY_OPEN);
-		IToken jsonArrayClose = new Token(JSON_ARRAY_CLOSE);
+		IToken jsonArrayOpen = new Token(JsonDocumentType.JSON_ARRAY_OPEN);
+		IToken jsonArrayClose = new Token(JsonDocumentType.JSON_ARRAY_CLOSE);
 		
-		IToken jsonColon = new Token(JSON_COLON);
-		IToken jsonComma = new Token(JSON_COMMA);
+		IToken jsonColon = new Token(JsonDocumentType.JSON_COLON);
+		IToken jsonComma = new Token(JsonDocumentType.JSON_COMMA);
 		
-		IToken jsonString = new Token(JSON_STRING);
-		IToken jsonNumber = new Token(JSON_NUMBER);
+		IToken jsonString = new Token(JsonDocumentType.JSON_STRING);
+		IToken jsonNumber = new Token(JsonDocumentType.JSON_NUMBER);
 		
-		IToken jsonTrue = new Token(JSON_TRUE);
-		IToken jsonFalse = new Token(JSON_FALSE);
-		IToken jsonNull = new Token(JSON_NULL);
+		IToken jsonTrue = new Token(JsonDocumentType.JSON_TRUE);
+		IToken jsonFalse = new Token(JsonDocumentType.JSON_FALSE);
+		IToken jsonNull = new Token(JsonDocumentType.JSON_NULL);
 
 		List<IPredicateRule> rules = new ArrayList<IPredicateRule>();
 

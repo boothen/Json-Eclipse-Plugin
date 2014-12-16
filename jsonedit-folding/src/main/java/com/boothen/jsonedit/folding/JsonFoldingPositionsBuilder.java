@@ -21,7 +21,7 @@ import java.util.List;
 import org.eclipse.jface.text.Position;
 
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
-import com.boothen.jsonedit.core.model.jsonnode.JsonType;
+import com.boothen.jsonedit.type.JsonDocumentType;
 
 /**
  * @author Matt Garner
@@ -41,13 +41,13 @@ public class JsonFoldingPositionsBuilder {
 		List<Position> positionsStack = new LinkedList<Position>();
 		if (jsonNodes != null) {
 			for (JsonNode jsonNode : jsonNodes) {
-				if (isJsonNodeType(jsonNode, JsonType.Array, JsonType.Object)) {
+				if (isJsonNodeType(jsonNode, JsonDocumentType.JSON_ARRAY_OPEN, JsonDocumentType.JSON_OBJECT_OPEN)) {
 					Position position = new Position(jsonNode.getStart());
 					positionsStack.add(0, position);
 					positions.add(position);
 				}
 
-				if (isJsonNodeType(jsonNode, JsonType.End)) {
+				if (isJsonNodeType(jsonNode, JsonDocumentType.JSON_ARRAY_CLOSE, JsonDocumentType.JSON_OBJECT_CLOSE)) {
 					if (positionsStack.size() > 0) {
 						Position position = positionsStack.remove(0);
 						position.setLength(jsonNode.getEnd() - position.getOffset());
@@ -58,10 +58,10 @@ public class JsonFoldingPositionsBuilder {
 		return positions;
 	}
 
-	private boolean isJsonNodeType(JsonNode jsonNode, JsonType ... jsonTypes) {
+	private boolean isJsonNodeType(JsonNode jsonNode, String ... jsonTypes) {
 
-		for (JsonType jsonType : jsonTypes) {
-			if (jsonNode.getJsonType() == jsonType) {
+		for (String jsonType : jsonTypes) {
+			if (jsonNode.getJsonType().equals(jsonType)) {
 				return true;
 			}
 		}
