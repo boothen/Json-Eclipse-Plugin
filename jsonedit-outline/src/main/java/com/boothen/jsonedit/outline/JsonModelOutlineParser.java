@@ -38,13 +38,13 @@ public class JsonModelOutlineParser {
 		super();
 	}
 
-	public JsonTreeNode parse(List<JsonNode> jsonNodes) {
+	private JsonTreeNode parse(List<JsonNode> jsonNodes) {
 
 		if (jsonNodes == null) {
 			return null;
 		}
 
-		JsonTreeNode root = null;
+		JsonTreeNode root = new JsonTreeNode(null, null);
 		JsonTreeNode parent = null;
 
 		for (JsonNode jsonNode : jsonNodes) {

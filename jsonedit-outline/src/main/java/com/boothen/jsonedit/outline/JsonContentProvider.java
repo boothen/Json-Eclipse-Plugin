@@ -67,7 +67,7 @@ public class JsonContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement == fInput) {
-			return (rootObject != null) ? new Object[]{ rootObject } : new Object[0];
+			return (rootObject != null && rootObject.hasChildren()) ? rootObject.getChildrenAsArray() : new Object[0];
 		}
 		if (parentElement instanceof JsonTreeNode) {
 			return ((JsonTreeNode) parentElement).getChildren().toArray();
@@ -91,7 +91,7 @@ public class JsonContentProvider implements ITreeContentProvider {
 	@Override
 	public boolean hasChildren(Object element) {
 		if (element == fInput) {
-			return (rootObject != null) ? true : false;
+			return (rootObject != null && rootObject.hasChildren()) ? true : false;
 		}
 		if (element instanceof JsonTreeNode) {
 			return ((JsonTreeNode) element).hasChildren();
@@ -103,7 +103,7 @@ public class JsonContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getElements(Object inputElement) {
 		if (inputElement == fInput) {
-			return (rootObject != null) ? new Object[]{ rootObject } : new Object[0];
+			return (rootObject != null && rootObject.hasChildren()) ? rootObject.getChildrenAsArray() : new Object[0];
 		}
 		return null;
 	}
@@ -156,7 +156,7 @@ public class JsonContentProvider implements ITreeContentProvider {
 			return null;
 		}
 
-		return findNearestElement((JsonTreeNode)rootObject, start, length);
+		return findNearestElement(rootObject, start, length);
 	}
 
 	/**

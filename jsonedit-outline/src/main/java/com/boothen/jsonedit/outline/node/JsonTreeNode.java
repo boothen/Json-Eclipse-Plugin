@@ -93,6 +93,11 @@ public class JsonTreeNode {
 	public List<JsonTreeNode> getChildren() {
 		return children;
 	}
+	
+	public JsonTreeNode[] getChildrenAsArray() {
+		return children.toArray(new JsonTreeNode[0]);
+		
+	}
 
 	public void addChild(JsonTreeNode jsonTreeNode) {
 		children.add(jsonTreeNode);
@@ -168,10 +173,16 @@ public class JsonTreeNode {
 	}
 
 	public int getStart() {
+		if (jsonNode == null) {
+			return 0;
+		}
 		return jsonNode.getStart();
 	}
 
 	public int getLength() {
+		if (jsonNode == null) {
+			return 0;
+		}
 		return jsonNode.getEnd() - jsonNode.getStart();
 	}
 
