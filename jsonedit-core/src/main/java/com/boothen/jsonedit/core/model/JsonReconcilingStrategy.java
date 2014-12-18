@@ -85,7 +85,6 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
 	    IToken nextToken = jsonPartitionScanner.nextToken();
 	    while (!nextToken.isEOF()) {
 	        if (nextToken.getData() != null && JsonDocumentType.DOCUMENT_TYPES.contains(nextToken.getData())) {
-	            System.out.println(nextToken.getData());
 	            try {
                     fDocument.addPosition(JsonEntryBuilder.JSON_ELEMENTS, new TypedPosition(jsonPartitionScanner.getTokenOffset(), 
                             jsonPartitionScanner.getTokenLength(), (String) nextToken.getData()));
