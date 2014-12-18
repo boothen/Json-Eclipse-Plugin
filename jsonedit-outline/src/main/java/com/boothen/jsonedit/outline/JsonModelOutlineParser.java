@@ -26,142 +26,133 @@ import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.outline.node.JsonTreeNode;
 import com.boothen.jsonedit.type.JsonDocumentType;
 
-
 /**
  * @author garner_m
  *
  */
 public class JsonModelOutlineParser {
 
+    public JsonModelOutlineParser() {
+        super();
+    }
 
-	public JsonModelOutlineParser() {
-		super();
-	}
+    private JsonTreeNode parse(List<JsonNode> jsonNodes) {
 
-	private JsonTreeNode parse(List<JsonNode> jsonNodes) {
+        if (jsonNodes == null) {
+            return null;
+        }
 
-		if (jsonNodes == null) {
-			return null;
-		}
+        JsonTreeNode root = new JsonTreeNode(null, null);
+        JsonTreeNode parent = root;
 
-		JsonTreeNode root = new JsonTreeNode(null, null);
-		JsonTreeNode parent = null;
+        for (JsonNode jsonNode : jsonNodes) {
 
-		for (JsonNode jsonNode : jsonNodes) {
+            if (isNodeOfType(jsonNode, JsonDocumentType.JSON_ARRAY_CLOSE, JsonDocumentType.JSON_OBJECT_CLOSE)) {
+                if (parent != null) {
+                    parent = parent.getParent();
+                }
+                continue;
+            }
 
-			if (isNodeOfType(jsonNode, JsonDocumentType.JSON_ARRAY_CLOSE, JsonDocumentType.JSON_OBJECT_CLOSE)) {
-				if (parent != null) {
-					parent = parent.getParent();
-				}
-				continue;
-			}
+            JsonTreeNode treeNode = new JsonTreeNode(jsonNode, parent);
+            parent.addChild(treeNode);
 
-			JsonTreeNode treeNode = new JsonTreeNode(jsonNode, parent);
-			if (root == null) {
-				root = treeNode;
-				parent = root;
-			} else {
-				if (parent == null) {
-					parent = root;
-				}
-				parent.addChild(treeNode);
-			}
+            if (isNodeOfType(jsonNode, JsonDocumentType.JSON_ARRAY_OPEN, JsonDocumentType.JSON_OBJECT_OPEN)) {
+                parent = treeNode;
+            }
+        }
+        return root;
+    }
 
-			if (isNodeOfType(jsonNode, JsonDocumentType.JSON_ARRAY_OPEN, JsonDocumentType.JSON_OBJECT_OPEN)) {
-				parent = treeNode;
-			}
-		}
-		return root;
-	}
+    public JsonTreeNode mergeNodes(JsonTreeNode oldRootObject, List<JsonNode> jsonNodes) {
 
-	public JsonTreeNode mergeNodes(JsonTreeNode oldRootObject, List<JsonNode> jsonNodes) {
+        if (jsonNodes == null) {
+            return oldRootObject;
+        }
 
-		if (jsonNodes == null) {
-			return oldRootObject;
-		}
+        if (oldRootObject == null && jsonNodes != null) {
+            return parse(jsonNodes);
+        }
 
-		if (oldRootObject == null && jsonNodes != null) {
-			return parse(jsonNodes);
-		}
+        JsonTreeNode root = oldRootObject;
 
-		JsonTreeNode root = new JsonTreeNode(null, null);
+        JsonTreeNode parent = oldRootObject;
 
-		JsonTreeNode parent = null;
+        JsonTreeNode head = oldRootObject.getChildren().get(0);
 
-		JsonTreeNode head = root;
+        List<Integer> childIterStack = new ArrayList<Integer>();
 
-		List<Integer> childIterStack = new ArrayList<Integer>();
+        try {
+            Integer childIter = 0;
+            for (JsonNode jsonNode : jsonNodes) {
 
-		try {
-			Integer childIter = 0;
-			for (JsonNode jsonNode : jsonNodes) {
+                if (isNodeOfType(jsonNode, JsonDocumentType.JSON_ARRAY_CLOSE, JsonDocumentType.JSON_OBJECT_CLOSE)) {
 
-				if (isNodeOfType(jsonNode, JsonDocumentType.JSON_ARRAY_CLOSE, JsonDocumentType.JSON_OBJECT_CLOSE)) {
+                    List<JsonTreeNode> nodesToRemove = new LinkedList<JsonTreeNode>();
+                    while (childIter < parent.getChildren().size()) {
+                        head = parent.getChildren().get(childIter);
+                        nodesToRemove.add(head);
+                        childIter++;
+                    }
 
-					List<JsonTreeNode> nodesToRemove = new LinkedList<JsonTreeNode>();
-					while(childIter < parent.getChildren().size()) {
-						head = parent.getChildren().get(childIter);
-						nodesToRemove.add(head);
-						childIter++;
-					}
+                    for (JsonTreeNode nodeToRemove : nodesToRemove) {
+                        nodeToRemove.removeFromParent();
+                    }
 
-					for (JsonTreeNode nodeToRemove: nodesToRemove) {
-						nodeToRemove.removeFromParent();
-					}
+                    if (childIterStack.size() > 0) {
+                        childIter = childIterStack.remove(0);
+                    } else {
+                        childIter = root.getChildren().size();
+                    }
 
-					if (childIterStack.size() > 0) {
-						childIter = childIterStack.remove(0);
-					} else {
-						childIter = root.getChildren().size();
-					}
+                    parent = parent.getParent();
+                    if (parent == null) {
+                        parent = root;
+                    }
+                    continue;
+                }
 
-					parent = parent.getParent();
-					if (parent == null) {
-						parent = root;
-					}
-					continue;
-				}
+                if (parent != null && childIter < parent.getChildren().size()) {
+                    head = parent.getChildren().get(childIter);
+                    childIter++;
+                } else if (head != root || (head == root && parent != null)) {
+                    head = null;
+                }
 
-				if (parent != null && childIter < parent.getChildren().size()) {
-					head = parent.getChildren().get(childIter);
-					childIter++;
-				} else if (head != root || (head == root && parent != null)) {
-					head = null;
-				}
+                if (head == null) {
+                    head = new JsonTreeNode(jsonNode, parent);
+                    parent.addChild(head);
+                    childIter++;
+                }
 
-				if (head == null) {
-					head = new JsonTreeNode(jsonNode, parent);
-					parent.addChild(head);
-					childIter++;
-				}
+                if (!jsonNode.equals(head.getJsonNode())) {
+                    head.setJsonNode(jsonNode);
+                }
 
-				if (!jsonNode.equals(head.getJsonNode())) {
-					head.setJsonNode(jsonNode);
-				}
+                if (isNodeOfType(jsonNode, JsonDocumentType.JSON_ARRAY_OPEN, JsonDocumentType.JSON_OBJECT_OPEN)) {
+                    parent = head;
+                    childIterStack.add(0, childIter);
+                    childIter = 0;
+                } else {
+                    if (head.hasChildren()) {
+                        head.clearChildren();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-				if (isNodeOfType(jsonNode, JsonDocumentType.JSON_ARRAY_OPEN, JsonDocumentType.JSON_OBJECT_OPEN)) {
-					parent = head;
-					childIterStack.add(0, childIter);
-					childIter = 0;
-				} else {
-					if (head.hasChildren()) {
-						head.clearChildren();
-					}
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return root;
-	}
+        return root;
+    }
 
-	private boolean isNodeOfType(JsonNode jsonNode, String ... jsonTypes) {
+    private boolean isNodeOfType(JsonNode jsonNode, String... jsonTypes) {
 
-		for (String jsonType : jsonTypes) {
-			if (jsonNode.getJsonType().equals(jsonType)) {
-				return true;
-			}
-		}
-		return false;
-	}
+        for (String jsonType : jsonTypes) {
+            if (jsonNode.getJsonType().equals(jsonType)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
