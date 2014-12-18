@@ -17,23 +17,23 @@ package com.boothen.jsonedit.model.entry;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.ITypedRegion;
+import org.eclipse.jface.text.TypedPosition;
 
 public class JsonEntry {
 
-	private final ITypedRegion typedRegion;
+	private final TypedPosition typedPosition;
 	private String content;
 	
-	public JsonEntry(ITypedRegion typedRegion, String content) {
+	public JsonEntry(TypedPosition typedPosition, String content) {
 		super();
-		this.typedRegion = typedRegion;
+		this.typedPosition = typedPosition;
 		this.content = content;
 	}
 	
-	public static JsonEntry createJsonEntry(ITypedRegion typedRegion, IDocument document) {
+	public static JsonEntry createJsonEntry(TypedPosition typedPosition, IDocument document) {
 		try {
-			String content = document.get(typedRegion.getOffset(), typedRegion.getLength());
-			return new JsonEntry(typedRegion, content);
+			String content = document.get(typedPosition.getOffset(), typedPosition.getLength());
+			return new JsonEntry(typedPosition, content);
 		} catch (BadLocationException e) {
 			return null;
 		}
@@ -44,14 +44,14 @@ public class JsonEntry {
 	}
 
 	public String getType() {
-		return typedRegion.getType();
+		return typedPosition.getType();
 	}
 	
 	public int getOffset() {
-		return typedRegion.getOffset();
+		return typedPosition.getOffset();
 	}
 	
 	public int getLength() {
-		return typedRegion.getLength();
+		return typedPosition.getLength();
 	}
 }

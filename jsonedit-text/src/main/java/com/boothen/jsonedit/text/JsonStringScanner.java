@@ -29,11 +29,13 @@ import org.eclipse.jface.text.rules.MultiLineRule;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
+import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.graphics.Color;
 
 import com.boothen.jsonedit.coloring.JsonColorProvider;
 import com.boothen.jsonedit.preferences.JsonPreferenceStore;
 import com.boothen.jsonedit.text.detector.JsonWhitespaceDetector;
+import com.boothen.jsonedit.text.detector.JsonWordDetector;
 
 /**
  * JsonScanner is used to scan the JSON and apply coloring.
@@ -57,17 +59,22 @@ public class JsonStringScanner extends RuleBasedScanner implements Reinitable {
 
 	private void initScanner() {
 		IToken string = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.STRING_COLOR)));
-//		IToken value = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.VALUE_COLOR)));
-//		IToken defaultText = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.DEFAULT_COLOR)));
-//		IToken nullValue = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.NULL_COLOR)));
+		IToken value = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.VALUE_COLOR)));
+		IToken defaultText = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.ERROR_COLOR)));
+		IToken nullValue = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.NULL_COLOR)));
 
 		List<IRule> rules= new LinkedList<IRule>();
 
-//		rules.add(new MultiLineRule(":\"", "\"", value, '\\'));
+		rules.add(new MultiLineRule(":\"", "\"", value, '\\'));
 		rules.add(new MultiLineRule("\"", "\"", string, '\\')); //$NON-NLS-2$ //$NON-NLS-1$
-//		WordRule wordRule= new WordRule(new JsonWordDetector(), defaultText);
-//		wordRule.addWord("null", nullValue);
-//		rules.add(wordRule);
+		rules.add(new JsonNumberRule(value));
+
+	    WordRule wordRule= new WordRule(new JsonWordDetector(), defaultText);
+	    wordRule.addWord("true", nullValue);
+	    wordRule.addWord("false", nullValue);
+	    wordRule.addWord("null", nullValue);
+	    
+	    rules.add(wordRule);
 		rules.add(new WhitespaceRule(new JsonWhitespaceDetector()));
 
 		IRule[] result= new IRule[rules.size()];

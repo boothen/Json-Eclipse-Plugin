@@ -76,7 +76,7 @@ public class JsonTextEditor extends TextEditor {
 		jsonPreferenceStore = new JsonPreferenceStore();
 		viewerConfiguration = new JsonSourceViewerConfiguration(this, jsonPreferenceStore);
 		setSourceViewerConfiguration(viewerConfiguration);
-		setDocumentProvider(new JsonDocumentProvider());
+//		setDocumentProvider(new JsonDocumentProvider());
 	}
 
 	@Override
@@ -91,9 +91,11 @@ public class JsonTextEditor extends TextEditor {
 	@Override
 	protected void initializeEditor() {
 		super.initializeEditor();
+		
 		setEditorContextMenuId("#JsonTextEditorContext"); //$NON-NLS-1$
 		setRulerContextMenuId("#JsonTextRulerContext"); //$NON-NLS-1$
 		setPreferenceStore(JsonPreferenceStore.getChainedPreferenceStore());
+		
 	}
 
 	@Override

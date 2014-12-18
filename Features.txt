@@ -7,11 +7,9 @@ Multi objects in file
  	- Text Folding
  - JsonTextFormatter
  
-Fix colouring when using folding annotations
 Fix \" in values
-Fix colouring after format - possible same issue as folding
-Fix pair matching.
 Fix validation.
+Fix multi object outline issue.
 
 Pair matching in editor {} or [] goes a miss if String contains any of those characters.
 

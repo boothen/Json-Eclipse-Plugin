@@ -18,12 +18,16 @@ package com.boothen.jsonedit.core.model;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.BadPositionCategoryException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Position;
+import org.eclipse.jface.text.TypedPosition;
 import org.eclipse.jface.text.reconciler.DirtyRegion;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategy;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategyExtension;
+import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.swt.widgets.Display;
 
 import com.boothen.jsonedit.core.editors.JsonTextEditor;
@@ -32,6 +36,7 @@ import com.boothen.jsonedit.core.model.jsonnode.JsonNodeBuilder;
 import com.boothen.jsonedit.folding.JsonFoldingPositionsBuilder;
 import com.boothen.jsonedit.model.entry.JsonEntry;
 import com.boothen.jsonedit.model.entry.JsonEntryBuilder;
+import com.boothen.jsonedit.type.JsonDocumentType;
 
 public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcilingStrategyExtension {
 
@@ -41,12 +46,12 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
 
 	@Override
 	public void reconcile(IRegion partition) {
-		initialReconcile();
+	    initialReconcile();
 	}
 
 	@Override
 	public void reconcile(DirtyRegion dirtyRegion, IRegion subRegion) {
-		initialReconcile();
+	    initialReconcile();
 	}
 
 	@Override
@@ -57,13 +62,42 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
 
 	@Override
 	public void initialReconcile() {
-
+	    try {
+            fDocument.removePositionCategory(JsonEntryBuilder.JSON_ELEMENTS);
+            fDocument.addPositionCategory(JsonEntryBuilder.JSON_ELEMENTS);
+        } catch (BadPositionCategoryException e) {
+            e.printStackTrace();
+        }
+	    
+	    
+	    scan(0, fDocument.getLength());
 		parse();
 	}
 
 	@Override
 	public void setProgressMonitor(IProgressMonitor monitor) {
 
+	}
+	
+	private void scan(int offset, int length) {
+	    JsonPartitionScanner jsonPartitionScanner = new JsonPartitionScanner();
+	    jsonPartitionScanner.setRange(fDocument, offset, length);
+	    IToken nextToken = jsonPartitionScanner.nextToken();
+	    while (!nextToken.isEOF()) {
+	        if (nextToken.getData() != null && JsonDocumentType.DOCUMENT_TYPES.contains(nextToken.getData())) {
+	            System.out.println(nextToken.getData());
+	            try {
+                    fDocument.addPosition(JsonEntryBuilder.JSON_ELEMENTS, new TypedPosition(jsonPartitionScanner.getTokenOffset(), 
+                            jsonPartitionScanner.getTokenLength(), (String) nextToken.getData()));
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                } catch (BadPositionCategoryException e) {
+                    e.printStackTrace();
+                } 
+	        }
+	        nextToken = jsonPartitionScanner.nextToken();
+	    }
+	    
 	}
 
 	private void parse() {
@@ -75,7 +109,7 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
 		if (textEditor != null) {
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
-//					textEditor.updateFoldingStructure(fPositions);
+					textEditor.updateFoldingStructure(fPositions);
 					textEditor.updateContentOutlinePage(jsonNodes);
 				}
 

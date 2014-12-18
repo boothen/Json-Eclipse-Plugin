@@ -30,11 +30,8 @@ import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 import com.boothen.jsonedit.core.model.JsonReconcilingStrategy;
 import com.boothen.jsonedit.core.text.JsonIndentLineAutoEditStrategy;
 import com.boothen.jsonedit.preferences.JsonPreferenceStore;
-import com.boothen.jsonedit.text.JsonConstantWordScanner;
-import com.boothen.jsonedit.text.JsonNumberScanner;
 import com.boothen.jsonedit.text.JsonStringScanner;
 import com.boothen.jsonedit.text.LineEndingUtil;
-import com.boothen.jsonedit.type.JsonDocumentType;
 
 /**
  * JsonSourceViewerConfiguration manages the coloring of the text.
@@ -47,10 +44,6 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
 	private JsonTextEditor textEditor;
 	private JsonIndentLineAutoEditStrategy jsonIndentLineAutoEditStrategy;
 	private JsonStringScanner jsonStringScanner;
-	private JsonConstantWordScanner jsonTrueScanner;
-	private JsonConstantWordScanner jsonFalseScanner;
-	private JsonConstantWordScanner jsonNullScanner;
-	private JsonNumberScanner jsonNumberScanner;
 	private JsonPreferenceStore store;
 
 	public JsonSourceViewerConfiguration(JsonTextEditor textEditor, JsonPreferenceStore store) {
@@ -62,10 +55,6 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
 		String lineEnding = "\n";
 		jsonIndentLineAutoEditStrategy = new JsonIndentLineAutoEditStrategy(spaces, numSpaces, lineEnding);
 		jsonStringScanner = new JsonStringScanner();
-		jsonTrueScanner = new JsonConstantWordScanner("true");
-		jsonFalseScanner = new JsonConstantWordScanner("false");
-		jsonNullScanner = new JsonConstantWordScanner("null");
-		jsonNumberScanner = new JsonNumberScanner();
 	}
 
 	@Override
@@ -73,45 +62,10 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
 		PresentationReconciler reconciler= new PresentationReconciler();
 		
 		DefaultDamagerRepairer dr= new DefaultDamagerRepairer(jsonStringScanner);	
-		reconciler.setDamager(dr, JsonDocumentType.JSON_STRING);
-		reconciler.setRepairer(dr, JsonDocumentType.JSON_STRING);
-		
-		dr= new DefaultDamagerRepairer(jsonTrueScanner);	
-		reconciler.setDamager(dr, JsonDocumentType.JSON_TRUE);
-		reconciler.setRepairer(dr, JsonDocumentType.JSON_TRUE);
-		
-		dr= new DefaultDamagerRepairer(jsonFalseScanner);	
-		reconciler.setDamager(dr, JsonDocumentType.JSON_FALSE);
-		reconciler.setRepairer(dr, JsonDocumentType.JSON_FALSE);
-		
-		dr= new DefaultDamagerRepairer(jsonNullScanner);	
-		reconciler.setDamager(dr, JsonDocumentType.JSON_NULL);
-		reconciler.setRepairer(dr, JsonDocumentType.JSON_NULL);
-		
-		dr= new DefaultDamagerRepairer(jsonNumberScanner);	
-		reconciler.setDamager(dr, JsonDocumentType.JSON_NUMBER);
-		reconciler.setRepairer(dr, JsonDocumentType.JSON_NUMBER);
+		reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
+		reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 		
 		return reconciler;
-	}
-	
-	
-
-	@Override
-	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
-		return new String[] { 
-				IDocument.DEFAULT_CONTENT_TYPE,
-				JsonDocumentType.JSON_OBJECT_CLOSE,
-				JsonDocumentType.JSON_OBJECT_OPEN,
-				JsonDocumentType.JSON_ARRAY_CLOSE,
-				JsonDocumentType.JSON_ARRAY_OPEN,
-				JsonDocumentType.JSON_STRING,
-				JsonDocumentType.JSON_NUMBER,
-				JsonDocumentType.JSON_TRUE,
-				JsonDocumentType.JSON_FALSE,
-				JsonDocumentType.JSON_NULL,
-				JsonDocumentType.JSON_COMMA,
-				JsonDocumentType.JSON_COLON};
 	}
 
 	@Override
@@ -135,10 +89,6 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
 		textEditor.updateTabWidth(tabWidth);
 		jsonIndentLineAutoEditStrategy.initPreferences(spacesForTab, tabWidth, lineEnding);
 		jsonStringScanner.reinit();
-		jsonTrueScanner.reinit();
-		jsonFalseScanner.reinit();
-		jsonNullScanner.reinit();
-		jsonNumberScanner.reinit();
 		
 	}
 

@@ -20,7 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import org.eclipse.jface.text.TypedRegion;
+import org.eclipse.jface.text.TypedPosition;
 
 import com.boothen.jsonedit.model.entry.JsonEntry;
 import com.boothen.jsonedit.type.JsonDocumentType;
@@ -130,8 +130,8 @@ public class JsonNodeBuilder {
 		}
 		
 		
-		TypedRegion typedRegion = new TypedRegion(offset, length, JsonDocumentType.JSON_ERROR);
-		return new JsonNode(null, new JsonEntry(typedRegion, content));
+		TypedPosition typedPosition = new TypedPosition(offset, length, JsonDocumentType.JSON_ERROR);
+		return new JsonNode(null, new JsonEntry(typedPosition, content));
 	}
 
 	private JsonNode createTerminalNode(JsonEntry jsonEntry) {

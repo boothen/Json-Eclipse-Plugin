@@ -84,7 +84,7 @@ public class JsonModelOutlineParser {
 			return parse(jsonNodes);
 		}
 
-		JsonTreeNode root = oldRootObject;
+		JsonTreeNode root = new JsonTreeNode(null, null);
 
 		JsonTreeNode parent = null;
 
