@@ -39,64 +39,64 @@ import com.boothen.jsonedit.text.LineEndingUtil;
 public class FormatTextHandler implements IHandler {
 
 
-	@Override
-	public void addHandlerListener(IHandlerListener handlerListener) {
+    @Override
+    public void addHandlerListener(IHandlerListener handlerListener) {
 
-	}
+    }
 
-	@Override
-	public void dispose() {
+    @Override
+    public void dispose() {
 
-	}
+    }
 
-	/**
-	 * Execute the text formatting request.
-	 */
-	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+    /**
+     * Execute the text formatting request.
+     */
+    @Override
+    public Object execute(ExecutionEvent event) throws ExecutionException {
 
-		IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		if (!(editor instanceof JsonTextEditor)) {
-			return null;
-		}
+        IEditorPart editor = HandlerUtil.getActiveEditor(event);
+        if (!(editor instanceof JsonTextEditor)) {
+            return null;
+        }
 
-		JsonTextEditor textEditor = (JsonTextEditor) editor;
+        JsonTextEditor textEditor = (JsonTextEditor) editor;
 
-		JsonPreferenceStore store = new JsonPreferenceStore();
-		boolean spaces = store.getSpacesForTab();
-		int numSpaces = store.getTabWidth();
+        JsonPreferenceStore store = new JsonPreferenceStore();
+        boolean spaces = store.getSpacesForTab();
+        int numSpaces = store.getTabWidth();
 
-		formatText(textEditor, spaces, numSpaces);
-		return null;
-	}
+        formatText(textEditor, spaces, numSpaces);
+        return null;
+    }
 
-	public static void formatText(JsonTextEditor textEditor, boolean spaces, int numSpaces) {
+    public static void formatText(JsonTextEditor textEditor, boolean spaces, int numSpaces) {
 
-		IDocument document = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
-		String text = document.get();
+        IDocument document = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
+        String text = document.get();
 
-		IFile file = (IFile) textEditor.getEditorInput().getAdapter(IFile.class);
-		String lineEnding = LineEndingUtil.determineProjectLineEnding(file);
+        IFile file = (IFile) textEditor.getEditorInput().getAdapter(IFile.class);
+        String lineEnding = LineEndingUtil.determineProjectLineEnding(file);
 
-		JsonTextFormatter textFormatter = new JsonTextFormatter(text, spaces, numSpaces, lineEnding);
-		textEditor.storeOutlineState();
-		textEditor.storeTextLocation();
-		textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).set(textFormatter.formatText());
-		textEditor.getFOutlinePage().update();
-	}
+        JsonTextFormatter textFormatter = new JsonTextFormatter(text, spaces, numSpaces, lineEnding);
+        textEditor.storeOutlineState();
+        textEditor.storeTextLocation();
+        textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).set(textFormatter.formatText());
+        textEditor.getFOutlinePage().update();
+    }
 
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
-	@Override
-	public boolean isHandled() {
-		return true;
-	}
+    @Override
+    public boolean isHandled() {
+        return true;
+    }
 
-	@Override
-	public void removeHandlerListener(IHandlerListener handlerListener) {
+    @Override
+    public void removeHandlerListener(IHandlerListener handlerListener) {
 
-	}
+    }
 }

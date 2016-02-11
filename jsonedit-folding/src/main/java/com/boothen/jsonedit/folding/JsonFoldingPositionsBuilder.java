@@ -29,45 +29,45 @@ import com.boothen.jsonedit.type.JsonDocumentType;
  */
 public class JsonFoldingPositionsBuilder {
 
-	private List<JsonNode> jsonNodes;
+    private List<JsonNode> jsonNodes;
 
-	public JsonFoldingPositionsBuilder(List<JsonNode> jsonNodes) {
-		this.jsonNodes = jsonNodes;
-	}
+    public JsonFoldingPositionsBuilder(List<JsonNode> jsonNodes) {
+        this.jsonNodes = jsonNodes;
+    }
 
-	public List<Position> buildFoldingPositions() {
+    public List<Position> buildFoldingPositions() {
 
-		List<Position> positions = new LinkedList<Position>();
-		List<Position> positionsStack = new LinkedList<Position>();
-		if (jsonNodes != null) {
-			for (JsonNode jsonNode : jsonNodes) {
-				if (isJsonNodeType(jsonNode, JsonDocumentType.JSON_ARRAY_OPEN, JsonDocumentType.JSON_OBJECT_OPEN)) {
-					Position position = new Position(jsonNode.getStart());
-					positionsStack.add(0, position);
-					positions.add(position);
-				}
+        List<Position> positions = new LinkedList<Position>();
+        List<Position> positionsStack = new LinkedList<Position>();
+        if (jsonNodes != null) {
+            for (JsonNode jsonNode : jsonNodes) {
+                if (isJsonNodeType(jsonNode, JsonDocumentType.JSON_ARRAY_OPEN, JsonDocumentType.JSON_OBJECT_OPEN)) {
+                    Position position = new Position(jsonNode.getStart());
+                    positionsStack.add(0, position);
+                    positions.add(position);
+                }
 
-				if (isJsonNodeType(jsonNode, JsonDocumentType.JSON_ARRAY_CLOSE, JsonDocumentType.JSON_OBJECT_CLOSE)) {
-					if (positionsStack.size() > 0) {
-						Position position = positionsStack.remove(0);
-						position.setLength(jsonNode.getEnd() - position.getOffset());
-					}
-				}
-			}
-		}
-		return positions;
-	}
+                if (isJsonNodeType(jsonNode, JsonDocumentType.JSON_ARRAY_CLOSE, JsonDocumentType.JSON_OBJECT_CLOSE)) {
+                    if (positionsStack.size() > 0) {
+                        Position position = positionsStack.remove(0);
+                        position.setLength(jsonNode.getEnd() - position.getOffset());
+                    }
+                }
+            }
+        }
+        return positions;
+    }
 
-	private boolean isJsonNodeType(JsonNode jsonNode, String ... jsonTypes) {
+    private boolean isJsonNodeType(JsonNode jsonNode, String ... jsonTypes) {
 
-		for (String jsonType : jsonTypes) {
-			if (jsonNode.getJsonType().equals(jsonType)) {
-				return true;
-			}
-		}
+        for (String jsonType : jsonTypes) {
+            if (jsonNode.getJsonType().equals(jsonType)) {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 
 }

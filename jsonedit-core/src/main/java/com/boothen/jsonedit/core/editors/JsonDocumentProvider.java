@@ -26,27 +26,27 @@ import com.boothen.jsonedit.type.JsonDocumentType;
 
 public class JsonDocumentProvider extends FileDocumentProvider {
 
-	protected IDocument createDocument(Object element) throws CoreException
+    protected IDocument createDocument(Object element) throws CoreException
 
-	{
-		IDocument document = super.createDocument(element);
-		if (document != null) {
-			IDocumentPartitioner partitioner = new JsonPartitioner(
-					new JsonPartitionScanner(), new String[] {
-							JsonDocumentType.JSON_OBJECT_CLOSE,
-							JsonDocumentType.JSON_OBJECT_OPEN,
-							JsonDocumentType.JSON_ARRAY_CLOSE,
-							JsonDocumentType.JSON_ARRAY_OPEN,
-							JsonDocumentType.JSON_STRING,
-							JsonDocumentType.JSON_NUMBER,
-							JsonDocumentType.JSON_TRUE,
-							JsonDocumentType.JSON_FALSE,
-							JsonDocumentType.JSON_NULL,
-							JsonDocumentType.JSON_COMMA,
-							JsonDocumentType.JSON_COLON });
-			partitioner.connect(document);
-			document.setDocumentPartitioner(partitioner);
-		}
-		return document;
-	}
+    {
+        IDocument document = super.createDocument(element);
+        if (document != null) {
+            IDocumentPartitioner partitioner = new JsonPartitioner(
+                    new JsonPartitionScanner(), new String[] {
+                            JsonDocumentType.JSON_OBJECT_CLOSE,
+                            JsonDocumentType.JSON_OBJECT_OPEN,
+                            JsonDocumentType.JSON_ARRAY_CLOSE,
+                            JsonDocumentType.JSON_ARRAY_OPEN,
+                            JsonDocumentType.JSON_STRING,
+                            JsonDocumentType.JSON_NUMBER,
+                            JsonDocumentType.JSON_TRUE,
+                            JsonDocumentType.JSON_FALSE,
+                            JsonDocumentType.JSON_NULL,
+                            JsonDocumentType.JSON_COMMA,
+                            JsonDocumentType.JSON_COLON });
+            partitioner.connect(document);
+            document.setDocumentPartitioner(partitioner);
+        }
+        return document;
+    }
 }

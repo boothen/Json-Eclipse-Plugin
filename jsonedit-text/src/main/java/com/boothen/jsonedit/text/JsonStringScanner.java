@@ -45,43 +45,43 @@ import com.boothen.jsonedit.text.detector.JsonWordDetector;
  */
 public class JsonStringScanner extends RuleBasedScanner implements Reinitable {
 
-	private JsonColorProvider jsonColorProvider = new JsonColorProvider();
+    private JsonColorProvider jsonColorProvider = new JsonColorProvider();
 
-	public JsonStringScanner() {
-		super();
-		initScanner();
-	}
+    public JsonStringScanner() {
+        super();
+        initScanner();
+    }
 
-	@Override
-	public void reinit() {
-		initScanner();
-	}
+    @Override
+    public void reinit() {
+        initScanner();
+    }
 
-	private void initScanner() {
-		IToken string = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.STRING_COLOR)));
-		IToken value = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.VALUE_COLOR)));
-		IToken defaultText = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.ERROR_COLOR)));
-		IToken nullValue = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.NULL_COLOR)));
+    private void initScanner() {
+        IToken string = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.STRING_COLOR)));
+        IToken value = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.VALUE_COLOR)));
+        IToken defaultText = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.ERROR_COLOR)));
+        IToken nullValue = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.NULL_COLOR)));
 
-		List<IRule> rules= new LinkedList<IRule>();
+        List<IRule> rules= new LinkedList<IRule>();
 
-		rules.add(new MultiLineRule(":\"", "\"", value, '\\'));
-		rules.add(new MultiLineRule("\"", "\"", string, '\\')); //$NON-NLS-2$ //$NON-NLS-1$
-		rules.add(new JsonNumberRule(value));
+        rules.add(new MultiLineRule(":\"", "\"", value, '\\'));
+        rules.add(new MultiLineRule("\"", "\"", string, '\\')); //$NON-NLS-2$ //$NON-NLS-1$
+        rules.add(new JsonNumberRule(value));
 
-	    WordRule wordRule= new WordRule(new JsonWordDetector(), defaultText);
-	    wordRule.addWord("true", nullValue);
-	    wordRule.addWord("false", nullValue);
-	    wordRule.addWord("null", nullValue);
-	    
-	    rules.add(wordRule);
-		rules.add(new WhitespaceRule(new JsonWhitespaceDetector()));
+        WordRule wordRule= new WordRule(new JsonWordDetector(), defaultText);
+        wordRule.addWord("true", nullValue);
+        wordRule.addWord("false", nullValue);
+        wordRule.addWord("null", nullValue);
+        
+        rules.add(wordRule);
+        rules.add(new WhitespaceRule(new JsonWhitespaceDetector()));
 
-		IRule[] result= new IRule[rules.size()];
-		setRules(rules.toArray(result));
-	}
+        IRule[] result= new IRule[rules.size()];
+        setRules(rules.toArray(result));
+    }
 
-	private Color getPreferenceColor(String preferenceValue) {
-		return jsonColorProvider.getColor(StringConverter.asRGB(JsonPreferenceStore.getIPreferenceStore().getString(preferenceValue)));
-	}
+    private Color getPreferenceColor(String preferenceValue) {
+        return jsonColorProvider.getColor(StringConverter.asRGB(JsonPreferenceStore.getIPreferenceStore().getString(preferenceValue)));
+    }
 }

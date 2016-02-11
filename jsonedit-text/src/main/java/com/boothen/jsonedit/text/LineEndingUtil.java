@@ -23,21 +23,21 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class LineEndingUtil {
 
-	public static String determineProjectLineEnding(IFile file) {
-		String lineEnding = null;
-		if (file != null && file.getProject() != null) {
-			lineEnding = Platform.getPreferencesService().getString(Platform.PI_RUNTIME, Platform.PREF_LINE_SEPARATOR, null, new IScopeContext[] { new ProjectScope(file.getProject()) });
-		}
+    public static String determineProjectLineEnding(IFile file) {
+        String lineEnding = null;
+        if (file != null && file.getProject() != null) {
+            lineEnding = Platform.getPreferencesService().getString(Platform.PI_RUNTIME, Platform.PREF_LINE_SEPARATOR, null, new IScopeContext[] { new ProjectScope(file.getProject()) });
+        }
 
-		if (lineEnding == null) {
-			lineEnding = Platform.getPreferencesService().getString(Platform.PI_RUNTIME, Platform.PREF_LINE_SEPARATOR, null, new IScopeContext[] {
-					InstanceScope.INSTANCE});
-		}
+        if (lineEnding == null) {
+            lineEnding = Platform.getPreferencesService().getString(Platform.PI_RUNTIME, Platform.PREF_LINE_SEPARATOR, null, new IScopeContext[] {
+                    InstanceScope.INSTANCE});
+        }
 
-		if (lineEnding == null) {
-			lineEnding = System.getProperty(Platform.PREF_LINE_SEPARATOR);
-		}
+        if (lineEnding == null) {
+            lineEnding = System.getProperty(Platform.PREF_LINE_SEPARATOR);
+        }
 
-		return lineEnding;
-	}
+        return lineEnding;
+    }
 }

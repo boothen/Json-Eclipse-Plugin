@@ -20,57 +20,57 @@ import com.boothen.jsonedit.model.entry.JsonEntry;
 
 public class JsonNode {
 
-	private JsonEntry key;
-	private JsonEntry value;
+    private JsonEntry key;
+    private JsonEntry value;
 
-	public JsonNode(JsonEntry key, JsonEntry value) {
-		this.key = key;
-		this.value = value;
-	}
+    public JsonNode(JsonEntry key, JsonEntry value) {
+        this.key = key;
+        this.value = value;
+    }
 
-	public String getKey() {
-		if (key == null) {
-			return null;
-		}
-		return key.getContent();
-	}
-	
+    public String getKey() {
+        if (key == null) {
+            return null;
+        }
+        return key.getContent();
+    }
+    
 
-	public String getValue() {
-		return value.getContent();
-	}
+    public String getValue() {
+        return value.getContent();
+    }
 
-	public String getJsonType() {
-		return value.getType();
-	}
-	
-	
-	public int getStart() {
-		JsonEntry startEntry = key;
-		if (startEntry == null) {
-			startEntry = value;
-		}
+    public String getJsonType() {
+        return value.getType();
+    }
+    
+    
+    public int getStart() {
+        JsonEntry startEntry = key;
+        if (startEntry == null) {
+            startEntry = value;
+        }
 
-		return startEntry.getOffset();
-	}
+        return startEntry.getOffset();
+    }
 
-	public int getEnd() {
-		return value.getOffset() + value.getLength();
-	}
-	
-	public boolean containsLocation(int offset) {
-	    return offset >= getStart() && offset <= getEnd();
-	}
-	
+    public int getEnd() {
+        return value.getOffset() + value.getLength();
+    }
+    
+    public boolean containsLocation(int offset) {
+        return offset >= getStart() && offset <= getEnd();
+    }
+    
 
-	@Override
-	public String toString() {
-		String toString = getJsonType();
-		String keyString = (key != null) ? key.getContent() + "," : "";
-//		toString += ", " + position.offset + ", " + position.length;
-		toString += ", " + keyString + ", " + ((value != null) ? value.getContent() : "");
-		return toString;
-	}
+    @Override
+    public String toString() {
+        String toString = getJsonType();
+        String keyString = (key != null) ? key.getContent() + "," : "";
+//        toString += ", " + position.offset + ", " + position.length;
+        toString += ", " + keyString + ", " + ((value != null) ? value.getContent() : "");
+        return toString;
+    }
 
     @Override
     public int hashCode() {
@@ -103,6 +103,6 @@ public class JsonNode {
         return true;
     }
 
-	
-	
+    
+    
 }

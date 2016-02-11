@@ -29,28 +29,28 @@ public class JsonEntryBuilder {
 
     public final static String JSON_ELEMENTS = "__json_elements"; //$NON-NLS-1$
     
-	public List<JsonEntry> buildJsonEntries(IDocument document) {
-		List<JsonEntry> jsonEntries = new LinkedList<JsonEntry>();
+    public List<JsonEntry> buildJsonEntries(IDocument document) {
+        List<JsonEntry> jsonEntries = new LinkedList<JsonEntry>();
 
-		Position[] positions = getPositions(document);
-		for (Position position : positions) {
-		    if (!(position instanceof TypedPosition)) {
-		        continue;
-		    }
-		    TypedPosition typedPosition = (TypedPosition) position;
-			if (JsonDocumentType.DOCUMENT_TYPES.contains(typedPosition.getType())) {
-				JsonEntry jsonEntry = JsonEntry.createJsonEntry(typedPosition, document);
-				jsonEntries.add(jsonEntry);
-			}
-		}
-		return jsonEntries;
-	}
-	
-	private Position[] getPositions(IDocument document) {
-	    try {
+        Position[] positions = getPositions(document);
+        for (Position position : positions) {
+            if (!(position instanceof TypedPosition)) {
+                continue;
+            }
+            TypedPosition typedPosition = (TypedPosition) position;
+            if (JsonDocumentType.DOCUMENT_TYPES.contains(typedPosition.getType())) {
+                JsonEntry jsonEntry = JsonEntry.createJsonEntry(typedPosition, document);
+                jsonEntries.add(jsonEntry);
+            }
+        }
+        return jsonEntries;
+    }
+    
+    private Position[] getPositions(IDocument document) {
+        try {
             return document.getPositions(JSON_ELEMENTS);
         } catch (BadPositionCategoryException e) {
             return new Position[0];
         }
-	}
+    }
 }

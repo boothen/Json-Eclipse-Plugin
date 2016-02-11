@@ -473,8 +473,8 @@ public class JsonTextValidator {
 class JsonValidationException extends Exception {
 
     /**
-	 *
-	 */
+     *
+     */
     private static final long serialVersionUID = -75665558665935017L;
 
     public JsonValidationException() {

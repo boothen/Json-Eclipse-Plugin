@@ -29,38 +29,38 @@ import com.boothen.jsonedit.type.JsonDocumentType;
 
 public class JsonPartitionScanner extends RuleBasedPartitionScanner {
 
-	public JsonPartitionScanner() {
+    public JsonPartitionScanner() {
 
-		IToken jsonObjectOpen = new Token(JsonDocumentType.JSON_OBJECT_OPEN);
-		IToken jsonObjectClose = new Token(JsonDocumentType.JSON_OBJECT_CLOSE);
-		
-		IToken jsonArrayOpen = new Token(JsonDocumentType.JSON_ARRAY_OPEN);
-		IToken jsonArrayClose = new Token(JsonDocumentType.JSON_ARRAY_CLOSE);
-		
-		IToken jsonColon = new Token(JsonDocumentType.JSON_COLON);
-		IToken jsonComma = new Token(JsonDocumentType.JSON_COMMA);
-		
-		IToken jsonString = new Token(JsonDocumentType.JSON_STRING);
-		IToken jsonNumber = new Token(JsonDocumentType.JSON_NUMBER);
-		
-		IToken jsonTrue = new Token(JsonDocumentType.JSON_TRUE);
-		IToken jsonFalse = new Token(JsonDocumentType.JSON_FALSE);
-		IToken jsonNull = new Token(JsonDocumentType.JSON_NULL);
+        IToken jsonObjectOpen = new Token(JsonDocumentType.JSON_OBJECT_OPEN);
+        IToken jsonObjectClose = new Token(JsonDocumentType.JSON_OBJECT_CLOSE);
+        
+        IToken jsonArrayOpen = new Token(JsonDocumentType.JSON_ARRAY_OPEN);
+        IToken jsonArrayClose = new Token(JsonDocumentType.JSON_ARRAY_CLOSE);
+        
+        IToken jsonColon = new Token(JsonDocumentType.JSON_COLON);
+        IToken jsonComma = new Token(JsonDocumentType.JSON_COMMA);
+        
+        IToken jsonString = new Token(JsonDocumentType.JSON_STRING);
+        IToken jsonNumber = new Token(JsonDocumentType.JSON_NUMBER);
+        
+        IToken jsonTrue = new Token(JsonDocumentType.JSON_TRUE);
+        IToken jsonFalse = new Token(JsonDocumentType.JSON_FALSE);
+        IToken jsonNull = new Token(JsonDocumentType.JSON_NULL);
 
-		List<IPredicateRule> rules = new ArrayList<IPredicateRule>();
+        List<IPredicateRule> rules = new ArrayList<IPredicateRule>();
 
-		rules.add(new MultiLineRule("\"", "\"", jsonString));
-		rules.add(new JsonNumberRule(jsonNumber));
-		rules.add(new WordPatternRule(new JsonConstantWordDetector("true"), "t", "e", jsonTrue));
-		rules.add(new WordPatternRule(new JsonConstantWordDetector("false"),"f", "e", jsonFalse));
-		rules.add(new WordPatternRule(new JsonConstantWordDetector("null"),"n", "l", jsonNull));
-		rules.add(new SingleCharacterRule('{', jsonObjectOpen));
-		rules.add(new SingleCharacterRule('}', jsonObjectClose));
-		rules.add(new SingleCharacterRule('[', jsonArrayOpen));
-		rules.add(new SingleCharacterRule(']', jsonArrayClose));
-		rules.add(new SingleCharacterRule(':', jsonColon));
-		rules.add(new SingleCharacterRule(',', jsonComma));
-		
-		setPredicateRules(rules.toArray(new IPredicateRule[0]));
-	}
+        rules.add(new MultiLineRule("\"", "\"", jsonString));
+        rules.add(new JsonNumberRule(jsonNumber));
+        rules.add(new WordPatternRule(new JsonConstantWordDetector("true"), "t", "e", jsonTrue));
+        rules.add(new WordPatternRule(new JsonConstantWordDetector("false"),"f", "e", jsonFalse));
+        rules.add(new WordPatternRule(new JsonConstantWordDetector("null"),"n", "l", jsonNull));
+        rules.add(new SingleCharacterRule('{', jsonObjectOpen));
+        rules.add(new SingleCharacterRule('}', jsonObjectClose));
+        rules.add(new SingleCharacterRule('[', jsonArrayOpen));
+        rules.add(new SingleCharacterRule(']', jsonArrayClose));
+        rules.add(new SingleCharacterRule(':', jsonColon));
+        rules.add(new SingleCharacterRule(',', jsonComma));
+        
+        setPredicateRules(rules.toArray(new IPredicateRule[0]));
+    }
 }

@@ -26,10 +26,10 @@ package com.boothen.jsonedit.core.util.reader;
  */
 public class JsonReaderException extends Exception {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 7836795816982549124L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 7836795816982549124L;
 
 
 }

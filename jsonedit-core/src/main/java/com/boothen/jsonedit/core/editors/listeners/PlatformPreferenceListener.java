@@ -28,44 +28,44 @@ import com.boothen.jsonedit.preferences.JsonPreferenceStore;
 
 public class PlatformPreferenceListener implements IEclipsePreferences.IPreferenceChangeListener, IPropertyChangeListener {
 
-	private JsonSourceViewerConfiguration viewerConfiguration;
-	private JsonPreferenceStore jsonPreferenceStore;
-	private IEclipsePreferences iEclipsePreferences;
+    private JsonSourceViewerConfiguration viewerConfiguration;
+    private JsonPreferenceStore jsonPreferenceStore;
+    private IEclipsePreferences iEclipsePreferences;
 
-	public PlatformPreferenceListener(JsonSourceViewerConfiguration viewerConfiguration, JsonPreferenceStore jsonPreferenceStore) {
-		this.viewerConfiguration = viewerConfiguration;
-		this.jsonPreferenceStore = jsonPreferenceStore;
-	}
+    public PlatformPreferenceListener(JsonSourceViewerConfiguration viewerConfiguration, JsonPreferenceStore jsonPreferenceStore) {
+        this.viewerConfiguration = viewerConfiguration;
+        this.jsonPreferenceStore = jsonPreferenceStore;
+    }
 
-	/**
-	 * Handle changes to the project preferences. Interested in line ending changes.
-	 */
-	@Override
-	public void preferenceChange(PreferenceChangeEvent event) {
-		viewerConfiguration.handlePreferenceStoreChanged();
-	}
+    /**
+     * Handle changes to the project preferences. Interested in line ending changes.
+     */
+    @Override
+    public void preferenceChange(PreferenceChangeEvent event) {
+        viewerConfiguration.handlePreferenceStoreChanged();
+    }
 
-	/**
-	 * Handle text editor preference changes. Interested in spacesForTabs and tabWidth.
-	 */
-	@Override
-	public void propertyChange(PropertyChangeEvent event) {
-		viewerConfiguration.handlePreferenceStoreChanged();
-		jsonPreferenceStore.updateEditorPreferences();
-	}
+    /**
+     * Handle text editor preference changes. Interested in spacesForTabs and tabWidth.
+     */
+    @Override
+    public void propertyChange(PropertyChangeEvent event) {
+        viewerConfiguration.handlePreferenceStoreChanged();
+        jsonPreferenceStore.updateEditorPreferences();
+    }
 
-	public void setPreferenceChangeListener(IFile file) {
-		if (file != null) {
-			iEclipsePreferences = new ProjectScope(file.getProject()).getNode(Platform.PI_RUNTIME);
-			iEclipsePreferences.addPreferenceChangeListener(this);
-		}
-		JsonPreferenceStore.getEditorPreferenceStore().addPropertyChangeListener(this);
-	}
+    public void setPreferenceChangeListener(IFile file) {
+        if (file != null) {
+            iEclipsePreferences = new ProjectScope(file.getProject()).getNode(Platform.PI_RUNTIME);
+            iEclipsePreferences.addPreferenceChangeListener(this);
+        }
+        JsonPreferenceStore.getEditorPreferenceStore().addPropertyChangeListener(this);
+    }
 
-	public void removePreferenceChangeListener() {
-		if (iEclipsePreferences != null) {
-			iEclipsePreferences.removePreferenceChangeListener(this);
-		}
-		JsonPreferenceStore.getEditorPreferenceStore().removePropertyChangeListener(this);
-	}
+    public void removePreferenceChangeListener() {
+        if (iEclipsePreferences != null) {
+            iEclipsePreferences.removePreferenceChangeListener(this);
+        }
+        JsonPreferenceStore.getEditorPreferenceStore().removePropertyChangeListener(this);
+    }
 }

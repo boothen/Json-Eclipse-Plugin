@@ -39,59 +39,59 @@ import com.boothen.jsonedit.validation.nature.JsonValidationNature;
  *
  */
 public class ProjectPropertiesPage extends PropertyPage implements
-		IWorkbenchPropertyPage {
+        IWorkbenchPropertyPage {
 
-	private Button checkbox;
+    private Button checkbox;
 
-	/**
-	 *
-	 */
-	public ProjectPropertiesPage() {
-	}
+    /**
+     *
+     */
+    public ProjectPropertiesPage() {
+    }
 
-	@Override
-	protected Control createContents(Composite parent) {
+    @Override
+    protected Control createContents(Composite parent) {
 
-		Composite panel = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout();
-		layout.marginHeight = 0;
-		layout.marginWidth = 0;
-		panel.setLayout(layout);
+        Composite panel = new Composite(parent, SWT.NONE);
+        GridLayout layout = new GridLayout();
+        layout.marginHeight = 0;
+        layout.marginWidth = 0;
+        panel.setLayout(layout);
 
-		checkbox = new Button(panel,SWT.CHECK);
-		checkbox.setLayoutData(new GridData());
-		checkbox.setText("Enable JSON validation in project");
+        checkbox = new Button(panel,SWT.CHECK);
+        checkbox.setLayoutData(new GridData());
+        checkbox.setText("Enable JSON validation in project");
 
-		checkbox.setSelection(getValidationEnabled());
-		return panel;
-	}
+        checkbox.setSelection(getValidationEnabled());
+        return panel;
+    }
 
-	/**
-	 * Determine if Json validation is already enabled for a project.
-	 *
-	 * @return
-	 */
-	private boolean getValidationEnabled() {
+    /**
+     * Determine if Json validation is already enabled for a project.
+     *
+     * @return
+     */
+    private boolean getValidationEnabled() {
 
-		IProject project =  (IProject) this.getElement().getAdapter(IProject.class);
-		return JsonValidationNature.hasNature(project);
-	}
+        IProject project =  (IProject) this.getElement().getAdapter(IProject.class);
+        return JsonValidationNature.hasNature(project);
+    }
 
-	/**
-	 * Perform the action when the user clicks ok.
-	 *
-	 */
-	@Override
-	public boolean performOk() {
+    /**
+     * Perform the action when the user clicks ok.
+     *
+     */
+    @Override
+    public boolean performOk() {
 
-		IProject project =  (IProject) this.getElement().getAdapter(IProject.class);
-		if (JsonValidationNature.hasNature(project) != checkbox.getSelection()) {
-			if (checkbox.getSelection()) {
-				JsonValidationNature.addNature(project);
-			} else {
-				JsonValidationNature.removeNature(project);
-			}
-		}
-		return true;
-	}
+        IProject project =  (IProject) this.getElement().getAdapter(IProject.class);
+        if (JsonValidationNature.hasNature(project) != checkbox.getSelection()) {
+            if (checkbox.getSelection()) {
+                JsonValidationNature.addNature(project);
+            } else {
+                JsonValidationNature.removeNature(project);
+            }
+        }
+        return true;
+    }
 }

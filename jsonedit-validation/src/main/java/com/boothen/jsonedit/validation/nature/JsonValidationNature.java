@@ -44,118 +44,118 @@ import com.boothen.jsonedit.validation.IncrementalJsonValidator;
  */
 public class JsonValidationNature implements IProjectNature {
 
-	public static final String NATURE_ID = "com.boothen.jsonedit.validation.nature";
+    public static final String NATURE_ID = "com.boothen.jsonedit.validation.nature";
 
-	private IProject project;
+    private IProject project;
 
-	@Override
-	public void configure() throws CoreException {
-		IncrementalJsonValidator.addBuilderToProject(project);
-		new Job("Validating JSON Files") {
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					project.build(IncrementalJsonValidator.FULL_BUILD, IncrementalJsonValidator.BUILDER_ID, null,monitor);
+    @Override
+    public void configure() throws CoreException {
+        IncrementalJsonValidator.addBuilderToProject(project);
+        new Job("Validating JSON Files") {
+            protected IStatus run(IProgressMonitor monitor) {
+                try {
+                    project.build(IncrementalJsonValidator.FULL_BUILD, IncrementalJsonValidator.BUILDER_ID, null,monitor);
 
-				} catch (CoreException e) {
-					JsonLog.logError(e);
-				}
-				return Status.OK_STATUS;
-			}
-		}.schedule();
-	}
+                } catch (CoreException e) {
+                    JsonLog.logError(e);
+                }
+                return Status.OK_STATUS;
+            }
+        }.schedule();
+    }
 
-	@Override
-	public void deconfigure() throws CoreException {
-		IncrementalJsonValidator.removeBuilderFromProject(project);
-		IncrementalJsonValidator.deleteValidationMarkers(project);
-	}
+    @Override
+    public void deconfigure() throws CoreException {
+        IncrementalJsonValidator.removeBuilderFromProject(project);
+        IncrementalJsonValidator.deleteValidationMarkers(project);
+    }
 
-	@Override
-	public IProject getProject() {
-		return project;
-	}
+    @Override
+    public IProject getProject() {
+        return project;
+    }
 
-	@Override
-	public void setProject(IProject project) {
-		this.project = project;
-	}
+    @Override
+    public void setProject(IProject project) {
+        this.project = project;
+    }
 
-	public static void addNature(IProject project) {
+    public static void addNature(IProject project) {
 
-		if (!project.isOpen()) {
-			return;
-		}
+        if (!project.isOpen()) {
+            return;
+        }
 
-		// Get the description
-		IProjectDescription description;
-		try {
-			description = project.getDescription();
-		} catch (CoreException e) {
-			JsonLog.logError("Error get project description: ", e);
-			return;
-		}
+        // Get the description
+        IProjectDescription description;
+        try {
+            description = project.getDescription();
+        } catch (CoreException e) {
+            JsonLog.logError("Error get project description: ", e);
+            return;
+        }
 
-		List<String> newIds = new ArrayList<String>();
-		String[] natureIds = description.getNatureIds();
-		for(String natureId : natureIds) {
-			if (natureId.equals(NATURE_ID)) {
-				return;
-			}
-		}
+        List<String> newIds = new ArrayList<String>();
+        String[] natureIds = description.getNatureIds();
+        for(String natureId : natureIds) {
+            if (natureId.equals(NATURE_ID)) {
+                return;
+            }
+        }
 
-		newIds.addAll(Arrays.asList(natureIds));
-		newIds.add(NATURE_ID);
+        newIds.addAll(Arrays.asList(natureIds));
+        newIds.add(NATURE_ID);
 
-		// Save description
-		description.setNatureIds(newIds.toArray(new String[newIds.size()]));
-		try {
-			project.setDescription(description, null);
-		} catch (CoreException e) {
-			JsonLog.logError("Error set project description: ", e);
-		}
+        // Save description
+        description.setNatureIds(newIds.toArray(new String[newIds.size()]));
+        try {
+            project.setDescription(description, null);
+        } catch (CoreException e) {
+            JsonLog.logError("Error set project description: ", e);
+        }
 
-	}
+    }
 
-	public static boolean hasNature(IProject project) {
+    public static boolean hasNature(IProject project) {
 
-		try {
-			return project.isOpen() && project.hasNature(NATURE_ID);
-		} catch (CoreException e) {
-			JsonLog.logError("Error determining if project has nature.: ", e);
-			return false;
-		}
-	}
+        try {
+            return project.isOpen() && project.hasNature(NATURE_ID);
+        } catch (CoreException e) {
+            JsonLog.logError("Error determining if project has nature.: ", e);
+            return false;
+        }
+    }
 
-	public static void removeNature(IProject project) {
+    public static void removeNature(IProject project) {
 
-		if (!project.isOpen()) {
-			return;
-		}
+        if (!project.isOpen()) {
+            return;
+        }
 
-		// Get the description
-		IProjectDescription description;
-		try {
-			description = project.getDescription();
-		} catch (CoreException e) {
-			JsonLog.logError("Error get project description: ", e);
-			return;
-		}
+        // Get the description
+        IProjectDescription description;
+        try {
+            description = project.getDescription();
+        } catch (CoreException e) {
+            JsonLog.logError("Error get project description: ", e);
+            return;
+        }
 
-		List<String> newIds = new ArrayList<String>();
-		String[] natureIds = description.getNatureIds();
-		newIds.addAll(Arrays.asList(natureIds));
-		if (newIds.indexOf(NATURE_ID) == -1) {
-			return;
-		}
+        List<String> newIds = new ArrayList<String>();
+        String[] natureIds = description.getNatureIds();
+        newIds.addAll(Arrays.asList(natureIds));
+        if (newIds.indexOf(NATURE_ID) == -1) {
+            return;
+        }
 
-		newIds.remove(NATURE_ID);
+        newIds.remove(NATURE_ID);
 
-		// Save description
-		description.setNatureIds(newIds.toArray(new String[newIds.size()]));
-		try {
-			project.setDescription(description, null);
-		} catch (CoreException e) {
-			JsonLog.logError("Error set project description: ", e);
-		}
-	}
+        // Save description
+        description.setNatureIds(newIds.toArray(new String[newIds.size()]));
+        try {
+            project.setDescription(description, null);
+        } catch (CoreException e) {
+            JsonLog.logError("Error set project description: ", e);
+        }
+    }
 }

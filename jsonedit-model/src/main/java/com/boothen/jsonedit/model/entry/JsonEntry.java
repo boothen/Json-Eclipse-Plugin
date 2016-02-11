@@ -21,39 +21,39 @@ import org.eclipse.jface.text.TypedPosition;
 
 public class JsonEntry {
 
-	private final TypedPosition typedPosition;
-	private String content;
-	
-	public JsonEntry(TypedPosition typedPosition, String content) {
-		super();
-		this.typedPosition = typedPosition;
-		this.content = content;
-	}
-	
-	public static JsonEntry createJsonEntry(TypedPosition typedPosition, IDocument document) {
-		try {
-			String content = document.get(typedPosition.getOffset(), typedPosition.getLength());
-			return new JsonEntry(typedPosition, content);
-		} catch (BadLocationException e) {
-			return null;
-		}
-	}
+    private final TypedPosition typedPosition;
+    private String content;
+    
+    public JsonEntry(TypedPosition typedPosition, String content) {
+        super();
+        this.typedPosition = typedPosition;
+        this.content = content;
+    }
+    
+    public static JsonEntry createJsonEntry(TypedPosition typedPosition, IDocument document) {
+        try {
+            String content = document.get(typedPosition.getOffset(), typedPosition.getLength());
+            return new JsonEntry(typedPosition, content);
+        } catch (BadLocationException e) {
+            return null;
+        }
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public String getType() {
-		return typedPosition.getType();
-	}
-	
-	public int getOffset() {
-		return typedPosition.getOffset();
-	}
-	
-	public int getLength() {
-		return typedPosition.getLength();
-	}
+    public String getType() {
+        return typedPosition.getType();
+    }
+    
+    public int getOffset() {
+        return typedPosition.getOffset();
+    }
+    
+    public int getLength() {
+        return typedPosition.getLength();
+    }
 
     @Override
     public int hashCode() {
@@ -85,6 +85,6 @@ public class JsonEntry {
             return false;
         return true;
     }
-	
-	
+    
+    
 }

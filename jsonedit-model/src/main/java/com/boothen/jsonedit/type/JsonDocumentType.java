@@ -20,45 +20,45 @@ import java.util.Set;
 
 public final class JsonDocumentType {
 
-	public final static String JSON_OBJECT_OPEN = "__json_object_open";
-	public final static String JSON_OBJECT_CLOSE = "__json_object_close";
-	
-	public final static String JSON_ARRAY_OPEN = "__json_array_open";
-	public final static String JSON_ARRAY_CLOSE = "__json_array_close";
-	
-	public final static String JSON_COLON = "__json_colon";
-	public final static String JSON_COMMA = "__json_comma";
-	
-	public final static String JSON_STRING = "__json_string";
-	public final static String JSON_NUMBER = "__json_number";
-	
-	public final static String JSON_TRUE = "__json_true";
-	public final static String JSON_FALSE = "__json_false";
-	public final static String JSON_NULL = "__json_null";
-	
-	public final static String JSON_ERROR = "__json_error";
-	
-	public final static Set<String> DOCUMENT_TYPES = new HashSet<String>();
-	
-	public final static Set<String> VALUE_TYPES = new HashSet<String>();
-	
-	static {
-		DOCUMENT_TYPES.add(JSON_OBJECT_OPEN);
-		DOCUMENT_TYPES.add(JSON_OBJECT_CLOSE);
-		DOCUMENT_TYPES.add(JSON_ARRAY_OPEN);
-		DOCUMENT_TYPES.add(JSON_ARRAY_CLOSE);
-		DOCUMENT_TYPES.add(JSON_COLON);
-		DOCUMENT_TYPES.add(JSON_COMMA);
-		DOCUMENT_TYPES.add(JSON_STRING);
-		DOCUMENT_TYPES.add(JSON_NUMBER);
-		DOCUMENT_TYPES.add(JSON_TRUE);
-		DOCUMENT_TYPES.add(JSON_FALSE);
-		DOCUMENT_TYPES.add(JSON_NULL);
-		
-		VALUE_TYPES.add(JSON_STRING);
-		VALUE_TYPES.add(JSON_NUMBER);
-		VALUE_TYPES.add(JSON_TRUE);
-		VALUE_TYPES.add(JSON_FALSE);
-		VALUE_TYPES.add(JSON_NULL);
-	}
+    public final static String JSON_OBJECT_OPEN = "__json_object_open";
+    public final static String JSON_OBJECT_CLOSE = "__json_object_close";
+    
+    public final static String JSON_ARRAY_OPEN = "__json_array_open";
+    public final static String JSON_ARRAY_CLOSE = "__json_array_close";
+    
+    public final static String JSON_COLON = "__json_colon";
+    public final static String JSON_COMMA = "__json_comma";
+    
+    public final static String JSON_STRING = "__json_string";
+    public final static String JSON_NUMBER = "__json_number";
+    
+    public final static String JSON_TRUE = "__json_true";
+    public final static String JSON_FALSE = "__json_false";
+    public final static String JSON_NULL = "__json_null";
+    
+    public final static String JSON_ERROR = "__json_error";
+    
+    public final static Set<String> DOCUMENT_TYPES = new HashSet<String>();
+    
+    public final static Set<String> VALUE_TYPES = new HashSet<String>();
+    
+    static {
+        DOCUMENT_TYPES.add(JSON_OBJECT_OPEN);
+        DOCUMENT_TYPES.add(JSON_OBJECT_CLOSE);
+        DOCUMENT_TYPES.add(JSON_ARRAY_OPEN);
+        DOCUMENT_TYPES.add(JSON_ARRAY_CLOSE);
+        DOCUMENT_TYPES.add(JSON_COLON);
+        DOCUMENT_TYPES.add(JSON_COMMA);
+        DOCUMENT_TYPES.add(JSON_STRING);
+        DOCUMENT_TYPES.add(JSON_NUMBER);
+        DOCUMENT_TYPES.add(JSON_TRUE);
+        DOCUMENT_TYPES.add(JSON_FALSE);
+        DOCUMENT_TYPES.add(JSON_NULL);
+        
+        VALUE_TYPES.add(JSON_STRING);
+        VALUE_TYPES.add(JSON_NUMBER);
+        VALUE_TYPES.add(JSON_TRUE);
+        VALUE_TYPES.add(JSON_FALSE);
+        VALUE_TYPES.add(JSON_NULL);
+    }
 }

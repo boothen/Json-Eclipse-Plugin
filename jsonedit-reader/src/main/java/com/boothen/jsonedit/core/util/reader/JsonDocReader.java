@@ -31,61 +31,61 @@ import org.eclipse.jface.text.IDocument;
  */
 public class JsonDocReader implements JsonReader {
 
-	private IDocument doc;
+    private IDocument doc;
 
-	private char previous;
+    private char previous;
 
-	private char current;
+    private char current;
 
-	private int position;
+    private int position;
 
-	public JsonDocReader(IDocument doc) {
-		super();
-		this.doc = doc;
-	}
+    public JsonDocReader(IDocument doc) {
+        super();
+        this.doc = doc;
+    }
 
-	public char getCurrent() {
-		return current;
-	}
+    public char getCurrent() {
+        return current;
+    }
 
-	public char getNextChar() throws JsonReaderException {
-		char ch = next();
-		previous = current;
-		current = ch;
-		return current;
-	}
+    public char getNextChar() throws JsonReaderException {
+        char ch = next();
+        previous = current;
+        current = ch;
+        return current;
+    }
 
-	private char next() throws JsonReaderException {
+    private char next() throws JsonReaderException {
 
-		try {
-			if (position < doc.getLength()) {
-				char ch = (char) doc.getChar(position++);
+        try {
+            if (position < doc.getLength()) {
+                char ch = (char) doc.getChar(position++);
 
-				return ch;
-			} else {
-				return (char) -1;
-			}
-		} catch (BadLocationException e) {
-			throw new JsonReaderException();
-		}
-	}
+                return ch;
+            } else {
+                return (char) -1;
+            }
+        } catch (BadLocationException e) {
+            throw new JsonReaderException();
+        }
+    }
 
-	public char getNextClean() throws JsonReaderException {
+    public char getNextClean() throws JsonReaderException {
 
-		char ch = ' ';
-		while (isWhiteSpace(ch)) {
-			ch = next();
-		}
-		previous = current;
-		current = ch;
-		return current;
-	}
+        char ch = ' ';
+        while (isWhiteSpace(ch)) {
+            ch = next();
+        }
+        previous = current;
+        current = ch;
+        return current;
+    }
 
-	public int getPosition() {
-		return position - 1;
-	}
+    public int getPosition() {
+        return position - 1;
+    }
 
-	public char getPrevious() {
-		return previous;
-	}
+    public char getPrevious() {
+        return previous;
+    }
 }

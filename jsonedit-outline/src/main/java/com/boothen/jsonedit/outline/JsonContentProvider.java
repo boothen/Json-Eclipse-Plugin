@@ -39,161 +39,161 @@ import com.boothen.jsonedit.outline.node.JsonTreeNode;
  */
 public class JsonContentProvider implements ITreeContentProvider {
 
-	protected IDocumentProvider fDocumentProvider;
-	protected Object fInput;
-	protected JsonTreeNode rootObject;
-	public final static String JSON_ELEMENTS = "__json_elements"; //$NON-NLS-1$
-	protected IPositionUpdater fPositionUpdater= new DefaultPositionUpdater(JSON_ELEMENTS);
-	protected List<JsonNode> jsonNodes;
+    protected IDocumentProvider fDocumentProvider;
+    protected Object fInput;
+    protected JsonTreeNode rootObject;
+    public final static String JSON_ELEMENTS = "__json_elements"; //$NON-NLS-1$
+    protected IPositionUpdater fPositionUpdater= new DefaultPositionUpdater(JSON_ELEMENTS);
+    protected List<JsonNode> jsonNodes;
 
-	protected void parse(IDocument document) {
-		rootObject = new JsonModelOutlineParser().mergeNodes(rootObject, jsonNodes);
-	}
+    protected void parse(IDocument document) {
+        rootObject = new JsonModelOutlineParser().mergeNodes(rootObject, jsonNodes);
+    }
 
-	public JsonContentProvider(IDocumentProvider documentProvider) {
-		super();
-		fDocumentProvider = documentProvider;
-	}
+    public JsonContentProvider(IDocumentProvider documentProvider) {
+        super();
+        fDocumentProvider = documentProvider;
+    }
 
-	public void setInput(Object input) {
-		this.fInput = input;
-	}
+    public void setInput(Object input) {
+        this.fInput = input;
+    }
 
-	public void setJsonNodes(List<JsonNode> jsonNodes) {
-		this.jsonNodes = jsonNodes;
-		rootObject = new JsonModelOutlineParser().mergeNodes(rootObject, jsonNodes);
-	}
+    public void setJsonNodes(List<JsonNode> jsonNodes) {
+        this.jsonNodes = jsonNodes;
+        rootObject = new JsonModelOutlineParser().mergeNodes(rootObject, jsonNodes);
+    }
 
-	@Override
-	public Object[] getChildren(Object parentElement) {
-		if (parentElement == fInput) {
-			return (rootObject != null && rootObject.hasChildren()) ? rootObject.getChildrenAsArray() : new Object[0];
-		}
-		if (parentElement instanceof JsonTreeNode) {
-			return ((JsonTreeNode) parentElement).getChildren().toArray();
-		}
-		return new Object[0];
-	}
+    @Override
+    public Object[] getChildren(Object parentElement) {
+        if (parentElement == fInput) {
+            return (rootObject != null && rootObject.hasChildren()) ? rootObject.getChildrenAsArray() : new Object[0];
+        }
+        if (parentElement instanceof JsonTreeNode) {
+            return ((JsonTreeNode) parentElement).getChildren().toArray();
+        }
+        return new Object[0];
+    }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
-	 */
-	@Override
-	public Object getParent(Object element) {
-		if (element == rootObject)
-			return fInput;
-		if (element instanceof JsonTreeNode) {
-			return ((JsonTreeNode) element).getParent();
-		}
-		return null;
-	}
+    /* (non-Javadoc)
+     * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
+     */
+    @Override
+    public Object getParent(Object element) {
+        if (element == rootObject)
+            return fInput;
+        if (element instanceof JsonTreeNode) {
+            return ((JsonTreeNode) element).getParent();
+        }
+        return null;
+    }
 
-	@Override
-	public boolean hasChildren(Object element) {
-		if (element == fInput) {
-			return (rootObject != null && rootObject.hasChildren()) ? true : false;
-		}
-		if (element instanceof JsonTreeNode) {
-			return ((JsonTreeNode) element).hasChildren();
-		}
+    @Override
+    public boolean hasChildren(Object element) {
+        if (element == fInput) {
+            return (rootObject != null && rootObject.hasChildren()) ? true : false;
+        }
+        if (element instanceof JsonTreeNode) {
+            return ((JsonTreeNode) element).hasChildren();
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public Object[] getElements(Object inputElement) {
-		if (inputElement == fInput) {
-			return (rootObject != null && rootObject.hasChildren()) ? rootObject.getChildrenAsArray() : new Object[0];
-		}
-		return null;
-	}
+    @Override
+    public Object[] getElements(Object inputElement) {
+        if (inputElement == fInput) {
+            return (rootObject != null && rootObject.hasChildren()) ? rootObject.getChildrenAsArray() : new Object[0];
+        }
+        return null;
+    }
 
-	@Override
-	public void dispose() {
-		if (rootObject != null) {
-			rootObject = null;
-		}
-	}
+    @Override
+    public void dispose() {
+        if (rootObject != null) {
+            rootObject = null;
+        }
+    }
 
-	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+    @Override
+    public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 
-		if (oldInput != null) {
-			IDocument document= fDocumentProvider.getDocument(oldInput);
-			if (document != null) {
-				try {
-					document.removePositionCategory(JSON_ELEMENTS);
-				} catch (BadPositionCategoryException x) {
-				}
-				document.removePositionUpdater(fPositionUpdater);
-			}
-		}
+        if (oldInput != null) {
+            IDocument document= fDocumentProvider.getDocument(oldInput);
+            if (document != null) {
+                try {
+                    document.removePositionCategory(JSON_ELEMENTS);
+                } catch (BadPositionCategoryException x) {
+                }
+                document.removePositionUpdater(fPositionUpdater);
+            }
+        }
 
-		rootObject = null;
+        rootObject = null;
 
-		if (newInput != null) {
-			IDocument document = fDocumentProvider.getDocument(newInput);
-			if (document != null) {
-				document.addPositionCategory(JSON_ELEMENTS);
-				document.addPositionUpdater(fPositionUpdater);
+        if (newInput != null) {
+            IDocument document = fDocumentProvider.getDocument(newInput);
+            if (document != null) {
+                document.addPositionCategory(JSON_ELEMENTS);
+                document.addPositionUpdater(fPositionUpdater);
 
-				parse(document);
-			}
-		}
-	}
+                parse(document);
+            }
+        }
+    }
 
-	/**
-	 * Finds the element in the tree that is closest to the required text
-	 * position.
-	 *
-	 * @param start
-	 * @param length
-	 * @return
-	 */
-	public JsonTreeNode findNearestElement(int start, int length) {
+    /**
+     * Finds the element in the tree that is closest to the required text
+     * position.
+     *
+     * @param start
+     * @param length
+     * @return
+     */
+    public JsonTreeNode findNearestElement(int start, int length) {
 
-		if (rootObject == null) {
-			return null;
-		}
+        if (rootObject == null) {
+            return null;
+        }
 
-		return findNearestElement(rootObject, start, length);
-	}
+        return findNearestElement(rootObject, start, length);
+    }
 
-	/**
-	 * Recursive search to find the nearest element in the tree.
-	 *
-	 * @param parent
-	 * @param start
-	 * @param length
-	 * @return
-	 */
-	private JsonTreeNode findNearestElement(JsonTreeNode parent, int start, int length) {
+    /**
+     * Recursive search to find the nearest element in the tree.
+     *
+     * @param parent
+     * @param start
+     * @param length
+     * @return
+     */
+    private JsonTreeNode findNearestElement(JsonTreeNode parent, int start, int length) {
 
-		JsonTreeNode previous = null;
-		boolean found = false;
+        JsonTreeNode previous = null;
+        boolean found = false;
 
-		if (parent.getChildren().size() == 0) {
-			return parent;
-		}
+        if (parent.getChildren().size() == 0) {
+            return parent;
+        }
 
-		for (JsonTreeNode jsonTreeNode : parent.getChildren()) {
+        for (JsonTreeNode jsonTreeNode : parent.getChildren()) {
 
-			if (start < jsonTreeNode.getStart()) {
-				found = true;
-				if (previous != null) {
-					previous = findNearestElement(previous, start, length);
-				} else {
-					previous = parent;
-				}
-				break;
-			}
-			previous = jsonTreeNode;
-		}
+            if (start < jsonTreeNode.getStart()) {
+                found = true;
+                if (previous != null) {
+                    previous = findNearestElement(previous, start, length);
+                } else {
+                    previous = parent;
+                }
+                break;
+            }
+            previous = jsonTreeNode;
+        }
 
-		if(!found) {
-			previous = findNearestElement(previous, start, length);
-		}
+        if(!found) {
+            previous = findNearestElement(previous, start, length);
+        }
 
-		return previous;
-	}
+        return previous;
+    }
 }

@@ -39,185 +39,185 @@ import com.boothen.jsonedit.type.JsonDocumentType;
  */
 public class JsonTreeNode {
 
-	private JsonNode jsonNode;
+    private JsonNode jsonNode;
 
-	private JsonTreeNode parent;
+    private JsonTreeNode parent;
 
-	private boolean textSelection;
+    private boolean textSelection;
 
-	private static final Map<String, String> imageMap = new HashMap<String, String>();
-	private static final Map<String, StyledString.Styler> styleMap = new HashMap<String, StyledString.Styler>();
-	
-	private static ImageRegistry imageRegistry;
+    private static final Map<String, String> imageMap = new HashMap<String, String>();
+    private static final Map<String, StyledString.Styler> styleMap = new HashMap<String, StyledString.Styler>();
+    
+    private static ImageRegistry imageRegistry;
 
-	static {
-		imageMap.put(JsonDocumentType.JSON_ARRAY_OPEN, "/icons/JsonArray.gif");
-		imageMap.put(JsonDocumentType.JSON_OBJECT_OPEN, "/icons/JsonObject.gif");
-		imageMap.put(JsonDocumentType.JSON_TRUE, "/icons/JsonBoolean.gif");
-		imageMap.put(JsonDocumentType.JSON_FALSE, "/icons/JsonBoolean.gif");
-		imageMap.put(JsonDocumentType.JSON_NUMBER, "/icons/JsonNumber.gif");
-		imageMap.put(JsonDocumentType.JSON_NULL, "/icons/JsonNull.gif");
-		imageMap.put(JsonDocumentType.JSON_STRING, "/icons/JsonString.gif");
-		imageMap.put(JsonDocumentType.JSON_ERROR, "/icons/JsonError.gif");
+    static {
+        imageMap.put(JsonDocumentType.JSON_ARRAY_OPEN, "/icons/JsonArray.gif");
+        imageMap.put(JsonDocumentType.JSON_OBJECT_OPEN, "/icons/JsonObject.gif");
+        imageMap.put(JsonDocumentType.JSON_TRUE, "/icons/JsonBoolean.gif");
+        imageMap.put(JsonDocumentType.JSON_FALSE, "/icons/JsonBoolean.gif");
+        imageMap.put(JsonDocumentType.JSON_NUMBER, "/icons/JsonNumber.gif");
+        imageMap.put(JsonDocumentType.JSON_NULL, "/icons/JsonNull.gif");
+        imageMap.put(JsonDocumentType.JSON_STRING, "/icons/JsonString.gif");
+        imageMap.put(JsonDocumentType.JSON_ERROR, "/icons/JsonError.gif");
 
-		styleMap.put(JsonDocumentType.JSON_STRING, StyledString.createColorRegistryStyler("GREEN", "WHITE"));
-		styleMap.put(JsonDocumentType.JSON_TRUE, StyledString.createColorRegistryStyler("BLACK", "WHITE"));
-		styleMap.put(JsonDocumentType.JSON_FALSE, StyledString.createColorRegistryStyler("BLACK", "WHITE"));
-		styleMap.put(JsonDocumentType.JSON_ERROR, StyledString.createColorRegistryStyler("RED", "WHITE"));
-		styleMap.put(JsonDocumentType.JSON_NUMBER, StyledString.createColorRegistryStyler("BLUE", "WHITE"));
-		styleMap.put(JsonDocumentType.JSON_NULL, StyledString.createColorRegistryStyler("BLUE", "WHITE"));
-		styleMap.put(JsonDocumentType.JSON_OBJECT_OPEN, StyledString.createColorRegistryStyler("BLUE", "WHITE"));
-		styleMap.put(JsonDocumentType.JSON_ARRAY_OPEN, StyledString.createColorRegistryStyler("BLUE", "WHITE"));
-	}
+        styleMap.put(JsonDocumentType.JSON_STRING, StyledString.createColorRegistryStyler("GREEN", "WHITE"));
+        styleMap.put(JsonDocumentType.JSON_TRUE, StyledString.createColorRegistryStyler("BLACK", "WHITE"));
+        styleMap.put(JsonDocumentType.JSON_FALSE, StyledString.createColorRegistryStyler("BLACK", "WHITE"));
+        styleMap.put(JsonDocumentType.JSON_ERROR, StyledString.createColorRegistryStyler("RED", "WHITE"));
+        styleMap.put(JsonDocumentType.JSON_NUMBER, StyledString.createColorRegistryStyler("BLUE", "WHITE"));
+        styleMap.put(JsonDocumentType.JSON_NULL, StyledString.createColorRegistryStyler("BLUE", "WHITE"));
+        styleMap.put(JsonDocumentType.JSON_OBJECT_OPEN, StyledString.createColorRegistryStyler("BLUE", "WHITE"));
+        styleMap.put(JsonDocumentType.JSON_ARRAY_OPEN, StyledString.createColorRegistryStyler("BLUE", "WHITE"));
+    }
 
-	public JsonTreeNode(JsonNode jsonNode, JsonTreeNode parent) {
-		super();
-		this.jsonNode = jsonNode;
-		this.parent = parent;
-	}
+    public JsonTreeNode(JsonNode jsonNode, JsonTreeNode parent) {
+        super();
+        this.jsonNode = jsonNode;
+        this.parent = parent;
+    }
 
-	private List<JsonTreeNode> children = new LinkedList<JsonTreeNode>();
+    private List<JsonTreeNode> children = new LinkedList<JsonTreeNode>();
 
-	public void removeEntry(JsonTreeNode jsonTreeNode) {
-		children.remove(jsonTreeNode);
-	}
+    public void removeEntry(JsonTreeNode jsonTreeNode) {
+        children.remove(jsonTreeNode);
+    }
 
-	public boolean hasChildren() {
-		return !children.isEmpty();
-	}
+    public boolean hasChildren() {
+        return !children.isEmpty();
+    }
 
-	public void clearChildren() {
-		children.clear();
-	}
+    public void clearChildren() {
+        children.clear();
+    }
 
-	public List<JsonTreeNode> getChildren() {
-		return children;
-	}
-	
-	public JsonTreeNode[] getChildrenAsArray() {
-		return children.toArray(new JsonTreeNode[0]);
-		
-	}
+    public List<JsonTreeNode> getChildren() {
+        return children;
+    }
+    
+    public JsonTreeNode[] getChildrenAsArray() {
+        return children.toArray(new JsonTreeNode[0]);
+        
+    }
 
-	public void addChild(JsonTreeNode jsonTreeNode) {
-		children.add(jsonTreeNode);
-	}
+    public void addChild(JsonTreeNode jsonTreeNode) {
+        children.add(jsonTreeNode);
+    }
 
-	public void setParent(JsonTreeNode parent) {
-		this.parent = parent;
-	}
+    public void setParent(JsonTreeNode parent) {
+        this.parent = parent;
+    }
 
-	public JsonTreeNode getParent() {
-		return parent;
-	}
+    public JsonTreeNode getParent() {
+        return parent;
+    }
 
-	public void removeFromParent() {
-		if (getParent() != null) {
-			getParent().removeEntry(this);
-		}
-	}
+    public void removeFromParent() {
+        if (getParent() != null) {
+            getParent().removeEntry(this);
+        }
+    }
 
-	/**
-	 * Returns true if the JsonElement was selected from a text event.
-	 * @return
-	 */
-	public boolean isTextSelection() {
-		return textSelection;
-	}
+    /**
+     * Returns true if the JsonElement was selected from a text event.
+     * @return
+     */
+    public boolean isTextSelection() {
+        return textSelection;
+    }
 
-	/**
-	 * Set to true if the JsonElement is about to fire a notification event.
-	 * @param textSelection
-	 */
-	public void setTextSelection(boolean textSelection) {
-		this.textSelection = textSelection;
-	}
+    /**
+     * Set to true if the JsonElement is about to fire a notification event.
+     * @param textSelection
+     */
+    public void setTextSelection(boolean textSelection) {
+        this.textSelection = textSelection;
+    }
 
-	public StyledString getStyledString() {
-		StyledString styledString = new StyledString();
-		if (jsonNode.getKey() != null) {
-			StyledString.Styler style1 = StyledString.createColorRegistryStyler("BLACK", "WHITE");
-			styledString.append(jsonNode.getKey(), style1);
-			StyledString.Styler style2 = StyledString.createColorRegistryStyler("BLACK", "WHITE");
-			styledString.append(" : ", style2);
-		}
+    public StyledString getStyledString() {
+        StyledString styledString = new StyledString();
+        if (jsonNode.getKey() != null) {
+            StyledString.Styler style1 = StyledString.createColorRegistryStyler("BLACK", "WHITE");
+            styledString.append(jsonNode.getKey(), style1);
+            StyledString.Styler style2 = StyledString.createColorRegistryStyler("BLACK", "WHITE");
+            styledString.append(" : ", style2);
+        }
 
-		if (jsonNode.getValue() != null && (!jsonNode.getJsonType().equals(JsonDocumentType.JSON_ARRAY_OPEN )
-				&& !jsonNode.getJsonType().equals(JsonDocumentType.JSON_OBJECT_OPEN))) {
-			StyledString.Styler style3 = styleMap.get(jsonNode.getJsonType());
-			styledString.append(jsonNode.getValue(), style3);
-		}
-		return styledString;
-	}
+        if (jsonNode.getValue() != null && (!jsonNode.getJsonType().equals(JsonDocumentType.JSON_ARRAY_OPEN )
+                && !jsonNode.getJsonType().equals(JsonDocumentType.JSON_OBJECT_OPEN))) {
+            StyledString.Styler style3 = styleMap.get(jsonNode.getJsonType());
+            styledString.append(jsonNode.getValue(), style3);
+        }
+        return styledString;
+    }
 
-	public Image getImage() {
-		return imageRegistry.get(jsonNode.getJsonType());
-	}
+    public Image getImage() {
+        return imageRegistry.get(jsonNode.getJsonType());
+    }
 
-	public static void initializeImageRegistry(ImageRegistry reg) {
-		imageRegistry = reg;
-		for (Map.Entry<String, String> entry : imageMap.entrySet()) {
-			Image image = createMyImage(entry.getValue());
-			imageRegistry.put(entry.getKey(), image);
-		}
-	}
-	
-	private static Image createMyImage(String urlPath) {
-		URL resource = JsonTreeNode.class.getResource(urlPath);
-		ImageDescriptor imgDescriptor = ImageDescriptor.createFromURL(resource);
-		if (imgDescriptor == null) {
-			return null;
-		}
+    public static void initializeImageRegistry(ImageRegistry reg) {
+        imageRegistry = reg;
+        for (Map.Entry<String, String> entry : imageMap.entrySet()) {
+            Image image = createMyImage(entry.getValue());
+            imageRegistry.put(entry.getKey(), image);
+        }
+    }
+    
+    private static Image createMyImage(String urlPath) {
+        URL resource = JsonTreeNode.class.getResource(urlPath);
+        ImageDescriptor imgDescriptor = ImageDescriptor.createFromURL(resource);
+        if (imgDescriptor == null) {
+            return null;
+        }
 
-		return imgDescriptor.createImage();
-	}
+        return imgDescriptor.createImage();
+    }
 
-	public int getStart() {
-		if (jsonNode == null) {
-			return 0;
-		}
-		return jsonNode.getStart();
-	}
+    public int getStart() {
+        if (jsonNode == null) {
+            return 0;
+        }
+        return jsonNode.getStart();
+    }
 
-	public int getLength() {
-		if (jsonNode == null) {
-			return 0;
-		}
-		return jsonNode.getEnd() - jsonNode.getStart();
-	}
+    public int getLength() {
+        if (jsonNode == null) {
+            return 0;
+        }
+        return jsonNode.getEnd() - jsonNode.getStart();
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((jsonNode == null) ? 0 : jsonNode.hashCode());
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((jsonNode == null) ? 0 : jsonNode.hashCode());
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		JsonTreeNode other = (JsonTreeNode) obj;
-		if (jsonNode == null) {
-			if (other.jsonNode != null)
-				return false;
-		} else if (!jsonNode.equals(other.jsonNode))
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        JsonTreeNode other = (JsonTreeNode) obj;
+        if (jsonNode == null) {
+            if (other.jsonNode != null)
+                return false;
+        } else if (!jsonNode.equals(other.jsonNode))
+            return false;
+        return true;
+    }
 
-	public JsonNode getJsonNode() {
-		return jsonNode;
-	}
+    public JsonNode getJsonNode() {
+        return jsonNode;
+    }
 
-	public void setJsonNode(JsonNode jsonNode) {
-		this.jsonNode = jsonNode;
-	}
+    public void setJsonNode(JsonNode jsonNode) {
+        this.jsonNode = jsonNode;
+    }
 
 }

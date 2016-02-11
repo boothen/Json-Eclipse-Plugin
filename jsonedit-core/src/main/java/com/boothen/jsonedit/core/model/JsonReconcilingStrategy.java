@@ -40,52 +40,52 @@ import com.boothen.jsonedit.type.JsonDocumentType;
 
 public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcilingStrategyExtension {
 
-	private JsonTextEditor textEditor;
+    private JsonTextEditor textEditor;
 
-	private IDocument fDocument;
+    private IDocument fDocument;
 
-	@Override
-	public void reconcile(IRegion partition) {
-	    initialReconcile();
-	}
+    @Override
+    public void reconcile(IRegion partition) {
+        initialReconcile();
+    }
 
-	@Override
-	public void reconcile(DirtyRegion dirtyRegion, IRegion subRegion) {
-	    initialReconcile();
-	}
+    @Override
+    public void reconcile(DirtyRegion dirtyRegion, IRegion subRegion) {
+        initialReconcile();
+    }
 
-	@Override
-	public void setDocument(IDocument document) {
-		this.fDocument = document;
+    @Override
+    public void setDocument(IDocument document) {
+        this.fDocument = document;
 
-	}
+    }
 
-	@Override
-	public void initialReconcile() {
-	    try {
+    @Override
+    public void initialReconcile() {
+        try {
             fDocument.removePositionCategory(JsonEntryBuilder.JSON_ELEMENTS);
             fDocument.addPositionCategory(JsonEntryBuilder.JSON_ELEMENTS);
         } catch (BadPositionCategoryException e) {
             e.printStackTrace();
         }
-	    
-	    
-	    scan(0, fDocument.getLength());
-		parse();
-	}
+        
+        
+        scan(0, fDocument.getLength());
+        parse();
+    }
 
-	@Override
-	public void setProgressMonitor(IProgressMonitor monitor) {
+    @Override
+    public void setProgressMonitor(IProgressMonitor monitor) {
 
-	}
-	
-	private void scan(int offset, int length) {
-	    JsonPartitionScanner jsonPartitionScanner = new JsonPartitionScanner();
-	    jsonPartitionScanner.setRange(fDocument, offset, length);
-	    IToken nextToken = jsonPartitionScanner.nextToken();
-	    while (!nextToken.isEOF()) {
-	        if (nextToken.getData() != null && JsonDocumentType.DOCUMENT_TYPES.contains(nextToken.getData())) {
-	            try {
+    }
+    
+    private void scan(int offset, int length) {
+        JsonPartitionScanner jsonPartitionScanner = new JsonPartitionScanner();
+        jsonPartitionScanner.setRange(fDocument, offset, length);
+        IToken nextToken = jsonPartitionScanner.nextToken();
+        while (!nextToken.isEOF()) {
+            if (nextToken.getData() != null && JsonDocumentType.DOCUMENT_TYPES.contains(nextToken.getData())) {
+                try {
                     fDocument.addPosition(JsonEntryBuilder.JSON_ELEMENTS, new TypedPosition(jsonPartitionScanner.getTokenOffset(), 
                             jsonPartitionScanner.getTokenLength(), (String) nextToken.getData()));
                 } catch (BadLocationException e) {
@@ -93,30 +93,30 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
                 } catch (BadPositionCategoryException e) {
                     e.printStackTrace();
                 } 
-	        }
-	        nextToken = jsonPartitionScanner.nextToken();
-	    }
-	    
-	}
+            }
+            nextToken = jsonPartitionScanner.nextToken();
+        }
+        
+    }
 
-	private void parse() {
+    private void parse() {
 
-		final List<JsonEntry> jsonEntries = new JsonEntryBuilder().buildJsonEntries(fDocument);
-		final List<JsonNode> jsonNodes = new JsonNodeBuilder().buildJsonNodes(jsonEntries);
-		final List<Position> fPositions = new JsonFoldingPositionsBuilder(jsonNodes).buildFoldingPositions();
+        final List<JsonEntry> jsonEntries = new JsonEntryBuilder().buildJsonEntries(fDocument);
+        final List<JsonNode> jsonNodes = new JsonNodeBuilder().buildJsonNodes(jsonEntries);
+        final List<Position> fPositions = new JsonFoldingPositionsBuilder(jsonNodes).buildFoldingPositions();
 
-		if (textEditor != null) {
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					textEditor.updateFoldingStructure(fPositions);
-					textEditor.updateContentOutlinePage(jsonNodes);
-				}
+        if (textEditor != null) {
+            Display.getDefault().asyncExec(new Runnable() {
+                public void run() {
+                    textEditor.updateFoldingStructure(fPositions);
+                    textEditor.updateContentOutlinePage(jsonNodes);
+                }
 
-			});
-		}
-	}
+            });
+        }
+    }
 
-	public void setTextEditor(JsonTextEditor textEditor) {
-		this.textEditor = textEditor;
-	}
+    public void setTextEditor(JsonTextEditor textEditor) {
+        this.textEditor = textEditor;
+    }
 }

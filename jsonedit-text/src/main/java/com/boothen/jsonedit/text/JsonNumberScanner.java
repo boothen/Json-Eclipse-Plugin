@@ -33,30 +33,30 @@ import com.boothen.jsonedit.text.detector.JsonWhitespaceDetector;
 
 public class JsonNumberScanner extends RuleBasedScanner implements Reinitable {
 
-	private JsonColorProvider jsonColorProvider = new JsonColorProvider();
+    private JsonColorProvider jsonColorProvider = new JsonColorProvider();
 
-	public JsonNumberScanner() {
-		super();
-		initScanner();
-	}
+    public JsonNumberScanner() {
+        super();
+        initScanner();
+    }
 
-	@Override
-	public void reinit() {
-		initScanner();
-	}
-	
-	private void initScanner() {
-		IToken value = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.VALUE_COLOR)));
+    @Override
+    public void reinit() {
+        initScanner();
+    }
+    
+    private void initScanner() {
+        IToken value = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.VALUE_COLOR)));
 
-		List<IRule> rules= new LinkedList<IRule>();
-		rules.add(new JsonNumberRule(value));
-		rules.add(new WhitespaceRule(new JsonWhitespaceDetector()));
+        List<IRule> rules= new LinkedList<IRule>();
+        rules.add(new JsonNumberRule(value));
+        rules.add(new WhitespaceRule(new JsonWhitespaceDetector()));
 
-		IRule[] result= new IRule[rules.size()];
-		setRules(rules.toArray(result));
-	}
+        IRule[] result= new IRule[rules.size()];
+        setRules(rules.toArray(result));
+    }
 
-	private Color getPreferenceColor(String preferenceValue) {
-		return jsonColorProvider.getColor(StringConverter.asRGB(JsonPreferenceStore.getIPreferenceStore().getString(preferenceValue)));
-	}
+    private Color getPreferenceColor(String preferenceValue) {
+        return jsonColorProvider.getColor(StringConverter.asRGB(JsonPreferenceStore.getIPreferenceStore().getString(preferenceValue)));
+    }
 }

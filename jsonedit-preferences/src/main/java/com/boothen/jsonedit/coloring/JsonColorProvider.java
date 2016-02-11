@@ -35,33 +35,33 @@ import org.eclipse.swt.widgets.Display;
  */
 public class JsonColorProvider {
 
-	protected Map<RGB, Color> fColorTable= new HashMap<RGB, Color>(10);
+    protected Map<RGB, Color> fColorTable= new HashMap<RGB, Color>(10);
 
-	/**
-	 * Release all of the color resources held onto by the receiver.
-	 */
-	public void dispose() {
-		Iterator<Color> e = fColorTable.values().iterator();
-		while (e.hasNext())
-			 e.next().dispose();
-	}
+    /**
+     * Release all of the color resources held onto by the receiver.
+     */
+    public void dispose() {
+        Iterator<Color> e = fColorTable.values().iterator();
+        while (e.hasNext())
+             e.next().dispose();
+    }
 
-	/**
-	 * Return the color that is stored in the color table under the given RGB
-	 * value.
-	 *
-	 * @param rgb the RGB value
-	 * @return the color stored in the color table for the given RGB value
-	 */
-	public Color getColor(RGB rgb) {
+    /**
+     * Return the color that is stored in the color table under the given RGB
+     * value.
+     *
+     * @param rgb the RGB value
+     * @return the color stored in the color table for the given RGB value
+     */
+    public Color getColor(RGB rgb) {
 
-		Color color= fColorTable.get(rgb);
+        Color color= fColorTable.get(rgb);
 
-		if (color == null) {
-			color= new Color(Display.getCurrent(), rgb);
-			fColorTable.put(rgb, color);
-		}
+        if (color == null) {
+            color= new Color(Display.getCurrent(), rgb);
+            fColorTable.put(rgb, color);
+        }
 
-		return color;
-	}
+        return color;
+    }
 }

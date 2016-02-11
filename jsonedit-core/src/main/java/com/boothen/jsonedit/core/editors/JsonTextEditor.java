@@ -54,267 +54,267 @@ import com.boothen.jsonedit.preferences.JsonPreferenceStore;
  */
 public class JsonTextEditor extends TextEditor {
 
-	private final static char[] PAIRS= { '{', '}', '[', ']' };
+    private final static char[] PAIRS= { '{', '}', '[', ']' };
 
-	private DefaultCharacterPairMatcher pairsMatcher = new DefaultCharacterPairMatcher(PAIRS);
-	private JsonSourceViewerConfiguration viewerConfiguration;
-	private JsonContentOutlinePage fOutlinePage;
-	private JsonPreferenceStore jsonPreferenceStore;
-	private PlatformPreferenceListener platformPreferenceListener;
-
-
-	private ProjectionAnnotationModel annotationModel;
-	private ProjectionAnnotation[] oldAnnotations;
-	private boolean[] annotationCollapsedState;
-	private boolean restoreCursorLocation = false;
-	private int nodePositionOffset = 0;
-	private int nodePosition = 0;
-	private List<JsonNode> jsonNodes;
-
-	public JsonTextEditor() {
-		super();
-		jsonPreferenceStore = new JsonPreferenceStore();
-		viewerConfiguration = new JsonSourceViewerConfiguration(this, jsonPreferenceStore);
-		setSourceViewerConfiguration(viewerConfiguration);
-//		setDocumentProvider(new JsonDocumentProvider());
-	}
-
-	@Override
-	protected void configureSourceViewerDecorationSupport(SourceViewerDecorationSupport support) {
-		support.setCharacterPairMatcher(pairsMatcher);
-		support.setMatchingCharacterPainterPreferenceKeys(JsonPreferenceStore.EDITOR_MATCHING_BRACKETS,
-				JsonPreferenceStore.EDITOR_MATCHING_BRACKETS_COLOR);
-		super.configureSourceViewerDecorationSupport(support);
-	}
+    private DefaultCharacterPairMatcher pairsMatcher = new DefaultCharacterPairMatcher(PAIRS);
+    private JsonSourceViewerConfiguration viewerConfiguration;
+    private JsonContentOutlinePage fOutlinePage;
+    private JsonPreferenceStore jsonPreferenceStore;
+    private PlatformPreferenceListener platformPreferenceListener;
 
 
-	@Override
-	protected void initializeEditor() {
-		super.initializeEditor();
-		
-		setEditorContextMenuId("#JsonTextEditorContext"); //$NON-NLS-1$
-		setRulerContextMenuId("#JsonTextRulerContext"); //$NON-NLS-1$
-		setPreferenceStore(JsonPreferenceStore.getChainedPreferenceStore());
-		
-	}
+    private ProjectionAnnotationModel annotationModel;
+    private ProjectionAnnotation[] oldAnnotations;
+    private boolean[] annotationCollapsedState;
+    private boolean restoreCursorLocation = false;
+    private int nodePositionOffset = 0;
+    private int nodePosition = 0;
+    private List<JsonNode> jsonNodes;
 
-	@Override
-	public void dispose() {
-		if (fOutlinePage != null)
-			fOutlinePage.setInput(null);
+    public JsonTextEditor() {
+        super();
+        jsonPreferenceStore = new JsonPreferenceStore();
+        viewerConfiguration = new JsonSourceViewerConfiguration(this, jsonPreferenceStore);
+        setSourceViewerConfiguration(viewerConfiguration);
+//        setDocumentProvider(new JsonDocumentProvider());
+    }
 
-		if (pairsMatcher != null) {
-			pairsMatcher.dispose();
-			pairsMatcher = null;
-		}
-
-		if (platformPreferenceListener != null) {
-			platformPreferenceListener.removePreferenceChangeListener();
-		}
-
-		super.dispose();
-	}
-
-	@Override
-	public void doRevertToSaved() {
-		super.doRevertToSaved();
-		if (fOutlinePage != null)
-			fOutlinePage.update();
-	}
-
-	@Override
-	public void doSave(IProgressMonitor monitor) {
-		doAutoFormatOnSave();
-		super.doSave(monitor);
-		if (fOutlinePage != null)
-			fOutlinePage.update();
-	}
-
-	/** The <code>JavaEditor</code> implementation of this
-	 * <code>AbstractTextEditor</code> method performs any extra
-	 * save as behavior required by the java editor.
-	 */
-	@Override
-	public void doSaveAs() {
-		doAutoFormatOnSave();
-		super.doSaveAs();
-		if (fOutlinePage != null)
-			fOutlinePage.update();
-	}
-
-	private void doAutoFormatOnSave() {
-		IPreferenceStore store = getPreferenceStore();
-		boolean autoFormatOnSave = store.getBoolean(JsonPreferenceStore.AUTO_FORMAT_ON_SAVE);
-		if (autoFormatOnSave) {
-			boolean spaces = store.getBoolean(JsonPreferenceStore.SPACES_FOR_TABS);
-			int numSpaces = store.getInt(JsonPreferenceStore.NUM_SPACES);
-			FormatTextHandler.formatText(this, spaces, numSpaces);
-		}
-	}
-
-	/** The <code>JavaEditor</code> implementation of this
-	 * <code>AbstractTextEditor</code> method performs sets the
-	 * input of the outline page after AbstractTextEditor has set input.
-	 *
-	 * @param input the editor input
-	 * @throws CoreException in case the input can not be set
-	 */
-	@Override
-	public void doSetInput(IEditorInput input) throws CoreException {
-		super.doSetInput(input);
-		if (fOutlinePage != null)
-			fOutlinePage.setInput(input);
-	}
-
-	/** The <code>JavaEditor</code> implementation of this
-	 * <code>AbstractTextEditor</code> method performs gets
-	 * the java content outline page if request is for a an
-	 * outline page.
-	 *
-	 * @param required the required type
-	 * @return an adapter for the required type or <code>null</code>
-	 */
-	@Override
-	public Object getAdapter(@SuppressWarnings("rawtypes") Class required) {
-		if (IContentOutlinePage.class.equals(required)) {
-			if (fOutlinePage == null) {
-				fOutlinePage= new JsonContentOutlinePage(getDocumentProvider(), this);
-				if (getEditorInput() != null)
-					fOutlinePage.setInput(getEditorInput());
-			}
-			return fOutlinePage;
-		}
-
-		return super.getAdapter(required);
-	}
-
-	@Override
-	public void createPartControl(Composite parent) {
-
-		super.createPartControl(parent);
-
-		ProjectionViewer viewer =(ProjectionViewer) getSourceViewer();
-		ProjectionSupport projectionSupport = new ProjectionSupport(viewer,getAnnotationAccess(),getSharedColors());
-		projectionSupport.install();
-
-		//turn projection mode on
-		viewer.doOperation(ProjectionViewer.TOGGLE);
-
-		annotationModel = viewer.getProjectionAnnotationModel();
-
-		SourceViewerDecorationSupport support = getSourceViewerDecorationSupport(viewer);
-		support.install(getPreferenceStore());
+    @Override
+    protected void configureSourceViewerDecorationSupport(SourceViewerDecorationSupport support) {
+        support.setCharacterPairMatcher(pairsMatcher);
+        support.setMatchingCharacterPainterPreferenceKeys(JsonPreferenceStore.EDITOR_MATCHING_BRACKETS,
+                JsonPreferenceStore.EDITOR_MATCHING_BRACKETS_COLOR);
+        super.configureSourceViewerDecorationSupport(support);
+    }
 
 
-		IFile file = (IFile) getEditorInput().getAdapter(IFile.class);
-		platformPreferenceListener = new PlatformPreferenceListener(viewerConfiguration, jsonPreferenceStore);
-		platformPreferenceListener.setPreferenceChangeListener(file);
-		
-	}
+    @Override
+    protected void initializeEditor() {
+        super.initializeEditor();
+        
+        setEditorContextMenuId("#JsonTextEditorContext"); //$NON-NLS-1$
+        setRulerContextMenuId("#JsonTextRulerContext"); //$NON-NLS-1$
+        setPreferenceStore(JsonPreferenceStore.getChainedPreferenceStore());
+        
+    }
 
-	@Override
-	protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
+    @Override
+    public void dispose() {
+        if (fOutlinePage != null)
+            fOutlinePage.setInput(null);
 
-		fAnnotationAccess = getAnnotationAccess();
-		fOverviewRuler = createOverviewRuler(getSharedColors());
+        if (pairsMatcher != null) {
+            pairsMatcher.dispose();
+            pairsMatcher = null;
+        }
 
-		ISourceViewer viewer = new ProjectionViewer(parent, ruler, getOverviewRuler(), isOverviewRulerVisible(), styles);
-		// ensure decoration support has been created and configured.
-		getSourceViewerDecorationSupport(viewer);
-		return viewer;
-	}
+        if (platformPreferenceListener != null) {
+            platformPreferenceListener.removePreferenceChangeListener();
+        }
 
-	@Override
-	protected void handlePreferenceStoreChanged(PropertyChangeEvent event) {
-		((JsonSourceViewerConfiguration) viewerConfiguration).handlePreferenceStoreChanged();
-		super.handlePreferenceStoreChanged(event);
-	}
+        super.dispose();
+    }
 
-	public void updateFoldingStructure(List<Position> positions)
-	{
-		ProjectionAnnotation[] annotations = new ProjectionAnnotation[positions.size()];
+    @Override
+    public void doRevertToSaved() {
+        super.doRevertToSaved();
+        if (fOutlinePage != null)
+            fOutlinePage.update();
+    }
 
-		//this will hold the new annotations along
-		//with their corresponding positions
-		HashMap<ProjectionAnnotation, Position> newAnnotations = new HashMap<ProjectionAnnotation, Position>();
+    @Override
+    public void doSave(IProgressMonitor monitor) {
+        doAutoFormatOnSave();
+        super.doSave(monitor);
+        if (fOutlinePage != null)
+            fOutlinePage.update();
+    }
 
-		for (int i = 0; i < positions.size(); i++)
-		{
-			ProjectionAnnotation annotation = new ProjectionAnnotation();
-			newAnnotations.put(annotation,positions.get(i));
-			annotations[i] = annotation;
-			if (annotationCollapsedState != null && annotationCollapsedState.length > i && annotationCollapsedState[i]) {
-				annotation.markCollapsed();
-			}
-		}
+    /** The <code>JavaEditor</code> implementation of this
+     * <code>AbstractTextEditor</code> method performs any extra
+     * save as behavior required by the java editor.
+     */
+    @Override
+    public void doSaveAs() {
+        doAutoFormatOnSave();
+        super.doSaveAs();
+        if (fOutlinePage != null)
+            fOutlinePage.update();
+    }
 
-		annotationModel.modifyAnnotations(oldAnnotations,newAnnotations,null);
-		oldAnnotations = annotations;
-	}
+    private void doAutoFormatOnSave() {
+        IPreferenceStore store = getPreferenceStore();
+        boolean autoFormatOnSave = store.getBoolean(JsonPreferenceStore.AUTO_FORMAT_ON_SAVE);
+        if (autoFormatOnSave) {
+            boolean spaces = store.getBoolean(JsonPreferenceStore.SPACES_FOR_TABS);
+            int numSpaces = store.getInt(JsonPreferenceStore.NUM_SPACES);
+            FormatTextHandler.formatText(this, spaces, numSpaces);
+        }
+    }
 
-	public JsonContentOutlinePage getFOutlinePage() {
-		return fOutlinePage;
-	}
+    /** The <code>JavaEditor</code> implementation of this
+     * <code>AbstractTextEditor</code> method performs sets the
+     * input of the outline page after AbstractTextEditor has set input.
+     *
+     * @param input the editor input
+     * @throws CoreException in case the input can not be set
+     */
+    @Override
+    public void doSetInput(IEditorInput input) throws CoreException {
+        super.doSetInput(input);
+        if (fOutlinePage != null)
+            fOutlinePage.setInput(input);
+    }
 
-	public void updateContentOutlinePage(List<JsonNode> jsonNodes) {
-	    this.jsonNodes = jsonNodes;
-		if (fOutlinePage != null) {
-			fOutlinePage.setJsonNodes(jsonNodes);
-		}
+    /** The <code>JavaEditor</code> implementation of this
+     * <code>AbstractTextEditor</code> method performs gets
+     * the java content outline page if request is for a an
+     * outline page.
+     *
+     * @param required the required type
+     * @return an adapter for the required type or <code>null</code>
+     */
+    @Override
+    public Object getAdapter(@SuppressWarnings("rawtypes") Class required) {
+        if (IContentOutlinePage.class.equals(required)) {
+            if (fOutlinePage == null) {
+                fOutlinePage= new JsonContentOutlinePage(getDocumentProvider(), this);
+                if (getEditorInput() != null)
+                    fOutlinePage.setInput(getEditorInput());
+            }
+            return fOutlinePage;
+        }
 
-		restoreTextLocation();
-	}
+        return super.getAdapter(required);
+    }
 
-	public void storeOutlineState() {
-		if (oldAnnotations != null) {
-			annotationCollapsedState = new boolean[oldAnnotations.length];
-			for (int i = 0; i < oldAnnotations.length; i++) {
-				annotationCollapsedState[i] = oldAnnotations[i].isCollapsed();
-			}
-		}
-	}
+    @Override
+    public void createPartControl(Composite parent) {
 
-	public void storeTextLocation() {
+        super.createPartControl(parent);
 
-		ITextSelection iTextSelection = (ITextSelection) this.getSite().getSelectionProvider().getSelection();
-		int textLocation = iTextSelection.getOffset();
-		if (jsonNodes != null) {
-			for (int i = 0; i < jsonNodes.size(); i++) {
-				JsonNode jsonNode = jsonNodes.get(i);
-				if (jsonNode.containsLocation(textLocation)) {
-					nodePosition = i;
-					nodePositionOffset = textLocation - jsonNode.getStart();
-					break;
-				}
-			}
-		}
+        ProjectionViewer viewer =(ProjectionViewer) getSourceViewer();
+        ProjectionSupport projectionSupport = new ProjectionSupport(viewer,getAnnotationAccess(),getSharedColors());
+        projectionSupport.install();
 
-		restoreCursorLocation = true;
-	}
+        //turn projection mode on
+        viewer.doOperation(ProjectionViewer.TOGGLE);
 
-	public void restoreTextLocation() {
+        annotationModel = viewer.getProjectionAnnotationModel();
 
-		if (!restoreCursorLocation) {
-			return;
-		}
+        SourceViewerDecorationSupport support = getSourceViewerDecorationSupport(viewer);
+        support.install(getPreferenceStore());
 
-		restoreCursorLocation = false;
 
-		ITextOperationTarget target = (ITextOperationTarget) this.getAdapter(ITextOperationTarget.class);
-		if (!(target instanceof ITextViewer)) {
-			return ;
-		}
-		ITextViewer textViewer = (ITextViewer) target;
-		if (jsonNodes != null && jsonNodes.size() > nodePosition) {
-			JsonNode node = jsonNodes.get(nodePosition);
-			if (node != null) {
-				int textLocation = node.getStart() + nodePositionOffset;
-				textViewer.getTextWidget().setSelection(textLocation);
-			}
-		}
-	}
+        IFile file = (IFile) getEditorInput().getAdapter(IFile.class);
+        platformPreferenceListener = new PlatformPreferenceListener(viewerConfiguration, jsonPreferenceStore);
+        platformPreferenceListener.setPreferenceChangeListener(file);
+        
+    }
 
-	public void updateTabWidth(int tabWidth) {
-		getSourceViewer().getTextWidget().setTabs(tabWidth);
-	}
+    @Override
+    protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
+
+        fAnnotationAccess = getAnnotationAccess();
+        fOverviewRuler = createOverviewRuler(getSharedColors());
+
+        ISourceViewer viewer = new ProjectionViewer(parent, ruler, getOverviewRuler(), isOverviewRulerVisible(), styles);
+        // ensure decoration support has been created and configured.
+        getSourceViewerDecorationSupport(viewer);
+        return viewer;
+    }
+
+    @Override
+    protected void handlePreferenceStoreChanged(PropertyChangeEvent event) {
+        ((JsonSourceViewerConfiguration) viewerConfiguration).handlePreferenceStoreChanged();
+        super.handlePreferenceStoreChanged(event);
+    }
+
+    public void updateFoldingStructure(List<Position> positions)
+    {
+        ProjectionAnnotation[] annotations = new ProjectionAnnotation[positions.size()];
+
+        //this will hold the new annotations along
+        //with their corresponding positions
+        HashMap<ProjectionAnnotation, Position> newAnnotations = new HashMap<ProjectionAnnotation, Position>();
+
+        for (int i = 0; i < positions.size(); i++)
+        {
+            ProjectionAnnotation annotation = new ProjectionAnnotation();
+            newAnnotations.put(annotation,positions.get(i));
+            annotations[i] = annotation;
+            if (annotationCollapsedState != null && annotationCollapsedState.length > i && annotationCollapsedState[i]) {
+                annotation.markCollapsed();
+            }
+        }
+
+        annotationModel.modifyAnnotations(oldAnnotations,newAnnotations,null);
+        oldAnnotations = annotations;
+    }
+
+    public JsonContentOutlinePage getFOutlinePage() {
+        return fOutlinePage;
+    }
+
+    public void updateContentOutlinePage(List<JsonNode> jsonNodes) {
+        this.jsonNodes = jsonNodes;
+        if (fOutlinePage != null) {
+            fOutlinePage.setJsonNodes(jsonNodes);
+        }
+
+        restoreTextLocation();
+    }
+
+    public void storeOutlineState() {
+        if (oldAnnotations != null) {
+            annotationCollapsedState = new boolean[oldAnnotations.length];
+            for (int i = 0; i < oldAnnotations.length; i++) {
+                annotationCollapsedState[i] = oldAnnotations[i].isCollapsed();
+            }
+        }
+    }
+
+    public void storeTextLocation() {
+
+        ITextSelection iTextSelection = (ITextSelection) this.getSite().getSelectionProvider().getSelection();
+        int textLocation = iTextSelection.getOffset();
+        if (jsonNodes != null) {
+            for (int i = 0; i < jsonNodes.size(); i++) {
+                JsonNode jsonNode = jsonNodes.get(i);
+                if (jsonNode.containsLocation(textLocation)) {
+                    nodePosition = i;
+                    nodePositionOffset = textLocation - jsonNode.getStart();
+                    break;
+                }
+            }
+        }
+
+        restoreCursorLocation = true;
+    }
+
+    public void restoreTextLocation() {
+
+        if (!restoreCursorLocation) {
+            return;
+        }
+
+        restoreCursorLocation = false;
+
+        ITextOperationTarget target = (ITextOperationTarget) this.getAdapter(ITextOperationTarget.class);
+        if (!(target instanceof ITextViewer)) {
+            return ;
+        }
+        ITextViewer textViewer = (ITextViewer) target;
+        if (jsonNodes != null && jsonNodes.size() > nodePosition) {
+            JsonNode node = jsonNodes.get(nodePosition);
+            if (node != null) {
+                int textLocation = node.getStart() + nodePositionOffset;
+                textViewer.getTextWidget().setSelection(textLocation);
+            }
+        }
+    }
+
+    public void updateTabWidth(int tabWidth) {
+        getSourceViewer().getTextWidget().setTabs(tabWidth);
+    }
 }

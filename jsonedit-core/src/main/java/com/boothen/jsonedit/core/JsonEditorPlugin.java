@@ -33,31 +33,31 @@ import com.boothen.jsonedit.outline.node.JsonTreeNode;
  */
 public class JsonEditorPlugin extends AbstractUIPlugin {
 
-	// The plug-in ID
-	public static final String PLUGIN_ID = "com.boothen.jsonedit.core";
+    // The plug-in ID
+    public static final String PLUGIN_ID = "com.boothen.jsonedit.core";
 
-	public JsonEditorPlugin() {
-		JsonLog.getInstance(PLUGIN_ID, super.getLog());
-		if (PlatformUI.isWorkbenchRunning() || Display.getCurrent() != null) {
-			getImageRegistry();
-		}
-	}
+    public JsonEditorPlugin() {
+        JsonLog.getInstance(PLUGIN_ID, super.getLog());
+        if (PlatformUI.isWorkbenchRunning() || Display.getCurrent() != null) {
+            getImageRegistry();
+        }
+    }
 
-	@Override
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-	}
+    @Override
+    public void start(BundleContext context) throws Exception {
+        super.start(context);
+    }
 
-	@Override
-	public void stop(BundleContext context) throws Exception {
-		super.stop(context);
-	}
+    @Override
+    public void stop(BundleContext context) throws Exception {
+        super.stop(context);
+    }
 
-	@Override
-	protected void initializeImageRegistry(ImageRegistry reg) {
-		JsonTreeNode.initializeImageRegistry(reg);
-		super.initializeImageRegistry(reg);
-	}
-	
-	
+    @Override
+    protected void initializeImageRegistry(ImageRegistry reg) {
+        JsonTreeNode.initializeImageRegistry(reg);
+        super.initializeImageRegistry(reg);
+    }
+    
+    
 }
