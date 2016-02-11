@@ -4,9 +4,9 @@
  * Licensed under the Eclipse Public License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *   
+ *
  * https://eclipse.org/org/documents/epl-v10.html
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.StringConverter;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.ui.texteditor.ChainedPreferenceStore;
 
@@ -90,13 +91,13 @@ public class JsonPreferenceStore extends AbstractPreferenceInitializer {
 		preferenceStore.setDefault(SPACES_FOR_TABS, true);
 		preferenceStore.setDefault(NUM_SPACES, 4);
 		preferenceStore.setDefault(EDITOR_MATCHING_BRACKETS, true);
-		preferenceStore.setDefault(EDITOR_MATCHING_BRACKETS_COLOR, StringConverter.asString(JsonColorProvider.STRING));
+		preferenceStore.setDefault(EDITOR_MATCHING_BRACKETS_COLOR, StringConverter.asString(new RGB(0, 128, 0)));
 		preferenceStore.setDefault(AUTO_FORMAT_ON_SAVE, false);
-		preferenceStore.setDefault(STRING_COLOR, StringConverter.asString(JsonColorProvider.STRING));
-		preferenceStore.setDefault(VALUE_COLOR, StringConverter.asString(JsonColorProvider.VALUE));
-		preferenceStore.setDefault(NULL_COLOR, StringConverter.asString(JsonColorProvider.NULL));
-		preferenceStore.setDefault(ERROR_COLOR, StringConverter.asString(JsonColorProvider.ERROR));
-		preferenceStore.setDefault(DEFAULT_COLOR, StringConverter.asString(JsonColorProvider.DEFAULT));
+		preferenceStore.setDefault(STRING_COLOR, StringConverter.asString(new RGB(0, 128, 0)));
+		preferenceStore.setDefault(VALUE_COLOR, StringConverter.asString(new RGB(0, 0, 128)));
+		preferenceStore.setDefault(NULL_COLOR, StringConverter.asString(new RGB(128, 0, 128)));
+		preferenceStore.setDefault(ERROR_COLOR, StringConverter.asString(new RGB(255, 0, 0)));
+		preferenceStore.setDefault(DEFAULT_COLOR, StringConverter.asString(new RGB(0, 0, 0)));
 		preferenceStore.setDefault(ERROR_TEXT_STYLE, editorPreferenceStore.getDefaultString(ERROR_TEXT_STYLE));
 		preferenceStore.setDefault(ERROR_INDICATION, editorPreferenceStore.getDefaultString(ERROR_INDICATION));
 		preferenceStore.setDefault(ERROR_INDICATION_COLOR, editorPreferenceStore.getDefaultString(ERROR_INDICATION_COLOR));

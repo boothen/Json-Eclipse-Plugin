@@ -46,7 +46,6 @@
 			<layout>p2</layout>
 			<url>http://logback.qos.ch/p2</url>
 		</repository>
-
 	</repositories>
 
 	<build>
