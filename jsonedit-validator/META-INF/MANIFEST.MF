@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: JSON Editor Validator
 Bundle-SymbolicName: jsonedit-validator
 Bundle-Version: 0.9.8
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: Boothen Technology
 Require-Bundle: jsonedit-reader,
  org.eclipse.core.resources,

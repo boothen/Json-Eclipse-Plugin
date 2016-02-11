@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: JSON Editor Reader
 Bundle-SymbolicName: jsonedit-reader
 Bundle-Version: 0.9.8
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: Boothen Technology
 Require-Bundle: org.eclipse.jface.text,
  org.eclipse.core.runtime,
