@@ -16,7 +16,7 @@
 /**
  *
  */
-package com.boothen.jsonedit.core.text;
+package com.boothen.jsonedit.editor.text;
 
 import static com.boothen.jsonedit.core.util.JsonCharUtility.closeCurly;
 import static com.boothen.jsonedit.core.util.JsonCharUtility.closeSquare;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.boothen.jsonedit.core.handlers;
+package com.boothen.jsonedit.editor.handlers;
 
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -25,7 +25,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.boothen.jsonedit.core.editors.JsonTextEditor;
+import com.boothen.jsonedit.editor.JsonTextEditor;
 import com.boothen.jsonedit.preferences.JsonPreferenceStore;
 import com.boothen.jsonedit.text.JsonTextFormatter;
 import com.boothen.jsonedit.text.LineEndingUtil;

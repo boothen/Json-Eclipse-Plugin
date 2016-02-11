@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.boothen.jsonedit.core.editors;
+package com.boothen.jsonedit.editor;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 
-import com.boothen.jsonedit.core.model.JsonPartitionScanner;
-import com.boothen.jsonedit.core.model.JsonPartitioner;
+import com.boothen.jsonedit.editor.model.JsonPartitionScanner;
+import com.boothen.jsonedit.editor.model.JsonPartitioner;
 import com.boothen.jsonedit.type.JsonDocumentType;
 
 public class JsonDocumentProvider extends FileDocumentProvider {

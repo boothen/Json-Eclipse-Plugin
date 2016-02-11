@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.boothen.jsonedit.core.editors;
+package com.boothen.jsonedit.editor;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,9 +40,9 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-import com.boothen.jsonedit.core.editors.listeners.PlatformPreferenceListener;
-import com.boothen.jsonedit.core.handlers.FormatTextHandler;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
+import com.boothen.jsonedit.editor.handlers.FormatTextHandler;
+import com.boothen.jsonedit.editor.listeners.PlatformPreferenceListener;
 import com.boothen.jsonedit.outline.JsonContentOutlinePage;
 import com.boothen.jsonedit.preferences.JsonPreferenceStore;
 

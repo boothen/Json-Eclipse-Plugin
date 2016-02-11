@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.boothen.jsonedit.core.editors;
+package com.boothen.jsonedit.editor;
 
 
 import org.eclipse.core.resources.IFile;
@@ -27,8 +27,8 @@ import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
-import com.boothen.jsonedit.core.model.JsonReconcilingStrategy;
-import com.boothen.jsonedit.core.text.JsonIndentLineAutoEditStrategy;
+import com.boothen.jsonedit.editor.model.JsonReconcilingStrategy;
+import com.boothen.jsonedit.editor.text.JsonIndentLineAutoEditStrategy;
 import com.boothen.jsonedit.preferences.JsonPreferenceStore;
 import com.boothen.jsonedit.text.JsonStringScanner;
 import com.boothen.jsonedit.text.LineEndingUtil;

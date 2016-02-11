@@ -7,7 +7,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.boothen.jsonedit.core.editors.JsonTextEditor"
+            class="com.boothen.jsonedit.editor.JsonTextEditor"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             default="true"
             extensions="json"
@@ -71,7 +71,7 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="com.boothen.jsonedit.core.handlers.FormatTextHandler"
+            class="com.boothen.jsonedit.editor.handlers.FormatTextHandler"
             commandId="Json.formatText">
       </handler>
    </extension>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.boothen.jsonedit.core.model;
+package com.boothen.jsonedit.editor.model;
 
 import org.eclipse.jface.text.rules.IWordDetector;
 

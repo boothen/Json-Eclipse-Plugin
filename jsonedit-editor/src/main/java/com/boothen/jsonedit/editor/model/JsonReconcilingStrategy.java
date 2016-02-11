@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.boothen.jsonedit.core.model;
+package com.boothen.jsonedit.editor.model;
 
 import java.util.List;
 
@@ -30,9 +30,9 @@ import org.eclipse.jface.text.reconciler.IReconcilingStrategyExtension;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.swt.widgets.Display;
 
-import com.boothen.jsonedit.core.editors.JsonTextEditor;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNodeBuilder;
+import com.boothen.jsonedit.editor.JsonTextEditor;
 import com.boothen.jsonedit.folding.JsonFoldingPositionsBuilder;
 import com.boothen.jsonedit.model.entry.JsonEntry;
 import com.boothen.jsonedit.model.entry.JsonEntryBuilder;

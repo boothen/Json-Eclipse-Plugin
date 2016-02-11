@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.boothen.jsonedit.core.editors.listeners;
+package com.boothen.jsonedit.editor.listeners;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ProjectScope;
@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChange
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 
-import com.boothen.jsonedit.core.editors.JsonSourceViewerConfiguration;
+import com.boothen.jsonedit.editor.JsonSourceViewerConfiguration;
 import com.boothen.jsonedit.preferences.JsonPreferenceStore;
 
 public class PlatformPreferenceListener implements IEclipsePreferences.IPreferenceChangeListener, IPropertyChangeListener {
