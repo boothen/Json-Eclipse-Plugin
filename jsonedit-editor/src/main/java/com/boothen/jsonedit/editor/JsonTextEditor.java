@@ -4,9 +4,9 @@
  * Licensed under the Eclipse Public License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *   
+ *
  * https://eclipse.org/org/documents/epl-v10.html
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,6 +18,7 @@ package com.boothen.jsonedit.editor;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.core.internal.resources.PreferenceInitializer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -40,11 +41,11 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
+import com.boothen.jsonedit.core.JsonEditorPlugin;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.editor.handlers.FormatTextHandler;
-import com.boothen.jsonedit.editor.listeners.PlatformPreferenceListener;
 import com.boothen.jsonedit.outline.JsonContentOutlinePage;
-import com.boothen.jsonedit.preferences.JsonPreferenceStore;
+import com.boothen.jsonedit.preferences.JsonPreferenceInitializer;
 
 /**
  * JsonTextEditor is the TextEditor instance used by the plugin.
@@ -59,8 +60,6 @@ public class JsonTextEditor extends TextEditor {
     private DefaultCharacterPairMatcher pairsMatcher = new DefaultCharacterPairMatcher(PAIRS);
     private JsonSourceViewerConfiguration viewerConfiguration;
     private JsonContentOutlinePage fOutlinePage;
-    private JsonPreferenceStore jsonPreferenceStore;
-    private PlatformPreferenceListener platformPreferenceListener;
 
 
     private ProjectionAnnotationModel annotationModel;
@@ -73,8 +72,7 @@ public class JsonTextEditor extends TextEditor {
 
     public JsonTextEditor() {
         super();
-        jsonPreferenceStore = new JsonPreferenceStore();
-        viewerConfiguration = new JsonSourceViewerConfiguration(this, jsonPreferenceStore);
+        viewerConfiguration = new JsonSourceViewerConfiguration(this);
         setSourceViewerConfiguration(viewerConfiguration);
 //        setDocumentProvider(new JsonDocumentProvider());
     }
@@ -82,8 +80,8 @@ public class JsonTextEditor extends TextEditor {
     @Override
     protected void configureSourceViewerDecorationSupport(SourceViewerDecorationSupport support) {
         support.setCharacterPairMatcher(pairsMatcher);
-        support.setMatchingCharacterPainterPreferenceKeys(JsonPreferenceStore.EDITOR_MATCHING_BRACKETS,
-                JsonPreferenceStore.EDITOR_MATCHING_BRACKETS_COLOR);
+        support.setMatchingCharacterPainterPreferenceKeys(JsonPreferenceInitializer.EDITOR_MATCHING_BRACKETS,
+                JsonPreferenceInitializer.EDITOR_MATCHING_BRACKETS_COLOR);
         super.configureSourceViewerDecorationSupport(support);
     }
 
@@ -91,11 +89,11 @@ public class JsonTextEditor extends TextEditor {
     @Override
     protected void initializeEditor() {
         super.initializeEditor();
-        
+
         setEditorContextMenuId("#JsonTextEditorContext"); //$NON-NLS-1$
         setRulerContextMenuId("#JsonTextRulerContext"); //$NON-NLS-1$
-        setPreferenceStore(JsonPreferenceStore.getChainedPreferenceStore());
-        
+        setPreferenceStore(JsonEditorPlugin.getDefault().getPreferenceStore());
+
     }
 
     @Override
@@ -106,10 +104,6 @@ public class JsonTextEditor extends TextEditor {
         if (pairsMatcher != null) {
             pairsMatcher.dispose();
             pairsMatcher = null;
-        }
-
-        if (platformPreferenceListener != null) {
-            platformPreferenceListener.removePreferenceChangeListener();
         }
 
         super.dispose();
@@ -144,11 +138,9 @@ public class JsonTextEditor extends TextEditor {
 
     private void doAutoFormatOnSave() {
         IPreferenceStore store = getPreferenceStore();
-        boolean autoFormatOnSave = store.getBoolean(JsonPreferenceStore.AUTO_FORMAT_ON_SAVE);
+        boolean autoFormatOnSave = store.getBoolean(JsonPreferenceInitializer.AUTO_FORMAT_ON_SAVE);
         if (autoFormatOnSave) {
-            boolean spaces = store.getBoolean(JsonPreferenceStore.SPACES_FOR_TABS);
-            int numSpaces = store.getInt(JsonPreferenceStore.NUM_SPACES);
-            FormatTextHandler.formatText(this, spaces, numSpaces);
+            FormatTextHandler.formatText(this);
         }
     }
 
@@ -204,12 +196,6 @@ public class JsonTextEditor extends TextEditor {
 
         SourceViewerDecorationSupport support = getSourceViewerDecorationSupport(viewer);
         support.install(getPreferenceStore());
-
-
-        IFile file = (IFile) getEditorInput().getAdapter(IFile.class);
-        platformPreferenceListener = new PlatformPreferenceListener(viewerConfiguration, jsonPreferenceStore);
-        platformPreferenceListener.setPreferenceChangeListener(file);
-        
     }
 
     @Override

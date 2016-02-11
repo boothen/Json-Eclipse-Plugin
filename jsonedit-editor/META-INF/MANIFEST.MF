@@ -21,6 +21,7 @@ Require-Bundle: jsonedit-core;bundle-version="0.9.8",
  org.eclipse.jface.text,
  org.eclipse.ui,
  org.eclipse.core.resources,
- org.eclipse.ui.views
+ org.eclipse.ui.views,
+ org.eclipse.equinox.preferences
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

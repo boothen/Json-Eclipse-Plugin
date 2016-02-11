@@ -4,9 +4,9 @@
  * Licensed under the Eclipse Public License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *   
+ *
  * https://eclipse.org/org/documents/epl-v10.html
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,8 @@ package com.boothen.jsonedit.editor;
 
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
@@ -27,9 +29,10 @@ import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
+import com.boothen.jsonedit.core.JsonEditorPlugin;
 import com.boothen.jsonedit.editor.model.JsonReconcilingStrategy;
 import com.boothen.jsonedit.editor.text.JsonIndentLineAutoEditStrategy;
-import com.boothen.jsonedit.preferences.JsonPreferenceStore;
+import com.boothen.jsonedit.preferences.JsonPreferenceInitializer;
 import com.boothen.jsonedit.text.JsonStringScanner;
 import com.boothen.jsonedit.text.LineEndingUtil;
 
@@ -44,14 +47,13 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
     private JsonTextEditor textEditor;
     private JsonIndentLineAutoEditStrategy jsonIndentLineAutoEditStrategy;
     private JsonStringScanner jsonStringScanner;
-    private JsonPreferenceStore store;
 
-    public JsonSourceViewerConfiguration(JsonTextEditor textEditor, JsonPreferenceStore store) {
+    public JsonSourceViewerConfiguration(JsonTextEditor textEditor) {
         super();
-        this.store = store;
         this.textEditor = textEditor;
-        boolean spaces = store.getSpacesForTab();
-        int numSpaces = store.getTabWidth();
+        IPreferenceStore store = JsonEditorPlugin.getDefault().getPreferenceStore();
+        boolean spaces = store.getBoolean(JsonPreferenceInitializer.SPACES_FOR_TABS);
+        int numSpaces = store.getInt(JsonPreferenceInitializer.NUM_SPACES);
         String lineEnding = "\n";
         jsonIndentLineAutoEditStrategy = new JsonIndentLineAutoEditStrategy(spaces, numSpaces, lineEnding);
         jsonStringScanner = new JsonStringScanner();
@@ -60,11 +62,11 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
     @Override
     public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
         PresentationReconciler reconciler= new PresentationReconciler();
-        
-        DefaultDamagerRepairer dr= new DefaultDamagerRepairer(jsonStringScanner);    
+
+        DefaultDamagerRepairer dr = new DefaultDamagerRepairer(jsonStringScanner);
         reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
         reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
-        
+
         return reconciler;
     }
 
@@ -82,18 +84,19 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
     }
 
     public void handlePreferenceStoreChanged() {
-        boolean spacesForTab = store.getSpacesForTab();
-        int tabWidth = store.getTabWidth();
+        IPreferenceStore store = JsonEditorPlugin.getDefault().getPreferenceStore();
+        boolean spaces = store.getBoolean(JsonPreferenceInitializer.SPACES_FOR_TABS);
+        int numSpaces = store.getInt(JsonPreferenceInitializer.NUM_SPACES);
 
         String lineEnding = getTextEditorLineEnding();
-        textEditor.updateTabWidth(tabWidth);
-        jsonIndentLineAutoEditStrategy.initPreferences(spacesForTab, tabWidth, lineEnding);
+        textEditor.updateTabWidth(numSpaces);
+        jsonIndentLineAutoEditStrategy.initPreferences(spaces, numSpaces, lineEnding);
         jsonStringScanner.reinit();
-        
+
     }
 
     private String getTextEditorLineEnding() {
-        IFile file = (IFile) textEditor.getEditorInput().getAdapter(IFile.class);
+        IFile file = textEditor.getEditorInput().getAdapter(IFile.class);
         return LineEndingUtil.determineProjectLineEnding(file);
     }
 }

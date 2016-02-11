@@ -10,5 +10,6 @@ Require-Bundle: org.eclipse.core.resources,
  org.eclipse.ui,
  org.eclipse.ui.editors,
  jsonedit-validation,
- jsonedit-core
+ jsonedit-core,
+ org.eclipse.equinox.preferences
 Export-Package: com.boothen.jsonedit.preferences

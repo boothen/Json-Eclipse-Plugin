@@ -4,9 +4,9 @@
  * Licensed under the Eclipse Public License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *   
+ *
  * https://eclipse.org/org/documents/epl-v10.html
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,12 +21,18 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Preferences;
+import org.eclipse.core.runtime.preferences.ConfigurationScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import com.boothen.jsonedit.core.JsonEditorPlugin;
 import com.boothen.jsonedit.editor.JsonTextEditor;
-import com.boothen.jsonedit.preferences.JsonPreferenceStore;
+import com.boothen.jsonedit.preferences.JsonPreferenceInitializer;
 import com.boothen.jsonedit.text.JsonTextFormatter;
 import com.boothen.jsonedit.text.LineEndingUtil;
 
@@ -62,15 +68,11 @@ public class FormatTextHandler implements IHandler {
 
         JsonTextEditor textEditor = (JsonTextEditor) editor;
 
-        JsonPreferenceStore store = new JsonPreferenceStore();
-        boolean spaces = store.getSpacesForTab();
-        int numSpaces = store.getTabWidth();
-
-        formatText(textEditor, spaces, numSpaces);
+        formatText(textEditor);
         return null;
     }
 
-    public static void formatText(JsonTextEditor textEditor, boolean spaces, int numSpaces) {
+    public static void formatText(JsonTextEditor textEditor) {
 
         IDocument document = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
         String text = document.get();
@@ -78,7 +80,11 @@ public class FormatTextHandler implements IHandler {
         IFile file = (IFile) textEditor.getEditorInput().getAdapter(IFile.class);
         String lineEnding = LineEndingUtil.determineProjectLineEnding(file);
 
-        JsonTextFormatter textFormatter = new JsonTextFormatter(text, spaces, numSpaces, lineEnding);
+        IPreferenceStore store = JsonEditorPlugin.getDefault().getPreferenceStore();
+        boolean spaces = store.getBoolean(JsonPreferenceInitializer.SPACES_FOR_TABS);
+        int numSpaces = store.getInt(JsonPreferenceInitializer.NUM_SPACES);
+
+        JsonTextFormatter textFormatter = new JsonTextFormatter(text, spaces , numSpaces, lineEnding);
         textEditor.storeOutlineState();
         textEditor.storeTextLocation();
         textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).set(textFormatter.formatText());

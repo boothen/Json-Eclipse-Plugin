@@ -4,9 +4,9 @@
  * Licensed under the Eclipse Public License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *   
+ *
  * https://eclipse.org/org/documents/epl-v10.html
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,6 +29,8 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
+import com.boothen.jsonedit.core.JsonEditorPlugin;
+
 
 /**
  * Workbench Preferences for the plugin.
@@ -38,7 +40,6 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
  */
 public class WorkbenchPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage, IPropertyChangeListener {
 
-    private BooleanFieldEditor usePlatformTabSetting;
     private BooleanFieldEditor spacesForTab;
     private IntegerFieldEditor indentSpaces;
 
@@ -47,101 +48,46 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage implement
      */
     public WorkbenchPreferencePage() {
         super(FieldEditorPreferencePage.GRID);
-        IPreferenceStore store = JsonPreferenceStore.getIPreferenceStore();
+        IPreferenceStore store = JsonEditorPlugin.getDefault().getPreferenceStore();
         setPreferenceStore(store);
-
-    }
-
-    @Override
-    protected IPreferenceStore doGetPreferenceStore() {
-        return JsonPreferenceStore.getIPreferenceStore();
-    }
-
-
-
-    /**
-     * @param title
-     */
-
-    public WorkbenchPreferencePage(String title) {
-        super(FieldEditorPreferencePage.GRID);
     }
 
     @Override
     public void init(IWorkbench workbench) {
-
-    }
-
-    @Override
-    public void dispose() {
-        if (usePlatformTabSetting != null) {
-            usePlatformTabSetting.setPropertyChangeListener(null);
-        }
-        super.dispose();
     }
 
     @Override
     protected void createFieldEditors() {
 
-        Boolean overrideTabSetting = getPreferenceStore().getBoolean(JsonPreferenceStore.OVERRIDE_TAB_SETTING);
-        usePlatformTabSetting = new BooleanFieldEditor(
-                JsonPreferenceStore.OVERRIDE_TAB_SETTING,
-                "Override Workbench Tab Setting",
-                getFieldEditorParent());
-        addField(usePlatformTabSetting);
-        usePlatformTabSetting.setPropertyChangeListener(this);
-
         spacesForTab = new BooleanFieldEditor(
-                JsonPreferenceStore.SPACES_FOR_TABS,
+                JsonPreferenceInitializer.SPACES_FOR_TABS,
                 "Insert Spaces For Tabs",
                 getFieldEditorParent());
-        spacesForTab.setEnabled(overrideTabSetting, getFieldEditorParent());
         addField(spacesForTab);
 
         indentSpaces = new IntegerFieldEditor(
-                JsonPreferenceStore.NUM_SPACES,
+                JsonPreferenceInitializer.NUM_SPACES,
                 "&Number of spaces to indent:",
                 getFieldEditorParent(), 1);
         indentSpaces.setValidRange(0, 10);
-        indentSpaces.setEnabled(overrideTabSetting, getFieldEditorParent());
         addField(indentSpaces);
 
         BooleanFieldEditor autoFormatOnSave = new BooleanFieldEditor(
-                JsonPreferenceStore.AUTO_FORMAT_ON_SAVE,
+                JsonPreferenceInitializer.AUTO_FORMAT_ON_SAVE,
                 "Auto Format On Save",
                 getFieldEditorParent());
         addField(autoFormatOnSave);
 
-        ColorFieldEditor stringColor = new ColorFieldEditor(JsonPreferenceStore.STRING_COLOR, "&Key Attribute Color", getFieldEditorParent());
+        ColorFieldEditor stringColor = new ColorFieldEditor(JsonPreferenceInitializer.STRING_COLOR, "&Key Attribute Color", getFieldEditorParent());
         addField(stringColor);
 
-        ColorFieldEditor valueColor = new ColorFieldEditor(JsonPreferenceStore.VALUE_COLOR, "&Value Attribute Color", getFieldEditorParent());
+        ColorFieldEditor valueColor = new ColorFieldEditor(JsonPreferenceInitializer.VALUE_COLOR, "&Value Attribute Color", getFieldEditorParent());
         addField(valueColor);
 
-        ColorFieldEditor nullColor = new ColorFieldEditor(JsonPreferenceStore.NULL_COLOR, "&Null Value Color", getFieldEditorParent());
+        ColorFieldEditor nullColor = new ColorFieldEditor(JsonPreferenceInitializer.NULL_COLOR, "&Null Value Color", getFieldEditorParent());
         addField(nullColor);
 
-        ColorFieldEditor defaultColor = new ColorFieldEditor(JsonPreferenceStore.DEFAULT_COLOR, "&Default Color", getFieldEditorParent());
+        ColorFieldEditor defaultColor = new ColorFieldEditor(JsonPreferenceInitializer.DEFAULT_COLOR, "&Default Color", getFieldEditorParent());
         addField(defaultColor);
-    }
-
-    @Override
-    protected void performDefaults() {
-        Boolean defaultUsePlatformTabSetting = getPreferenceStore().getDefaultBoolean(JsonPreferenceStore.OVERRIDE_TAB_SETTING);
-        togglePreferences(defaultUsePlatformTabSetting);
-        super.performDefaults();
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent event) {
-        if (event.getSource() == usePlatformTabSetting) {
-            togglePreferences((Boolean) event.getNewValue());
-        }
-        super.propertyChange(event);
-    }
-
-    private void togglePreferences(Boolean enabled) {
-        spacesForTab.setEnabled(enabled, getFieldEditorParent());
-        indentSpaces.setEnabled(enabled, getFieldEditorParent());
     }
 }

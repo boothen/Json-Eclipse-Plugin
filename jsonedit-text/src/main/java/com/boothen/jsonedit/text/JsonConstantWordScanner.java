@@ -18,6 +18,7 @@ package com.boothen.jsonedit.text;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.jface.text.TextAttribute;
@@ -30,7 +31,7 @@ import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.graphics.Color;
 
 import com.boothen.jsonedit.core.JsonEditorPlugin;
-import com.boothen.jsonedit.preferences.JsonPreferenceStore;
+import com.boothen.jsonedit.preferences.JsonPreferenceInitializer;
 import com.boothen.jsonedit.text.detector.JsonWhitespaceDetector;
 import com.boothen.jsonedit.text.detector.JsonWordDetector;
 
@@ -45,8 +46,8 @@ public class JsonConstantWordScanner extends RuleBasedScanner implements Reinita
 
     @Override
     public void reinit() {
-        IToken defaultText = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.ERROR_COLOR)));
-        IToken nullValue = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceStore.NULL_COLOR)));
+        IToken defaultText = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceInitializer.ERROR_COLOR)));
+        IToken nullValue = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceInitializer.NULL_COLOR)));
 
         List<IRule> rules= new LinkedList<IRule>();
 
@@ -60,7 +61,7 @@ public class JsonConstantWordScanner extends RuleBasedScanner implements Reinita
     }
 
     private Color getPreferenceColor(String preferenceValue) {
-        IPreferenceStore store = JsonPreferenceStore.getIPreferenceStore();
+        IPreferenceStore store = JsonEditorPlugin.getDefault().getPreferenceStore();
         return JsonEditorPlugin.getColorProvider().getColor(StringConverter.asRGB(store.getString(preferenceValue)));
     }
 }
