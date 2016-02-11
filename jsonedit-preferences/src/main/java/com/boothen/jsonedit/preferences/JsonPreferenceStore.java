@@ -23,8 +23,6 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.ui.texteditor.ChainedPreferenceStore;
 
-import com.boothen.jsonedit.coloring.JsonColorProvider;
-
 /**
  *
  * @author Matt Garner

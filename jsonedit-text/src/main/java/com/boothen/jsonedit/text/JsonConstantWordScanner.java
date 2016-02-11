@@ -4,9 +4,9 @@
  * Licensed under the Eclipse Public License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *   
+ *
  * https://eclipse.org/org/documents/epl-v10.html
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,6 +18,7 @@ package com.boothen.jsonedit.text;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IRule;
@@ -28,16 +29,15 @@ import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.graphics.Color;
 
-import com.boothen.jsonedit.coloring.JsonColorProvider;
+import com.boothen.jsonedit.core.JsonEditorPlugin;
 import com.boothen.jsonedit.preferences.JsonPreferenceStore;
 import com.boothen.jsonedit.text.detector.JsonWhitespaceDetector;
 import com.boothen.jsonedit.text.detector.JsonWordDetector;
 
 public class JsonConstantWordScanner extends RuleBasedScanner implements Reinitable {
 
-    private final JsonColorProvider jsonColorProvider = new JsonColorProvider();
     private final String word;
-    
+
     public JsonConstantWordScanner(String word) {
         this.word = word;
         reinit();
@@ -60,6 +60,7 @@ public class JsonConstantWordScanner extends RuleBasedScanner implements Reinita
     }
 
     private Color getPreferenceColor(String preferenceValue) {
-        return jsonColorProvider.getColor(StringConverter.asRGB(JsonPreferenceStore.getIPreferenceStore().getString(preferenceValue)));
+        IPreferenceStore store = JsonPreferenceStore.getIPreferenceStore();
+        return JsonEditorPlugin.getColorProvider().getColor(StringConverter.asRGB(store.getString(preferenceValue)));
     }
 }

@@ -16,13 +16,12 @@
 /**
  *
  */
-package com.boothen.jsonedit.coloring;
+package com.boothen.jsonedit.core;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
@@ -35,15 +34,21 @@ import org.eclipse.swt.widgets.Display;
  */
 public class JsonColorProvider {
 
-    protected Map<RGB, Color> fColorTable= new HashMap<RGB, Color>(10);
+    private final Map<RGB, Color> fColorTable = new HashMap<RGB, Color>();
+
+    JsonColorProvider() {
+        // package private
+    }
 
     /**
      * Release all of the color resources held onto by the receiver.
      */
-    public void dispose() {
+    void purge() {
         Iterator<Color> e = fColorTable.values().iterator();
-        while (e.hasNext())
+        while (e.hasNext()) {
              e.next().dispose();
+        }
+        fColorTable.clear();
     }
 
     /**
@@ -55,10 +60,10 @@ public class JsonColorProvider {
      */
     public Color getColor(RGB rgb) {
 
-        Color color= fColorTable.get(rgb);
+        Color color = fColorTable.get(rgb);
 
         if (color == null) {
-            color= new Color(Display.getCurrent(), rgb);
+            color = new Color(Display.getCurrent(), rgb);
             fColorTable.put(rgb, color);
         }
 
