@@ -8,7 +8,7 @@
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             default="true"
             extensions="json"
-            icon="src/main/resources/icons/JsonFile.gif"
+            icon="src/main/resources/icons/json.png"
             id="com.boothen.jsonedit.core.editors.JsonTextEditor"
             name="JSON Editor"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
@@ -139,6 +139,20 @@
          </enabledWhen>
       </page>
    </extension>
+    <extension point="org.eclipse.ui.newWizards">
+        <category
+            id="com.boothen.jsonedit.editor.new.category"
+            name="JSON">
+        </category>
+        <wizard
+              category="com.boothen.jsonedit.editor.new.category"
+              class="com.boothen.jsonedit.editor.JsonNewFileWizard"
+              icon="src/main/resources/icons/json.png"
+              id="com.boothen.jsonedit.editor.new"
+              name="JSON File">
+            <selection class="org.eclipse.core.resources.IResource" />
+        </wizard>
+    </extension>
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
