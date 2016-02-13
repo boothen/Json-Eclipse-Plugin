@@ -18,8 +18,6 @@ package com.boothen.jsonedit.editor;
 import java.util.HashMap;
 import java.util.List;
 
-import org.eclipse.core.internal.resources.PreferenceInitializer;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -45,7 +43,8 @@ import com.boothen.jsonedit.core.JsonEditorPlugin;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.editor.handlers.FormatTextHandler;
 import com.boothen.jsonedit.outline.JsonContentOutlinePage;
-import com.boothen.jsonedit.preferences.JsonPreferenceInitializer;
+import com.boothen.jsonedit.preferences.JsonPreferences;
+import com.boothen.jsonedit.preferences.JsonPreferencesPlugin;
 
 /**
  * JsonTextEditor is the TextEditor instance used by the plugin.
@@ -80,8 +79,8 @@ public class JsonTextEditor extends TextEditor {
     @Override
     protected void configureSourceViewerDecorationSupport(SourceViewerDecorationSupport support) {
         support.setCharacterPairMatcher(pairsMatcher);
-        support.setMatchingCharacterPainterPreferenceKeys(JsonPreferenceInitializer.EDITOR_MATCHING_BRACKETS,
-                JsonPreferenceInitializer.EDITOR_MATCHING_BRACKETS_COLOR);
+        support.setMatchingCharacterPainterPreferenceKeys(JsonPreferences.EDITOR_MATCHING_BRACKETS,
+                JsonPreferences.EDITOR_MATCHING_BRACKETS_COLOR);
         super.configureSourceViewerDecorationSupport(support);
     }
 
@@ -92,8 +91,8 @@ public class JsonTextEditor extends TextEditor {
 
         setEditorContextMenuId("#JsonTextEditorContext"); //$NON-NLS-1$
         setRulerContextMenuId("#JsonTextRulerContext"); //$NON-NLS-1$
-        setPreferenceStore(JsonEditorPlugin.getDefault().getPreferenceStore());
-
+        IPreferenceStore store = JsonPreferencesPlugin.getDefault().getPreferenceStore();
+        setPreferenceStore(store);
     }
 
     @Override
@@ -138,7 +137,7 @@ public class JsonTextEditor extends TextEditor {
 
     private void doAutoFormatOnSave() {
         IPreferenceStore store = getPreferenceStore();
-        boolean autoFormatOnSave = store.getBoolean(JsonPreferenceInitializer.AUTO_FORMAT_ON_SAVE);
+        boolean autoFormatOnSave = store.getBoolean(JsonPreferences.AUTO_FORMAT_ON_SAVE);
         if (autoFormatOnSave) {
             FormatTextHandler.formatText(this);
         }

@@ -22,14 +22,10 @@ package com.boothen.jsonedit.preferences;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-
-import com.boothen.jsonedit.core.JsonEditorPlugin;
 
 
 /**
@@ -48,8 +44,7 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage implement
      */
     public WorkbenchPreferencePage() {
         super(FieldEditorPreferencePage.GRID);
-        IPreferenceStore store = JsonEditorPlugin.getDefault().getPreferenceStore();
-        setPreferenceStore(store);
+        setPreferenceStore(JsonPreferencesPlugin.getDefault().getPreferenceStore());
     }
 
     @Override
@@ -60,34 +55,34 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage implement
     protected void createFieldEditors() {
 
         spacesForTab = new BooleanFieldEditor(
-                JsonPreferenceInitializer.SPACES_FOR_TABS,
+                JsonPreferences.SPACES_FOR_TABS,
                 "Insert Spaces For Tabs",
                 getFieldEditorParent());
         addField(spacesForTab);
 
         indentSpaces = new IntegerFieldEditor(
-                JsonPreferenceInitializer.NUM_SPACES,
+                JsonPreferences.NUM_SPACES,
                 "&Number of spaces to indent:",
                 getFieldEditorParent(), 1);
         indentSpaces.setValidRange(0, 10);
         addField(indentSpaces);
 
         BooleanFieldEditor autoFormatOnSave = new BooleanFieldEditor(
-                JsonPreferenceInitializer.AUTO_FORMAT_ON_SAVE,
+                JsonPreferences.AUTO_FORMAT_ON_SAVE,
                 "Auto Format On Save",
                 getFieldEditorParent());
         addField(autoFormatOnSave);
 
-        ColorFieldEditor stringColor = new ColorFieldEditor(JsonPreferenceInitializer.STRING_COLOR, "&Key Attribute Color", getFieldEditorParent());
+        ColorFieldEditor stringColor = new ColorFieldEditor(JsonPreferences.STRING_COLOR, "&Key Attribute Color", getFieldEditorParent());
         addField(stringColor);
 
-        ColorFieldEditor valueColor = new ColorFieldEditor(JsonPreferenceInitializer.VALUE_COLOR, "&Value Attribute Color", getFieldEditorParent());
+        ColorFieldEditor valueColor = new ColorFieldEditor(JsonPreferences.VALUE_COLOR, "&Value Attribute Color", getFieldEditorParent());
         addField(valueColor);
 
-        ColorFieldEditor nullColor = new ColorFieldEditor(JsonPreferenceInitializer.NULL_COLOR, "&Null Value Color", getFieldEditorParent());
+        ColorFieldEditor nullColor = new ColorFieldEditor(JsonPreferences.NULL_COLOR, "&Null Value Color", getFieldEditorParent());
         addField(nullColor);
 
-        ColorFieldEditor defaultColor = new ColorFieldEditor(JsonPreferenceInitializer.DEFAULT_COLOR, "&Default Color", getFieldEditorParent());
+        ColorFieldEditor defaultColor = new ColorFieldEditor(JsonPreferences.DEFAULT_COLOR, "&Default Color", getFieldEditorParent());
         addField(defaultColor);
     }
 }

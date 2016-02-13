@@ -21,18 +21,14 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Preferences;
-import org.eclipse.core.runtime.preferences.ConfigurationScope;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.boothen.jsonedit.core.JsonEditorPlugin;
 import com.boothen.jsonedit.editor.JsonTextEditor;
-import com.boothen.jsonedit.preferences.JsonPreferenceInitializer;
+import com.boothen.jsonedit.preferences.JsonPreferences;
+import com.boothen.jsonedit.preferences.JsonPreferencesPlugin;
 import com.boothen.jsonedit.text.JsonTextFormatter;
 import com.boothen.jsonedit.text.LineEndingUtil;
 
@@ -80,9 +76,9 @@ public class FormatTextHandler implements IHandler {
         IFile file = (IFile) textEditor.getEditorInput().getAdapter(IFile.class);
         String lineEnding = LineEndingUtil.determineProjectLineEnding(file);
 
-        IPreferenceStore store = JsonEditorPlugin.getDefault().getPreferenceStore();
-        boolean spaces = store.getBoolean(JsonPreferenceInitializer.SPACES_FOR_TABS);
-        int numSpaces = store.getInt(JsonPreferenceInitializer.NUM_SPACES);
+        IPreferenceStore store = JsonPreferencesPlugin.getDefault().getPreferenceStore();
+        boolean spaces = store.getBoolean(JsonPreferences.SPACES_FOR_TABS);
+        int numSpaces = store.getInt(JsonPreferences.NUM_SPACES);
 
         JsonTextFormatter textFormatter = new JsonTextFormatter(text, spaces , numSpaces, lineEnding);
         textEditor.storeOutlineState();

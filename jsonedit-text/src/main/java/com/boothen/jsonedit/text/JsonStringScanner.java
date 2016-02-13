@@ -33,9 +33,9 @@ import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.graphics.Color;
 
-import com.boothen.jsonedit.core.JsonColorProvider;
 import com.boothen.jsonedit.core.JsonEditorPlugin;
-import com.boothen.jsonedit.preferences.JsonPreferenceInitializer;
+import com.boothen.jsonedit.preferences.JsonPreferences;
+import com.boothen.jsonedit.preferences.JsonPreferencesPlugin;
 import com.boothen.jsonedit.text.detector.JsonWhitespaceDetector;
 import com.boothen.jsonedit.text.detector.JsonWordDetector;
 
@@ -58,10 +58,10 @@ public class JsonStringScanner extends RuleBasedScanner implements Reinitable {
     }
 
     private void initScanner() {
-        IToken string = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceInitializer.STRING_COLOR)));
-        IToken value = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceInitializer.VALUE_COLOR)));
-        IToken defaultText = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceInitializer.ERROR_COLOR)));
-        IToken nullValue = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceInitializer.NULL_COLOR)));
+        IToken string = new Token(new TextAttribute(getPreferenceColor(JsonPreferences.STRING_COLOR)));
+        IToken value = new Token(new TextAttribute(getPreferenceColor(JsonPreferences.VALUE_COLOR)));
+        IToken defaultText = new Token(new TextAttribute(getPreferenceColor(JsonPreferences.ERROR_COLOR)));
+        IToken nullValue = new Token(new TextAttribute(getPreferenceColor(JsonPreferences.NULL_COLOR)));
 
         List<IRule> rules= new LinkedList<IRule>();
 
@@ -82,7 +82,7 @@ public class JsonStringScanner extends RuleBasedScanner implements Reinitable {
     }
 
     private Color getPreferenceColor(String preferenceValue) {
-        IPreferenceStore store = JsonEditorPlugin.getDefault().getPreferenceStore();
+        IPreferenceStore store = JsonPreferencesPlugin.getDefault().getPreferenceStore();
         return JsonEditorPlugin.getColorProvider().getColor(StringConverter.asRGB(store.getString(preferenceValue)));
     }
 }

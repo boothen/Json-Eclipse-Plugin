@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.Display;
  * @author Matt Garner
  *
  */
-public class JsonColorProvider {
+public final class JsonColorProvider {
 
     private final Map<RGB, Color> fColorTable = new HashMap<RGB, Color>();
 

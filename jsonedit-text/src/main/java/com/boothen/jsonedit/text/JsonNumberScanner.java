@@ -28,9 +28,9 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.swt.graphics.Color;
 
-import com.boothen.jsonedit.core.JsonColorProvider;
 import com.boothen.jsonedit.core.JsonEditorPlugin;
-import com.boothen.jsonedit.preferences.JsonPreferenceInitializer;
+import com.boothen.jsonedit.preferences.JsonPreferences;
+import com.boothen.jsonedit.preferences.JsonPreferencesPlugin;
 import com.boothen.jsonedit.text.detector.JsonWhitespaceDetector;
 
 public class JsonNumberScanner extends RuleBasedScanner implements Reinitable {
@@ -46,7 +46,7 @@ public class JsonNumberScanner extends RuleBasedScanner implements Reinitable {
     }
 
     private void initScanner() {
-        IToken value = new Token(new TextAttribute(getPreferenceColor(JsonPreferenceInitializer.VALUE_COLOR)));
+        IToken value = new Token(new TextAttribute(getPreferenceColor(JsonPreferences.VALUE_COLOR)));
 
         List<IRule> rules= new LinkedList<IRule>();
         rules.add(new JsonNumberRule(value));
@@ -57,7 +57,7 @@ public class JsonNumberScanner extends RuleBasedScanner implements Reinitable {
     }
 
     private Color getPreferenceColor(String preferenceValue) {
-        IPreferenceStore store = JsonEditorPlugin.getDefault().getPreferenceStore();
+        IPreferenceStore store = JsonPreferencesPlugin.getDefault().getPreferenceStore();
         return JsonEditorPlugin.getColorProvider().getColor(StringConverter.asRGB(store.getString(preferenceValue)));
     }
 }

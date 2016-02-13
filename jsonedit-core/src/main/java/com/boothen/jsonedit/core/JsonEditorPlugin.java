@@ -31,7 +31,8 @@ public class JsonEditorPlugin extends AbstractUIPlugin {
     /**
      * The plug-in ID
      */
-    public static final String PLUGIN_ID = "com.boothen.jsonedit.core";
+//    public static final String PLUGIN_ID = "com.boothen.jsonedit.core";
+    public static final String PLUGIN_ID = "jsonedit-core";
 
     private static final JsonColorProvider colorProvider = new JsonColorProvider();
 
@@ -59,11 +60,8 @@ public class JsonEditorPlugin extends AbstractUIPlugin {
     }
 
     /**
-     * Returns an image descriptor for the image file at the given plug-in
-     * relative path
-     *
-     * @param path
-     *            the path
+     * Returns an image descriptor for the image file at the given plug-in relative path
+     * @param path the path
      * @return the image descriptor
      */
     public static ImageDescriptor getImageDescriptor(String path) {
