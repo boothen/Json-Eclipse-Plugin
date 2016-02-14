@@ -11,7 +11,7 @@
             icon="src/main/resources/icons/json.png"
             id="com.boothen.jsonedit.core.editors.JsonTextEditor"
             name="JSON Editor"
-            symbolicFontName="org.eclipse.wst.sse.ui.textfont">
+            symbolicFontName="com.boothen.jsonedit.fonts.textfont">
          <contentTypeBinding
                contentTypeId="com.boothen.jsonedit.core.jsonsource">
          </contentTypeBinding>
@@ -164,5 +164,18 @@
             parentId="org.eclipse.ui.textEditorScope"
             id="com.boothen.jsonedit.jsonEditorScope">
         </context>
+    </extension>
+   <extension
+         point="org.eclipse.ui.themes">
+        <themeElementCategory label="%jsonPresentation.label" id="com.boothen.jsonedit.presentation"/>
+      <fontDefinition
+            label="%jsonEditorFontDefiniton.label"
+            defaultsTo="org.eclipse.jface.textfont"
+            categoryId="com.boothen.jsonedit.presentation"
+            id="com.boothen.jsonedit.fonts.textfont">
+         <description>
+            %javaEditorFontDefintion.description
+         </description>
+      </fontDefinition>
     </extension>
 </plugin>
