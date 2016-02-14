@@ -19,15 +19,10 @@
    </extension>
    <extension
          point="org.eclipse.ui.commands">
-      <category
-            id="Json.format"
-            name="format">
-      </category>
       <command
-            categoryId="Json.format"
-            description="Format JSON Text"
-            id="Json.formatText"
-            name="Format Text">
+            categoryId="org.eclipse.ui.category.edit"
+            name="Format JSON"
+            id="com.boothen.jsonedit.format">
       </command>
    </extension>
    <extension
@@ -35,7 +30,7 @@
       <menuContribution
             locationURI="popup:#JsonTextEditorContext?after=additions">
          <command
-               commandId="Json.formatText"
+               commandId="com.boothen.jsonedit.format"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -51,7 +46,7 @@
       <menuContribution
             locationURI="menu:edit?after=additions">
          <command
-               commandId="Json.formatText"
+               commandId="com.boothen.jsonedit.format"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -64,13 +59,6 @@
             </visibleWhen>
          </command>
       </menuContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.handlers">
-      <handler
-            class="com.boothen.jsonedit.editor.handlers.FormatTextHandler"
-            commandId="Json.formatText">
-      </handler>
    </extension>
    <extension
          id="com.boothen.jsonedit.validation.builder"
@@ -162,4 +150,19 @@
             name="JSON Source"
             priority="high"/>
    </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+        <key
+              commandId="com.boothen.jsonedit.format"
+              contextId="com.boothen.jsonedit.jsonEditorScope"
+              schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+              sequence="M1+M2+F"/>
+    </extension>
+    <extension point="org.eclipse.ui.contexts">
+        <context
+            name="JSON editor"
+            parentId="org.eclipse.ui.textEditorScope"
+            id="com.boothen.jsonedit.jsonEditorScope">
+        </context>
+    </extension>
 </plugin>

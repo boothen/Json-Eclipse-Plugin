@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Jsonedit Editor
+Bundle-Name: JSON Editor
 Bundle-SymbolicName: jsonedit-editor;singleton:=true
 Bundle-Version: 0.9.8
 Bundle-Activator: com.boothen.jsonedit.editor.Activator
@@ -28,3 +28,4 @@ Require-Bundle: jsonedit-core;bundle-version="0.9.8",
  org.eclipse.ui.workbench.texteditor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
+Bundle-Vendor: Boothen Technology

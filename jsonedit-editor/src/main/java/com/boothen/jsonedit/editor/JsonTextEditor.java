@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.ITextOperationTarget;
 import org.eclipse.jface.text.ITextSelection;
@@ -35,13 +36,13 @@ import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
+import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-import com.boothen.jsonedit.core.JsonEditorPlugin;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
-import com.boothen.jsonedit.editor.handlers.FormatTextHandler;
 import com.boothen.jsonedit.outline.JsonContentOutlinePage;
 import com.boothen.jsonedit.preferences.JsonPreferences;
 import com.boothen.jsonedit.preferences.JsonPreferencesPlugin;
@@ -77,6 +78,17 @@ public class JsonTextEditor extends TextEditor {
     }
 
     @Override
+    protected void createActions() {
+        super.createActions();
+
+        Action action = new TextOperationAction(Messages.RESOURCE_BUNDLE, "Format.", this, ISourceViewer.FORMAT);
+        action.setActionDefinitionId(Constants.FORMAT_ACTION_ID);
+        setAction(Constants.FORMAT_ACTION_ID, action);
+        markAsStateDependentAction(Constants.FORMAT_ACTION_ID, true);
+        markAsSelectionDependentAction(Constants.FORMAT_ACTION_ID, true);
+    }
+
+    @Override
     protected void configureSourceViewerDecorationSupport(SourceViewerDecorationSupport support) {
         support.setCharacterPairMatcher(pairsMatcher);
         support.setMatchingCharacterPainterPreferenceKeys(JsonPreferences.EDITOR_MATCHING_BRACKETS,
@@ -84,6 +96,10 @@ public class JsonTextEditor extends TextEditor {
         super.configureSourceViewerDecorationSupport(support);
     }
 
+    @Override
+    protected void initializeKeyBindingScopes() {
+        setKeyBindingScopes(new String[] { Constants.EDITOR_CONTEXT_ID });
+    }
 
     @Override
     protected void initializeEditor() {
@@ -139,7 +155,7 @@ public class JsonTextEditor extends TextEditor {
         IPreferenceStore store = getPreferenceStore();
         boolean autoFormatOnSave = store.getBoolean(JsonPreferences.AUTO_FORMAT_ON_SAVE);
         if (autoFormatOnSave) {
-            FormatTextHandler.formatText(this);
+            new JsonFormatStrategy(this).format(); // TODO: consider storing this
         }
     }
 

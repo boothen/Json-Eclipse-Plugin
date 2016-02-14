@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: JSON Editor Plugin
+Bundle-Name: JSON Editor Core
 Bundle-SymbolicName: jsonedit-core;singleton:=true
 Bundle-Version: 0.9.8
 Bundle-Activator: com.boothen.jsonedit.core.JsonEditorPlugin
