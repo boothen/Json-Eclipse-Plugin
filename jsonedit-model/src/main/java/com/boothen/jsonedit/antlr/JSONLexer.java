@@ -52,9 +52,9 @@ public class JSONLexer extends Lexer {
         }
     }
 
-        /**
-         * @deprecated Use {@link #VOCABULARY} instead.
-         */
+    /**
+     * @deprecated Use {@link #VOCABULARY} instead.
+     */
     @Override
     @Deprecated
     public String[] getTokenNames() {
