@@ -74,7 +74,6 @@ public class JsonTextEditor extends TextEditor {
         super();
         viewerConfiguration = new JsonSourceViewerConfiguration(this);
         setSourceViewerConfiguration(viewerConfiguration);
-//        setDocumentProvider(new JsonDocumentProvider());
     }
 
     @Override

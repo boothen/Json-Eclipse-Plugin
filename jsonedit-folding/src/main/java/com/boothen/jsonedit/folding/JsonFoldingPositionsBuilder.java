@@ -4,9 +4,9 @@
  * Licensed under the Eclipse Public License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *   
+ *
  * https://eclipse.org/org/documents/epl-v10.html
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,6 +20,11 @@ import java.util.List;
 
 import org.eclipse.jface.text.Position;
 
+import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
+import com.boothen.jsonedit.antlr.JSONBaseVisitor;
+import com.boothen.jsonedit.antlr.JSONParser.ArrayContext;
+import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
+import com.boothen.jsonedit.antlr.JSONParser.ObjectContext;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.type.JsonDocumentType;
 
@@ -29,32 +34,36 @@ import com.boothen.jsonedit.type.JsonDocumentType;
  */
 public class JsonFoldingPositionsBuilder {
 
-    private List<JsonNode> jsonNodes;
+    private JsonContext jsonContext;
 
-    public JsonFoldingPositionsBuilder(List<JsonNode> jsonNodes) {
-        this.jsonNodes = jsonNodes;
+    public JsonFoldingPositionsBuilder(JsonContext jsonContext) {
+        this.jsonContext = jsonContext;
     }
 
     public List<Position> buildFoldingPositions() {
 
-        List<Position> positions = new LinkedList<Position>();
-        List<Position> positionsStack = new LinkedList<Position>();
-        if (jsonNodes != null) {
-            for (JsonNode jsonNode : jsonNodes) {
-                if (isJsonNodeType(jsonNode, JsonDocumentType.JSON_ARRAY_OPEN, JsonDocumentType.JSON_OBJECT_OPEN)) {
-                    Position position = new Position(jsonNode.getStart());
-                    positionsStack.add(0, position);
-                    positions.add(position);
-                }
+        final List<Position> positions = new LinkedList<Position>();
 
-                if (isJsonNodeType(jsonNode, JsonDocumentType.JSON_ARRAY_CLOSE, JsonDocumentType.JSON_OBJECT_CLOSE)) {
-                    if (positionsStack.size() > 0) {
-                        Position position = positionsStack.remove(0);
-                        position.setLength(jsonNode.getEnd() - position.getOffset());
-                    }
-                }
+        jsonContext.accept(new JSONBaseVisitor<Object>() {
+            @Override
+            public Object visitObject(ObjectContext ctx) {
+                Object result = super.visitObject(ctx);
+                int startIndex = ctx.start.getStartIndex();
+                int stopIndex = ctx.stop.getStopIndex();
+                positions.add(new Position(startIndex, stopIndex - startIndex));
+                return result;
             }
-        }
+
+            @Override
+            public Object visitArray(ArrayContext ctx) {
+                Object result = super.visitArray(ctx);
+                int startIndex = ctx.start.getStartIndex();
+                int stopIndex = ctx.stop.getStopIndex();
+                positions.add(new Position(startIndex, stopIndex - startIndex));
+                return result;
+            }
+        });
+
         return positions;
     }
 

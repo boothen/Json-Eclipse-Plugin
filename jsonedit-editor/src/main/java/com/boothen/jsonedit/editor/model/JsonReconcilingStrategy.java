@@ -4,9 +4,9 @@
  * Licensed under the Eclipse Public License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *   
+ *
  * https://eclipse.org/org/documents/epl-v10.html
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,9 +15,12 @@
  *******************************************************************************/
 package com.boothen.jsonedit.editor.model;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPositionCategoryException;
 import org.eclipse.jface.text.IDocument;
@@ -28,15 +31,20 @@ import org.eclipse.jface.text.reconciler.DirtyRegion;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategy;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategyExtension;
 import org.eclipse.jface.text.rules.IToken;
+import org.eclipse.jface.util.StatusHandler;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.statushandlers.StatusManager;
 
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNodeBuilder;
+import com.boothen.jsonedit.editor.Activator;
 import com.boothen.jsonedit.editor.JsonTextEditor;
 import com.boothen.jsonedit.folding.JsonFoldingPositionsBuilder;
 import com.boothen.jsonedit.model.entry.JsonEntry;
 import com.boothen.jsonedit.model.entry.JsonEntryBuilder;
 import com.boothen.jsonedit.type.JsonDocumentType;
+import com.boothen.jsonedit.model.AntlrAdapter;
+import com.boothen.jsonedit.model.AntlrAdapter.ParseResult;
 
 public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcilingStrategyExtension {
 
@@ -63,53 +71,31 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
     @Override
     public void initialReconcile() {
         try {
-            fDocument.removePositionCategory(JsonEntryBuilder.JSON_ELEMENTS);
-            fDocument.addPositionCategory(JsonEntryBuilder.JSON_ELEMENTS);
-        } catch (BadPositionCategoryException e) {
-            e.printStackTrace();
+//            fDocument.removePositionCategory(JsonEntryBuilder.JSON_ELEMENTS);
+//            fDocument.addPositionCategory(JsonEntryBuilder.JSON_ELEMENTS);
+            scan(0, fDocument.getLength());
+        } catch (Exception e) {
+            StatusManager.getManager().handle(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage()));
         }
-        
-        
-        scan(0, fDocument.getLength());
-        parse();
     }
 
     @Override
     public void setProgressMonitor(IProgressMonitor monitor) {
 
     }
-    
-    private void scan(int offset, int length) {
-        JsonPartitionScanner jsonPartitionScanner = new JsonPartitionScanner();
-        jsonPartitionScanner.setRange(fDocument, offset, length);
-        IToken nextToken = jsonPartitionScanner.nextToken();
-        while (!nextToken.isEOF()) {
-            if (nextToken.getData() != null && JsonDocumentType.DOCUMENT_TYPES.contains(nextToken.getData())) {
-                try {
-                    fDocument.addPosition(JsonEntryBuilder.JSON_ELEMENTS, new TypedPosition(jsonPartitionScanner.getTokenOffset(), 
-                            jsonPartitionScanner.getTokenLength(), (String) nextToken.getData()));
-                } catch (BadLocationException e) {
-                    e.printStackTrace();
-                } catch (BadPositionCategoryException e) {
-                    e.printStackTrace();
-                } 
-            }
-            nextToken = jsonPartitionScanner.nextToken();
-        }
-        
-    }
 
-    private void parse() {
+    private void scan(int offset, int length) throws IOException {
+        final ParseResult result = AntlrAdapter.convert(fDocument);
 
-        final List<JsonEntry> jsonEntries = new JsonEntryBuilder().buildJsonEntries(fDocument);
-        final List<JsonNode> jsonNodes = new JsonNodeBuilder().buildJsonNodes(jsonEntries);
-        final List<Position> fPositions = new JsonFoldingPositionsBuilder(jsonNodes).buildFoldingPositions();
+//        fDocument.addPosition(JsonEntryBuilder.JSON_ELEMENTS, new TypedPosition(jsonPartitionScanner.getTokenOffset(), jsonPartitionScanner.getTokenLength(), (String) nextToken.getData()));
+
+        final List<Position> fPositions = new JsonFoldingPositionsBuilder(result.getTree()).buildFoldingPositions();
 
         if (textEditor != null) {
             Display.getDefault().asyncExec(new Runnable() {
                 public void run() {
                     textEditor.updateFoldingStructure(fPositions);
-                    textEditor.updateContentOutlinePage(jsonNodes);
+//                    textEditor.updateContentOutlinePage(result.getTree());
                 }
 
             });

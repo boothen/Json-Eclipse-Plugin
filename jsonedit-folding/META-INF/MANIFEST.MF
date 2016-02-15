@@ -6,5 +6,6 @@ Bundle-Version: 0.9.8
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: Boothen Technology
 Require-Bundle: org.eclipse.jface.text,
- jsonedit-model
+ jsonedit-model,
+ org.antlr.antlr4-runtime-osgi;bundle-version="4.5.2"
 Export-Package: com.boothen.jsonedit.folding
