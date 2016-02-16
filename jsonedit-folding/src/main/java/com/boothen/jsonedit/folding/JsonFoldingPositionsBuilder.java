@@ -20,13 +20,7 @@ import java.util.List;
 
 import org.eclipse.jface.text.Position;
 
-import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
-import com.boothen.jsonedit.antlr.JSONBaseVisitor;
-import com.boothen.jsonedit.antlr.JSONParser.ArrayContext;
 import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
-import com.boothen.jsonedit.antlr.JSONParser.ObjectContext;
-import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
-import com.boothen.jsonedit.type.JsonDocumentType;
 
 /**
  * @author Matt Garner
@@ -44,39 +38,9 @@ public class JsonFoldingPositionsBuilder {
 
         final List<Position> positions = new LinkedList<Position>();
 
-        jsonContext.accept(new JSONBaseVisitor<Object>() {
-            @Override
-            public Object visitObject(ObjectContext ctx) {
-                Object result = super.visitObject(ctx);
-                int startIndex = ctx.start.getStartIndex();
-                int stopIndex = ctx.stop.getStopIndex();
-                positions.add(new Position(startIndex, stopIndex - startIndex));
-                return result;
-            }
-
-            @Override
-            public Object visitArray(ArrayContext ctx) {
-                Object result = super.visitArray(ctx);
-                int startIndex = ctx.start.getStartIndex();
-                int stopIndex = ctx.stop.getStopIndex();
-                positions.add(new Position(startIndex, stopIndex - startIndex));
-                return result;
-            }
-        });
+        jsonContext.accept(new FoldingVisitor(positions));
 
         return positions;
     }
-
-    private boolean isJsonNodeType(JsonNode jsonNode, String ... jsonTypes) {
-
-        for (String jsonType : jsonTypes) {
-            if (jsonNode.getJsonType().equals(jsonType)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
 
 }
