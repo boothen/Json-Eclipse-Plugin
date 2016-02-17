@@ -55,8 +55,8 @@ class FoldingVisitor extends JSONBaseVisitor<Void> {
             return false;
         }
 
-        // Skip elements that span a single line only
-        return ctx.start.getLine() != ctx.stop.getLine();
+        // Skip elements that span less than two lines
+        return ctx.start.getLine() < ctx.stop.getLine() - 1;
     }
 }
 
