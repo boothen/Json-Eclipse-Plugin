@@ -15,8 +15,11 @@
  *******************************************************************************/
 package com.boothen.jsonedit.editor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,6 +29,7 @@ import org.eclipse.jface.text.ITextOperationTarget;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Position;
+import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.DefaultCharacterPairMatcher;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.IVerticalRuler;
@@ -36,7 +40,6 @@ import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.texteditor.TextOperationAction;
@@ -61,10 +64,7 @@ public class JsonTextEditor extends TextEditor {
     private JsonSourceViewerConfiguration viewerConfiguration;
     private JsonContentOutlinePage fOutlinePage;
 
-
     private ProjectionAnnotationModel annotationModel;
-    private ProjectionAnnotation[] oldAnnotations;
-    private boolean[] annotationCollapsedState;
     private boolean restoreCursorLocation = false;
     private int nodePositionOffset = 0;
     private int nodePosition = 0;
@@ -230,26 +230,35 @@ public class JsonTextEditor extends TextEditor {
         super.handlePreferenceStoreChanged(event);
     }
 
-    public void updateFoldingStructure(List<Position> positions)
-    {
-        ProjectionAnnotation[] annotations = new ProjectionAnnotation[positions.size()];
+    public void updateFoldingStructure(List<Position> newPositions) {
 
-        //this will hold the new annotations along
-        //with their corresponding positions
-        HashMap<ProjectionAnnotation, Position> newAnnotations = new HashMap<ProjectionAnnotation, Position>();
+        // this will hold the new annotations along with their corresponding positions
+        Map<Annotation, Position> additionMap = new HashMap<>();
+        List<Annotation> deletions = new ArrayList<>();
 
-        for (int i = 0; i < positions.size(); i++)
-        {
-            ProjectionAnnotation annotation = new ProjectionAnnotation();
-            newAnnotations.put(annotation,positions.get(i));
-            annotations[i] = annotation;
-            if (annotationCollapsedState != null && annotationCollapsedState.length > i && annotationCollapsedState[i]) {
-                annotation.markCollapsed();
+        // existing annotations will be removed so that only additions remain
+        List<Position> additions = new ArrayList<>(newPositions);
+
+        @SuppressWarnings("unchecked") // we can be sure that only Annotation instances are in the Iterable
+        Iterator<Annotation> it = annotationModel.getAnnotationIterator();
+        while (it.hasNext()) {
+            Annotation anno = it.next();
+            Position pos = annotationModel.getPosition(anno);
+            if (!additions.remove(pos)) {
+                // element is not present in the new list
+                deletions.add(anno);
             }
         }
 
-        annotationModel.modifyAnnotations(oldAnnotations,newAnnotations,null);
-        oldAnnotations = annotations;
+        for (Position pos : additions) {
+            additionMap.put(new ProjectionAnnotation(), pos);
+        }
+
+        // trigger modification event only if either additions or deletions contains an element
+        if (!deletions.isEmpty() || !additionMap.isEmpty()) {
+            Annotation[] deletionsArray = deletions.toArray(new Annotation[deletions.size()]);
+            annotationModel.modifyAnnotations(deletionsArray, additionMap, null);
+        }
     }
 
     public JsonContentOutlinePage getFOutlinePage() {
@@ -263,15 +272,6 @@ public class JsonTextEditor extends TextEditor {
         }
 
         restoreTextLocation();
-    }
-
-    public void storeOutlineState() {
-        if (oldAnnotations != null) {
-            annotationCollapsedState = new boolean[oldAnnotations.length];
-            for (int i = 0; i < oldAnnotations.length; i++) {
-                annotationCollapsedState[i] = oldAnnotations[i].isCollapsed();
-            }
-        }
     }
 
     public void storeTextLocation() {
