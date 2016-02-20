@@ -59,6 +59,21 @@ NUMBER
    ;
 
 
+// keywords
+
+TRUE  : 'true';
+FALSE : 'false';
+NULL  : 'null';
+
+// more constants
+
+BEGIN_ARRAY  : '[';
+END_ARRAY    : ']';
+BEGIN_OBJECT : '{';
+END_OBJECT   : '}';
+COMMA        : ',';
+COLON        : ':';
+
 fragment INT
    : '0' | [1-9] [0-9]*
    ;
