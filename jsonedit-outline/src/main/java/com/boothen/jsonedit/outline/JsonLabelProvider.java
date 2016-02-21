@@ -44,6 +44,7 @@ import com.boothen.jsonedit.type.JsonDocumentType;
  */
 public class JsonLabelProvider extends ColumnLabelProvider implements IStyledLabelProvider  {
 
+    private final JsonContextLabelVisitor contextLabelVisitor = new JsonContextLabelVisitor();
     private final JsonContextImageVisitor contextImageVisitor = new JsonContextImageVisitor();
 
     static {
@@ -62,7 +63,6 @@ public class JsonLabelProvider extends ColumnLabelProvider implements IStyledLab
     @Override
     public String getText(Object element) {
         return getStyledText(element).toString();
-
     }
 
     @Override
@@ -89,7 +89,7 @@ public class JsonLabelProvider extends ColumnLabelProvider implements IStyledLab
         StyledString styledString = new StyledString();
         if (element instanceof ParserRuleContext) {
             ParserRuleContext node = (ParserRuleContext) element;
-            return styledString.append("Rule " + node.getRuleIndex());
+            return contextLabelVisitor.visit(node);
         }
         return styledString;
     }

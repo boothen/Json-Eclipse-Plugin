@@ -12,6 +12,8 @@ import com.boothen.jsonedit.antlr.JSONBaseVisitor;
 import com.boothen.jsonedit.antlr.JSONParser;
 import com.boothen.jsonedit.antlr.JSONParser.ArrayContext;
 import com.boothen.jsonedit.antlr.JSONParser.ObjectContext;
+import com.boothen.jsonedit.antlr.JSONParser.PairContext;
+import com.boothen.jsonedit.antlr.JSONParser.ValueContext;
 
 /**
  * Visits tree nodes in the JsonContext depending on the node type. Does not recurse.
@@ -36,14 +38,26 @@ class JsonContextImageVisitor extends JSONBaseVisitor<Image> {
     }
 
     @Override
+    public Image visitPair(PairContext ctx) {
+        ValueContext value = ctx.value();
+        if (value.NUMBER() != null) {
+            return getCachedImage(NodeType.NUMBER);
+        }
+
+        if (value.STRING() != null) {
+            return getCachedImage(NodeType.STRING);
+        }
+        return super.visitPair(ctx);
+    }
+
+    @Override
     public Image visitTerminal(TerminalNode node) {
         switch (node.getSymbol().getType()) {
             case JSONParser.TRUE:
-                return getCachedImage(NodeType.TRUE);
+            case JSONParser.FALSE:
+                return getCachedImage(NodeType.BOOLEAN);
             case JSONParser.STRING:
                 return getCachedImage(NodeType.STRING);
-            case JSONParser.FALSE:
-                return getCachedImage(NodeType.TRUE);
             case JSONParser.NULL:
                 return getCachedImage(NodeType.NULL);
             default:

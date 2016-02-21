@@ -46,13 +46,7 @@ public class JsonContentProvider implements ITreeContentProvider {
     public Object[] getChildren(Object parentElement) {
         if (parentElement instanceof ParserRuleContext) {
             ParserRuleContext context = (ParserRuleContext) parentElement;
-            List<Object> children = new ArrayList<>();
-            for (int i = 0; i < context.getChildCount(); i++) {
-                ParseTree child = context.getChild(i);
-                if (matches(child)) {
-                    children.add(child);
-                }
-            }
+            List<ParseTree> children = context.accept(new JsonContextTreeVisitor());
             return children.toArray();
         }
 
@@ -61,22 +55,7 @@ public class JsonContentProvider implements ITreeContentProvider {
 
     @Override
     public boolean hasChildren(Object element) {
-        if (element instanceof ParserRuleContext) {
-            ParserRuleContext context = (ParserRuleContext) element;
-            for (int i = 0; i < context.getChildCount(); i++) {
-                ParseTree child = context.getChild(i);
-                if (matches(child)) {
-                    // there is at least one matching child
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private boolean matches(ParseTree child) {
-        return (child instanceof ParserRuleContext);
+        return getChildren(element).length > 0;
     }
 
     @Override

@@ -7,8 +7,7 @@ package com.boothen.jsonedit.outline;
 enum NodeType {
     OBJECT("JsonObject.gif", "BLUE", "WHITE"),
     ARRAY("JsonArray.gif", "BLUE", "WHITE"),
-    TRUE("JsonBoolean.gif", "BLACK", "WHITE"),
-    FALSE("JsonBoolean.gif", "BLACK", "WHITE"),
+    BOOLEAN("JsonBoolean.gif", "BLACK", "WHITE"),
     NULL("JsonNull.gif", "BLACK", "WHITE"),
     NUMBER("JsonNumber.gif", "BLUE", "WHITE"),
     STRING("JsonString.gif", "GREEN", "WHITE"),
