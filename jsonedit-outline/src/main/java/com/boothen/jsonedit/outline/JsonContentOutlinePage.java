@@ -4,9 +4,9 @@
  * Licensed under the Eclipse Public License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *   
+ *
  * https://eclipse.org/org/documents/epl-v10.html
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
+import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -37,6 +38,7 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
+import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.outline.node.JsonTreeNode;
 
@@ -48,36 +50,28 @@ import com.boothen.jsonedit.outline.node.JsonTreeNode;
  */
 public class JsonContentOutlinePage extends ContentOutlinePage implements ISelectionListener {
 
-    protected Object fInput;
+    protected JsonContext fInput;
     protected IDocumentProvider fDocumentProvider;
     protected ITextEditor fTextEditor;
-    protected JsonContentProvider fContentProvider;
 
     public JsonContentOutlinePage(IDocumentProvider provider, ITextEditor editor) {
         super();
         fDocumentProvider= provider;
         fTextEditor= editor;
-        fContentProvider = new JsonContentProvider(fDocumentProvider);
     }
 
-    /* (non-Javadoc)
-     * Method declared on ContentOutlinePage
-     */
     @Override
     public void createControl(Composite parent) {
-
         super.createControl(parent);
 
-        TreeViewer viewer= getTreeViewer();
-        viewer.setContentProvider(fContentProvider);
-        DelegatingStyledCellLabelProvider delegatingStyledCellLabelProvider = new DelegatingStyledCellLabelProvider(new JsonLabelProvider());
-        viewer.setLabelProvider(delegatingStyledCellLabelProvider);
+        TreeViewer viewer = getTreeViewer();
+        viewer.setContentProvider(new JsonContentProvider());
+        viewer.setLabelProvider(new DelegatingStyledCellLabelProvider(new JsonLabelProvider()));
+
         getSite().getPage().addPostSelectionListener(this);
 
         if (fInput != null) {
             viewer.setInput(fInput);
-            fContentProvider.setInput(fInput);
-
         }
     }
 
@@ -88,7 +82,7 @@ public class JsonContentOutlinePage extends ContentOutlinePage implements ISelec
     @Override
     public void dispose() {
 
-        getSite().getPage().removeSelectionListener(this);
+        getSite().getPage().removePostSelectionListener(this);
         super.dispose();
     }
 
@@ -126,9 +120,9 @@ public class JsonContentOutlinePage extends ContentOutlinePage implements ISelec
      *
      * @param input the input of this outline page
      */
-    public void setInput(Object input) {
+    public void setInput(JsonContext input) {
         fInput = input;
-        fContentProvider.setInput(fInput);
+        getTreeViewer().setInput(fInput);
         update();
     }
 
@@ -160,27 +154,14 @@ public class JsonContentOutlinePage extends ContentOutlinePage implements ISelec
             int start = textSelection.getOffset();
             int length = textSelection.getLength();
 
-            JsonTreeNode element = fContentProvider.findNearestElement(start, length);
-            if (element != null) {
-                element.setTextSelection(true);
-                getTreeViewer().reveal(element);
-                TreeSelection treeSelection = new TreeSelection(new TreePath(new Object[]{element}));
-                getTreeViewer().setSelection(treeSelection);
-            }
+//            JsonTreeNode element = fContentProvider.findNearestElement(start, length);
+//            if (element != null) {
+//                element.setTextSelection(true);
+//                getTreeViewer().reveal(element);
+//                TreeSelection treeSelection = new TreeSelection(new TreePath(new Object[]{element}));
+//                getTreeViewer().setSelection(treeSelection);
+//            }
         }
 
-    }
-
-    public void setJsonNodes(List<JsonNode> jsonNodes) {
-        fContentProvider.setJsonNodes(jsonNodes);
-        if (fContentProvider.rootObject == null) {
-            update();
-        } else {
-            TreeViewer viewer= getTreeViewer();
-
-            if (viewer != null) {
-                viewer.refresh();
-            }
-        }
     }
 }

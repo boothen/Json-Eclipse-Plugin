@@ -45,6 +45,7 @@ import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
+import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
 import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.outline.JsonContentOutlinePage;
 import com.boothen.jsonedit.preferences.JsonPreferences;
@@ -184,9 +185,7 @@ public class JsonTextEditor extends TextEditor {
     public Object getAdapter(@SuppressWarnings("rawtypes") Class required) {
         if (IContentOutlinePage.class.equals(required)) {
             if (fOutlinePage == null) {
-                fOutlinePage= new JsonContentOutlinePage(getDocumentProvider(), this);
-                if (getEditorInput() != null)
-                    fOutlinePage.setInput(getEditorInput());
+                fOutlinePage = new JsonContentOutlinePage(getDocumentProvider(), this);
             }
             return fOutlinePage;
         }
@@ -265,10 +264,10 @@ public class JsonTextEditor extends TextEditor {
         return fOutlinePage;
     }
 
-    public void updateContentOutlinePage(List<JsonNode> jsonNodes) {
-        this.jsonNodes = jsonNodes;
+    public void updateContentOutlinePage(JsonContext jsonContext) {
+//        this.jsonNodes = jsonContext;
         if (fOutlinePage != null) {
-            fOutlinePage.setJsonNodes(jsonNodes);
+            fOutlinePage.setInput(jsonContext);
         }
 
         restoreTextLocation();

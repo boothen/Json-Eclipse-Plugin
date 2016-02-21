@@ -95,7 +95,7 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
             Display.getDefault().asyncExec(new Runnable() {
                 public void run() {
                     textEditor.updateFoldingStructure(fPositions);
-//                    textEditor.updateContentOutlinePage(result.getTree());
+                    textEditor.updateContentOutlinePage(result.getTree());
                 }
 
             });
