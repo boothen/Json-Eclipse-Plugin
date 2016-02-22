@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.jface.resource.JFaceResources;
@@ -33,6 +34,7 @@ import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 
+import com.boothen.jsonedit.antlr.JSONParser.ArrayContext;
 import com.boothen.jsonedit.outline.node.JsonTreeNode;
 import com.boothen.jsonedit.type.JsonDocumentType;
 
@@ -67,18 +69,12 @@ public class JsonLabelProvider extends ColumnLabelProvider implements IStyledLab
 
     @Override
     public Image getImage(Object element) {
-        if (element instanceof ParserRuleContext) {
-            ParserRuleContext context = (ParserRuleContext) element;
+        if (element instanceof ParseTree) {
+            ParseTree context = (ParseTree) element;
             return context.accept(contextImageVisitor);
         }
 
         return null;
-    }
-
-    @Override
-    public void dispose() {
-        contextImageVisitor.dispose();
-        super.dispose();
     }
 
     /**
@@ -87,11 +83,18 @@ public class JsonLabelProvider extends ColumnLabelProvider implements IStyledLab
     @Override
     public StyledString getStyledText(Object element) {
         StyledString styledString = new StyledString();
-        if (element instanceof ParserRuleContext) {
-            ParserRuleContext node = (ParserRuleContext) element;
+        if (element instanceof ParseTree) {
+            ParseTree node = (ParseTree) element;
             return contextLabelVisitor.visit(node);
         }
         return styledString;
     }
+
+    @Override
+    public void dispose() {
+        contextImageVisitor.dispose();
+        super.dispose();
+    }
+
 
 }

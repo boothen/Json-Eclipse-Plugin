@@ -40,19 +40,20 @@ class JsonContextImageVisitor extends JSONBaseVisitor<Image> {
     @Override
     public Image visitPair(PairContext ctx) {
         ValueContext value = ctx.value();
-        if (value.NUMBER() != null) {
-            return getCachedImage(NodeType.NUMBER);
+
+        TerminalNode node = value.getChild(TerminalNode.class, 0);
+        if (node != null) {
+            return visitTerminal(node);
         }
 
-        if (value.STRING() != null) {
-            return getCachedImage(NodeType.STRING);
-        }
-        return super.visitPair(ctx);
+        return visit(value.getChild(0));
     }
 
     @Override
     public Image visitTerminal(TerminalNode node) {
         switch (node.getSymbol().getType()) {
+        case JSONParser.NUMBER:
+            return getCachedImage(NodeType.NUMBER);
             case JSONParser.TRUE:
             case JSONParser.FALSE:
                 return getCachedImage(NodeType.BOOLEAN);
