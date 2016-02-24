@@ -185,7 +185,7 @@ public class JsonTextEditor extends TextEditor {
     public Object getAdapter(@SuppressWarnings("rawtypes") Class required) {
         if (IContentOutlinePage.class.equals(required)) {
             if (fOutlinePage == null) {
-                fOutlinePage = new JsonContentOutlinePage(getDocumentProvider(), this);
+                fOutlinePage = new JsonContentOutlinePage(this);
             }
             return fOutlinePage;
         }
