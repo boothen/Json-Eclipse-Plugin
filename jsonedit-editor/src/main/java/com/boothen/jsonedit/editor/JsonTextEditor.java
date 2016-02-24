@@ -62,7 +62,6 @@ public class JsonTextEditor extends TextEditor {
     private ProjectionAnnotationModel annotationModel;
 
     public JsonTextEditor() {
-        super();
         viewerConfiguration = new JsonSourceViewerConfiguration(this);
         setSourceViewerConfiguration(viewerConfiguration);
     }
@@ -150,20 +149,6 @@ public class JsonTextEditor extends TextEditor {
     }
 
     /** The <code>JavaEditor</code> implementation of this
-     * <code>AbstractTextEditor</code> method performs sets the
-     * input of the outline page after AbstractTextEditor has set input.
-     *
-     * @param input the editor input
-     * @throws CoreException in case the input can not be set
-     */
-    @Override
-    public void doSetInput(IEditorInput input) throws CoreException {
-        super.doSetInput(input);
-        if (fOutlinePage != null)
-            fOutlinePage.setInput(input);
-    }
-
-    /** The <code>JavaEditor</code> implementation of this
      * <code>AbstractTextEditor</code> method performs gets
      * the java content outline page if request is for a an
      * outline page.
@@ -174,10 +159,7 @@ public class JsonTextEditor extends TextEditor {
     @Override
     public Object getAdapter(@SuppressWarnings("rawtypes") Class required) {
         if (IContentOutlinePage.class.equals(required)) {
-            if (fOutlinePage == null) {
-                fOutlinePage = new JsonContentOutlinePage(this);
-            }
-            return fOutlinePage;
+            return getOutlinePage();
         }
 
         return super.getAdapter(required);
@@ -250,17 +232,18 @@ public class JsonTextEditor extends TextEditor {
         }
     }
 
-    public JsonContentOutlinePage getFOutlinePage() {
-        return fOutlinePage;
-    }
-
     public void updateContentOutlinePage(JsonContext jsonContext) {
-        if (fOutlinePage != null) {
-            fOutlinePage.setInput(jsonContext);
-        }
+        getOutlinePage().setInput(jsonContext);
     }
 
     public void updateTabWidth(int tabWidth) {
         getSourceViewer().getTextWidget().setTabs(tabWidth);
+    }
+
+    private JsonContentOutlinePage getOutlinePage() {
+        if (fOutlinePage == null) {
+            fOutlinePage = new JsonContentOutlinePage(this);
+        }
+        return fOutlinePage;
     }
 }

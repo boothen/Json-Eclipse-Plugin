@@ -22,24 +22,11 @@ import org.eclipse.jface.text.Position;
 
 import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
 
-/**
- * @author Matt Garner
- *
- */
 public class JsonFoldingPositionsBuilder {
 
-    private JsonContext jsonContext;
-
-    public JsonFoldingPositionsBuilder(JsonContext jsonContext) {
-        this.jsonContext = jsonContext;
-    }
-
-    public List<Position> buildFoldingPositions() {
-
-        final List<Position> positions = new LinkedList<Position>();
-
+    public List<Position> getFoldingPositions(JsonContext jsonContext) {
+        List<Position> positions = new LinkedList<Position>();
         jsonContext.accept(new FoldingVisitor(positions));
-
         return positions;
     }
 

@@ -104,6 +104,7 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
             if (control != null && !control.isDisposed()) {
                 control.setRedraw(false);
                 viewer.setInput(fInput);
+                viewer.expandToLevel(2);
                 control.setRedraw(true);
             }
         }

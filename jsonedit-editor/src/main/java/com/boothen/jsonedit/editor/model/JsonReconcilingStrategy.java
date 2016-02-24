@@ -30,6 +30,7 @@ import org.eclipse.jface.text.reconciler.IReconcilingStrategyExtension;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.statushandlers.StatusManager;
 
+import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
 import com.boothen.jsonedit.editor.Activator;
 import com.boothen.jsonedit.editor.JsonTextEditor;
 import com.boothen.jsonedit.folding.JsonFoldingPositionsBuilder;
@@ -42,57 +43,63 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
 
     private IDocument fDocument;
 
-    @Override
-    public void reconcile(IRegion partition) {
-        initialReconcile();
-    }
+    private IProgressMonitor monitor;
 
-    @Override
-    public void reconcile(DirtyRegion dirtyRegion, IRegion subRegion) {
-        initialReconcile();
+    private JsonFoldingPositionsBuilder foldingPositionsBuilder = new JsonFoldingPositionsBuilder();
+
+    public JsonReconcilingStrategy(JsonTextEditor textEditor) {
+        this.textEditor = textEditor;
     }
 
     @Override
     public void setDocument(IDocument document) {
         this.fDocument = document;
-
-    }
-
-    @Override
-    public void initialReconcile() {
-        try {
-//            fDocument.removePositionCategory(JsonEntryBuilder.JSON_ELEMENTS);
-//            fDocument.addPositionCategory(JsonEntryBuilder.JSON_ELEMENTS);
-            scan(0, fDocument.getLength());
-        } catch (Exception e) {
-            StatusManager.getManager().handle(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage()));
-        }
     }
 
     @Override
     public void setProgressMonitor(IProgressMonitor monitor) {
-
+        this.monitor = monitor;
     }
 
-    private void scan(int offset, int length) throws IOException {
-        final ParseResult result = AntlrAdapter.convert(fDocument);
+    @Override
+    public void initialReconcile() {
+        reconcileSafely(0, fDocument.getLength());
+    }
 
-//        fDocument.addPosition(JsonEntryBuilder.JSON_ELEMENTS, new TypedPosition(jsonPartitionScanner.getTokenOffset(), jsonPartitionScanner.getTokenLength(), (String) nextToken.getData()));
+    @Override
+    public void reconcile(IRegion partition) {
+        reconcileSafely(partition.getOffset(), partition.getLength());
+    }
 
-        final List<Position> fPositions = new JsonFoldingPositionsBuilder(result.getTree()).buildFoldingPositions();
+    @Override
+    public void reconcile(DirtyRegion dirtyRegion, IRegion subRegion) {
+        reconcileSafely(subRegion.getOffset(), subRegion.getLength());
+    }
 
-        if (textEditor != null) {
-            Display.getDefault().asyncExec(new Runnable() {
-                public void run() {
-                    textEditor.updateFoldingStructure(fPositions);
-                    textEditor.updateContentOutlinePage(result.getTree());
-                }
-
-            });
+    private void reconcileSafely(int offset, int length) {
+        try {
+            monitor.beginTask("Updating syntax tree", IProgressMonitor.UNKNOWN);
+            reconcile(offset, length);
+        } catch (Exception e) {
+            StatusManager.getManager().handle(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.toString()));
+        } finally {
+            monitor.done();
         }
     }
 
-    public void setTextEditor(JsonTextEditor textEditor) {
-        this.textEditor = textEditor;
+    private void reconcile(int offset, int length) throws IOException {
+        final ParseResult result = AntlrAdapter.convert(fDocument);
+        final JsonContext syntaxTree = result.getTree();
+        final List<Position> fPositions = foldingPositionsBuilder.getFoldingPositions(syntaxTree);
+
+        if (textEditor != null) {
+            Display.getDefault().asyncExec(new Runnable() {
+                @Override
+                public void run() {
+                    textEditor.updateFoldingStructure(fPositions);
+                    textEditor.updateContentOutlinePage(syntaxTree);
+                }
+            });
+        }
     }
 }

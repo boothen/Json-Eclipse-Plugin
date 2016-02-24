@@ -37,10 +37,7 @@ import com.boothen.jsonedit.text.JsonStringScanner;
 import com.boothen.jsonedit.text.LineEndingUtil;
 
 /**
- * JsonSourceViewerConfiguration manages the coloring of the text.
- *
- * @author Matt Garner
- *
+ * Configures the text editor.
  */
 public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration {
 
@@ -77,9 +74,8 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
 
     @Override
     public IReconciler getReconciler(ISourceViewer sourceViewer) {
-        JsonReconcilingStrategy strategy = new JsonReconcilingStrategy();
-        strategy.setTextEditor(textEditor);
-        MonoReconciler reconciler = new MonoReconciler(strategy,false);
+        JsonReconcilingStrategy strategy = new JsonReconcilingStrategy(textEditor);
+        MonoReconciler reconciler = new MonoReconciler(strategy, false);
         return reconciler;
     }
 
