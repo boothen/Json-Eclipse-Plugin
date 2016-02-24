@@ -21,28 +21,18 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.BadPositionCategoryException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Position;
-import org.eclipse.jface.text.TypedPosition;
 import org.eclipse.jface.text.reconciler.DirtyRegion;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategy;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategyExtension;
-import org.eclipse.jface.text.rules.IToken;
-import org.eclipse.jface.util.StatusHandler;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.statushandlers.StatusManager;
 
-import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
-import com.boothen.jsonedit.core.model.jsonnode.JsonNodeBuilder;
 import com.boothen.jsonedit.editor.Activator;
 import com.boothen.jsonedit.editor.JsonTextEditor;
 import com.boothen.jsonedit.folding.JsonFoldingPositionsBuilder;
-import com.boothen.jsonedit.model.entry.JsonEntry;
-import com.boothen.jsonedit.model.entry.JsonEntryBuilder;
-import com.boothen.jsonedit.type.JsonDocumentType;
 import com.boothen.jsonedit.model.AntlrAdapter;
 import com.boothen.jsonedit.model.AntlrAdapter.ParseResult;
 

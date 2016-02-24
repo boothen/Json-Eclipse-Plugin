@@ -1,13 +1,11 @@
 package com.boothen.jsonedit.editor;
 
-import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import com.boothen.jsonedit.log.JsonLog;
-import com.boothen.jsonedit.outline.node.JsonTreeNode;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -52,11 +50,5 @@ public class Activator extends AbstractUIPlugin {
      */
     public static Activator getDefault() {
         return plugin;
-    }
-
-    @Override
-    protected void initializeImageRegistry(ImageRegistry reg) {
-        JsonTreeNode.initializeImageRegistry(reg);
-        super.initializeImageRegistry(reg);
     }
 }

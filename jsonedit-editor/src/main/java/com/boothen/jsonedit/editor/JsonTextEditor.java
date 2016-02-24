@@ -21,13 +21,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.text.ITextOperationTarget;
-import org.eclipse.jface.text.ITextSelection;
-import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.DefaultCharacterPairMatcher;
@@ -39,14 +35,12 @@ import org.eclipse.jface.text.source.projection.ProjectionSupport;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
-import com.boothen.jsonedit.core.model.jsonnode.JsonNode;
 import com.boothen.jsonedit.outline.JsonContentOutlinePage;
 import com.boothen.jsonedit.preferences.JsonPreferences;
 import com.boothen.jsonedit.preferences.JsonPreferencesPlugin;
@@ -66,10 +60,6 @@ public class JsonTextEditor extends TextEditor {
     private JsonContentOutlinePage fOutlinePage;
 
     private ProjectionAnnotationModel annotationModel;
-    private boolean restoreCursorLocation = false;
-    private int nodePositionOffset = 0;
-    private int nodePosition = 0;
-    private List<JsonNode> jsonNodes;
 
     public JsonTextEditor() {
         super();
@@ -265,51 +255,8 @@ public class JsonTextEditor extends TextEditor {
     }
 
     public void updateContentOutlinePage(JsonContext jsonContext) {
-//        this.jsonNodes = jsonContext;
         if (fOutlinePage != null) {
             fOutlinePage.setInput(jsonContext);
-        }
-
-        restoreTextLocation();
-    }
-
-    public void storeTextLocation() {
-
-        ITextSelection iTextSelection = (ITextSelection) this.getSite().getSelectionProvider().getSelection();
-        int textLocation = iTextSelection.getOffset();
-        if (jsonNodes != null) {
-            for (int i = 0; i < jsonNodes.size(); i++) {
-                JsonNode jsonNode = jsonNodes.get(i);
-                if (jsonNode.containsLocation(textLocation)) {
-                    nodePosition = i;
-                    nodePositionOffset = textLocation - jsonNode.getStart();
-                    break;
-                }
-            }
-        }
-
-        restoreCursorLocation = true;
-    }
-
-    public void restoreTextLocation() {
-
-        if (!restoreCursorLocation) {
-            return;
-        }
-
-        restoreCursorLocation = false;
-
-        ITextOperationTarget target = (ITextOperationTarget) this.getAdapter(ITextOperationTarget.class);
-        if (!(target instanceof ITextViewer)) {
-            return ;
-        }
-        ITextViewer textViewer = (ITextViewer) target;
-        if (jsonNodes != null && jsonNodes.size() > nodePosition) {
-            JsonNode node = jsonNodes.get(nodePosition);
-            if (node != null) {
-                int textLocation = node.getStart() + nodePositionOffset;
-                textViewer.getTextWidget().setSelection(textLocation);
-            }
         }
     }
 

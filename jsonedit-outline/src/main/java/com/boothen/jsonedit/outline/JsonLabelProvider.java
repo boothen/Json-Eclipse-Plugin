@@ -19,13 +19,7 @@
 package com.boothen.jsonedit.outline;
 
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -34,15 +28,8 @@ import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 
-import com.boothen.jsonedit.antlr.JSONParser.ArrayContext;
-import com.boothen.jsonedit.outline.node.JsonTreeNode;
-import com.boothen.jsonedit.type.JsonDocumentType;
-
 /**
  * JsonLabelProvider provides the label format for each element in the tree.
- *
- * @author Matt Garner
- *
  */
 public class JsonLabelProvider extends ColumnLabelProvider implements IStyledLabelProvider  {
 
