@@ -18,6 +18,10 @@
  */
 package com.boothen.jsonedit.outline;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -27,12 +31,13 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
@@ -47,9 +52,12 @@ import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
 public class JsonContentOutlinePage extends ContentOutlinePage {
 
     private JsonContext fInput;
+    private TreeFlattener treeFlattener;
     private ITextEditor fTextEditor;
     private ISelectionListener textListener = new MyTextListener();
     private ISelectionChangedListener treeListener = new MyTreeListener();
+    private Set<Object> treeElements = new HashSet<>();
+    private boolean textHasChanged;
 
     public JsonContentOutlinePage(ITextEditor editor) {
         fTextEditor = editor;
@@ -60,16 +68,16 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
         super.createControl(parent);
 
         TreeViewer viewer = getTreeViewer();
-        viewer.setContentProvider(new JsonContentProvider());
+        JsonContentProvider provider = new JsonContentProvider();
+        viewer.setContentProvider(provider);
         viewer.setLabelProvider(new DelegatingStyledCellLabelProvider(new JsonLabelProvider()));
+        viewer.setInput(fInput);
+
+        treeFlattener = new TreeFlattener(provider);
 
         // TODO: is it equal to fTextEditor.getSite().getPage() ?
         getSite().getPage().addPostSelectionListener(textListener);
         addSelectionChangedListener(treeListener);
-
-        if (fInput != null) {
-            viewer.setInput(fInput);
-        }
     }
 
     /**
@@ -89,7 +97,6 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
      */
     public void setInput(JsonContext input) {
         fInput = input;
-        getTreeViewer().setInput(fInput);
         update();
     }
 
@@ -104,6 +111,9 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
             if (control != null && !control.isDisposed()) {
                 control.setRedraw(false);
                 viewer.setInput(fInput);
+                treeElements.clear();
+                List<Object> elements = treeFlattener.flatten(fInput);
+                treeElements.addAll(elements);
                 viewer.expandToLevel(2);
                 control.setRedraw(true);
             }
@@ -118,8 +128,13 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
 
         @Override
         public void selectionChanged(SelectionChangedEvent event) {
-            ISelection selection = event.getSelection();
+            if (textHasChanged) {
+                // this method is called from MyTextListener#selectionChanged
+                // avoid getting caught in an infinite loop triggering text/tree selection
+                return;
+            }
 
+            ISelection selection = event.getSelection();
             if (selection.isEmpty())
                 fTextEditor.resetHighlightRange();
             else {
@@ -173,11 +188,16 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
                 int start = textSelection.getOffset();
                 int length = textSelection.getLength();
 
-//                ParseTree element = fInput.accept(new JsonContextTokenFinder(start, start + length - 1));
-//                if (element != null) {
-//                    getTreeViewer().reveal(element);
-//                    getTreeViewer().setSelection(new TreeSelection(new TreePath(new Object[] { element })));
-//                }
+                ParseTree element = fInput.accept(new JsonContextTokenFinder(start, start + length - 1));
+                while (element != null && !treeElements.contains(element)) {
+                    element = element.getParent();
+                }
+                if (element != null) {
+                    textHasChanged = true;
+                    getTreeViewer().reveal(element);
+                    getTreeViewer().setSelection(new TreeSelection(new TreePath(new Object[] { element })));
+                    textHasChanged = false;
+                }
             }
 
         }

@@ -18,7 +18,6 @@
  */
 package com.boothen.jsonedit.outline;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.antlr.v4.runtime.ParserRuleContext;
