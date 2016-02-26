@@ -1,6 +1,7 @@
 package com.boothen.jsonedit.outline;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -44,7 +45,18 @@ public class JsonContextTokenFinder extends JSONBaseVisitor<ParseTree> {
         return node;
     }
 
-    private boolean fullyInside(RuleNode treeNode) {
+    @Override
+    public ParseTree visitTerminal(TerminalNode node) {
+        return fullyInside(node) ? node : null;
+    }
+
+    @Override
+    public ParseTree visitErrorNode(ErrorNode node) {
+        // TODO examine what to do here
+        return super.visitErrorNode(node);
+    }
+
+    private boolean fullyInside(ParseTree treeNode) {
         int start = -1;
         int stop = -1;
         if (treeNode instanceof ParserRuleContext) {

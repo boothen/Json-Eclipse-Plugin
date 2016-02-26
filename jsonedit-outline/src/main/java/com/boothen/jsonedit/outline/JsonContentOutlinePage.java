@@ -188,7 +188,7 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
                 int start = textSelection.getOffset();
                 int length = textSelection.getLength();
 
-                ParseTree element = fInput.accept(new JsonContextTokenFinder(start, start + length - 1));
+                ParseTree element = fInput.accept(new JsonContextTokenFinder(start, start + length));
                 while (element != null && !treeElements.contains(element)) {
                     element = element.getParent();
                 }
