@@ -1,12 +1,13 @@
 package com.boothen.jsonedit.outline;
 
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import com.boothen.jsonedit.antlr.JSONBaseVisitor;
+import com.boothen.jsonedit.model.ParseTreeInfo;
+import com.boothen.jsonedit.model.Segment;
 
 /**
  * Recurses into tree finding the smallest node that fully contains the specified text segment.
@@ -57,19 +58,7 @@ public class JsonContextTokenFinder extends JSONBaseVisitor<ParseTree> {
     }
 
     private boolean fullyInside(ParseTree treeNode) {
-        int start = -1;
-        int stop = -1;
-        if (treeNode instanceof ParserRuleContext) {
-            ParserRuleContext ctx = (ParserRuleContext) treeNode;
-            start = ctx.start.getStartIndex();
-            stop = ctx.stop.getStopIndex();
-        }
-        if (treeNode instanceof TerminalNode) {
-            TerminalNode t = (TerminalNode) treeNode;
-            start = t.getSymbol().getStartIndex();
-            stop = t.getSymbol().getStopIndex();
-        }
-
-        return (start <= textStart && textStop <= stop);
+        Segment segment = ParseTreeInfo.getSegment(treeNode);
+        return (segment.getStart() <= textStart && textStop <= segment.getStop());
     }
 }

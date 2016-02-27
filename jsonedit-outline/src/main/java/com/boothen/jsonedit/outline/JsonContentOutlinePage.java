@@ -42,6 +42,8 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
 import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
+import com.boothen.jsonedit.model.ParseTreeInfo;
+import com.boothen.jsonedit.model.Segment;
 
 /**
  * JsonContentOutlinePage manages the outline view of the Json.
@@ -140,24 +142,10 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
             else {
                 ParseTree treeNode = (ParseTree) ((IStructuredSelection) selection).getFirstElement();
 
-                // TODO: Duplicate: The following snippet exists in JsonContextTokenFinder.fullyInside() as well
-                int start = -1;
-                int stop = -1;
-                if (treeNode instanceof ParserRuleContext) {
-                    ParserRuleContext ctx = (ParserRuleContext) treeNode;
-                    start = ctx.start.getStartIndex();
-                    stop = ctx.stop.getStopIndex();
-                }
-                if (treeNode instanceof TerminalNode) {
-                    TerminalNode t = (TerminalNode) treeNode;
-                    start = t.getSymbol().getStartIndex();
-                    stop = t.getSymbol().getStopIndex();
-                }
-                // -------------- end
-
                 try {
-                    if (start >= 0) {
-                        fTextEditor.selectAndReveal(start, stop - start + 1);
+                    Segment segment = ParseTreeInfo.getSegment(treeNode);
+                    if (segment != null) {
+                        fTextEditor.selectAndReveal(segment.getStart(), segment.getLength());
                     }
                 } catch (IllegalArgumentException x) {
                     fTextEditor.resetHighlightRange();
