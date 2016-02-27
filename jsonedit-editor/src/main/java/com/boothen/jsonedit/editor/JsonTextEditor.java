@@ -36,6 +36,7 @@ import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.texteditor.ChainedPreferenceStore;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
@@ -67,14 +68,33 @@ public class JsonTextEditor extends TextEditor {
     }
 
     @Override
-    protected void createActions() {
-        super.createActions();
+    public void createPartControl(Composite parent) {
 
-        Action action = new TextOperationAction(Messages.RESOURCE_BUNDLE, "Format.", this, ISourceViewer.FORMAT);
-        action.setActionDefinitionId(Constants.FORMAT_ACTION_ID);
-        setAction(Constants.FORMAT_ACTION_ID, action);
-        markAsStateDependentAction(Constants.FORMAT_ACTION_ID, true);
-        markAsSelectionDependentAction(Constants.FORMAT_ACTION_ID, true);
+        super.createPartControl(parent);
+
+        ProjectionViewer viewer =(ProjectionViewer) getSourceViewer();
+        ProjectionSupport projectionSupport = new ProjectionSupport(viewer,getAnnotationAccess(),getSharedColors());
+        projectionSupport.install();
+
+        //turn projection mode on
+        viewer.doOperation(ProjectionViewer.TOGGLE);
+
+        annotationModel = viewer.getProjectionAnnotationModel();
+
+        SourceViewerDecorationSupport support = getSourceViewerDecorationSupport(viewer);
+        support.install(getPreferenceStore());
+    }
+
+    @Override
+    protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
+
+        fAnnotationAccess = getAnnotationAccess();
+        fOverviewRuler = createOverviewRuler(getSharedColors());
+
+        ISourceViewer viewer = new ProjectionViewer(parent, ruler, getOverviewRuler(), isOverviewRulerVisible(), styles);
+        // ensure decoration support has been created and configured.
+        getSourceViewerDecorationSupport(viewer);
+        return viewer;
     }
 
     @Override
@@ -96,8 +116,22 @@ public class JsonTextEditor extends TextEditor {
 
         setEditorContextMenuId("#JsonTextEditorContext"); //$NON-NLS-1$
         setRulerContextMenuId("#JsonTextRulerContext"); //$NON-NLS-1$
-        IPreferenceStore store = JsonPreferencesPlugin.getDefault().getPreferenceStore();
-        setPreferenceStore(store);
+
+        // chain default preference store to get reasonable default values (e.g. for annotations)
+        IPreferenceStore store = getPreferenceStore();
+        IPreferenceStore myStore = JsonPreferencesPlugin.getDefault().getPreferenceStore();
+        setPreferenceStore(new ChainedPreferenceStore(new IPreferenceStore[] { store, myStore }));
+    }
+
+    @Override
+    protected void createActions() {
+        super.createActions();
+
+        Action action = new TextOperationAction(Messages.RESOURCE_BUNDLE, "Format.", this, ISourceViewer.FORMAT);
+        action.setActionDefinitionId(Constants.FORMAT_ACTION_ID);
+        setAction(Constants.FORMAT_ACTION_ID, action);
+        markAsStateDependentAction(Constants.FORMAT_ACTION_ID, true);
+        markAsSelectionDependentAction(Constants.FORMAT_ACTION_ID, true);
     }
 
     @Override
@@ -163,36 +197,6 @@ public class JsonTextEditor extends TextEditor {
         }
 
         return super.getAdapter(required);
-    }
-
-    @Override
-    public void createPartControl(Composite parent) {
-
-        super.createPartControl(parent);
-
-        ProjectionViewer viewer =(ProjectionViewer) getSourceViewer();
-        ProjectionSupport projectionSupport = new ProjectionSupport(viewer,getAnnotationAccess(),getSharedColors());
-        projectionSupport.install();
-
-        //turn projection mode on
-        viewer.doOperation(ProjectionViewer.TOGGLE);
-
-        annotationModel = viewer.getProjectionAnnotationModel();
-
-        SourceViewerDecorationSupport support = getSourceViewerDecorationSupport(viewer);
-        support.install(getPreferenceStore());
-    }
-
-    @Override
-    protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
-
-        fAnnotationAccess = getAnnotationAccess();
-        fOverviewRuler = createOverviewRuler(getSharedColors());
-
-        ISourceViewer viewer = new ProjectionViewer(parent, ruler, getOverviewRuler(), isOverviewRulerVisible(), styles);
-        // ensure decoration support has been created and configured.
-        getSourceViewerDecorationSupport(viewer);
-        return viewer;
     }
 
     @Override
