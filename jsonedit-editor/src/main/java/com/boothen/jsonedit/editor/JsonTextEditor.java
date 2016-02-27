@@ -87,14 +87,9 @@ public class JsonTextEditor extends TextEditor {
 
     @Override
     protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
-
-        fAnnotationAccess = getAnnotationAccess();
-        fOverviewRuler = createOverviewRuler(getSharedColors());
-
-        ISourceViewer viewer = new ProjectionViewer(parent, ruler, getOverviewRuler(), isOverviewRulerVisible(), styles);
-        // ensure decoration support has been created and configured.
-        getSourceViewerDecorationSupport(viewer);
-        return viewer;
+        // A projection source viewer is a source viewer which supports multiple
+        // visible regions which can dynamically be changed (aka document folding).
+        return new ProjectionViewer(parent, ruler, getOverviewRuler(), isOverviewRulerVisible(), styles);
     }
 
     @Override

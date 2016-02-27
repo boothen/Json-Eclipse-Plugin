@@ -31,6 +31,8 @@ import org.eclipse.jface.viewers.Viewer;
  */
 public class JsonContentProvider implements ITreeContentProvider {
 
+    private final JsonContextTreeFilter treeFilter = new JsonContextTreeFilter();
+
     @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
         // must be implemented
@@ -45,7 +47,7 @@ public class JsonContentProvider implements ITreeContentProvider {
     public Object[] getChildren(Object parentElement) {
         if (parentElement instanceof ParserRuleContext) {
             ParserRuleContext context = (ParserRuleContext) parentElement;
-            List<ParseTree> children = context.accept(new JsonContextTreeVisitor());
+            List<ParseTree> children = context.accept(treeFilter);
             return children.toArray();
         }
 
@@ -59,12 +61,7 @@ public class JsonContentProvider implements ITreeContentProvider {
 
     @Override
     public Object getParent(Object element) {
-        if (element instanceof ParserRuleContext) {
-            ParserRuleContext context = (ParserRuleContext) element;
-            return context.getParent();
-        }
-
-        return null;
+        return treeFilter.getParent((ParseTree) element);
     }
 
     @Override
