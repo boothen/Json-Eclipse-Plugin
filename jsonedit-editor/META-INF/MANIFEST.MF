@@ -26,7 +26,8 @@ Require-Bundle: jsonedit-core;bundle-version="0.9.8",
  org.eclipse.equinox.preferences,
  org.eclipse.ui.workbench,
  org.eclipse.ui.ide,
- org.eclipse.ui.workbench.texteditor
+ org.eclipse.ui.workbench.texteditor,
+ org.antlr.antlr4-runtime-osgi
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Boothen Technology

@@ -42,6 +42,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
 import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
+import com.boothen.jsonedit.model.JsonContextTokenFinder;
 import com.boothen.jsonedit.model.ParseTreeInfo;
 import com.boothen.jsonedit.model.Segment;
 
@@ -77,8 +78,7 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
 
         treeFlattener = new TreeFlattener(provider);
 
-        // TODO: is it equal to fTextEditor.getSite().getPage() ?
-        getSite().getPage().addPostSelectionListener(textListener);
+        fTextEditor.getSite().getPage().addPostSelectionListener(textListener);
         addSelectionChangedListener(treeListener);
     }
 
@@ -87,7 +87,7 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
      */
     @Override
     public void dispose() {
-        getSite().getPage().removePostSelectionListener(textListener);
+        fTextEditor.getSite().getPage().removePostSelectionListener(textListener);
         removeSelectionChangedListener(treeListener);
         super.dispose();
     }
@@ -167,9 +167,6 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
             if (fInput == null) {
                 return;
             }
-
-            // TODO: avoid getting caught in an infinite loop
-            // (text selection change <-> tree selection change)
 
             if (selection instanceof ITextSelection) {
                 ITextSelection textSelection = (ITextSelection) selection;

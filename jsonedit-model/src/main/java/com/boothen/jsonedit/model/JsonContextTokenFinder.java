@@ -1,4 +1,4 @@
-package com.boothen.jsonedit.outline;
+package com.boothen.jsonedit.model;
 
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -6,8 +6,6 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import com.boothen.jsonedit.antlr.JSONBaseVisitor;
-import com.boothen.jsonedit.model.ParseTreeInfo;
-import com.boothen.jsonedit.model.Segment;
 
 /**
  * Recurses into tree finding the smallest node that fully contains the specified text segment.

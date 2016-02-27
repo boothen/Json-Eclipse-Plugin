@@ -57,13 +57,14 @@ public class JsonTextEditor extends TextEditor {
     private final static char[] PAIRS= { '{', '}', '[', ']' };
 
     private DefaultCharacterPairMatcher pairsMatcher = new DefaultCharacterPairMatcher(PAIRS);
-    private JsonSourceViewerConfiguration viewerConfiguration;
+    private JsonSourceViewerConfiguration viewerConfiguration = new JsonSourceViewerConfiguration(this);
+    private RangeHighlighter rangeHighlighter = new RangeHighlighter(this);
     private JsonContentOutlinePage fOutlinePage;
 
     private ProjectionAnnotationModel annotationModel;
 
+
     public JsonTextEditor() {
-        viewerConfiguration = new JsonSourceViewerConfiguration(this);
         setSourceViewerConfiguration(viewerConfiguration);
     }
 
@@ -72,17 +73,19 @@ public class JsonTextEditor extends TextEditor {
 
         super.createPartControl(parent);
 
-        ProjectionViewer viewer =(ProjectionViewer) getSourceViewer();
+        ProjectionViewer viewer = (ProjectionViewer) getSourceViewer();
         ProjectionSupport projectionSupport = new ProjectionSupport(viewer,getAnnotationAccess(),getSharedColors());
         projectionSupport.install();
 
-        //turn projection mode on
+        // turn projection mode on
         viewer.doOperation(ProjectionViewer.TOGGLE);
 
         annotationModel = viewer.getProjectionAnnotationModel();
 
         SourceViewerDecorationSupport support = getSourceViewerDecorationSupport(viewer);
         support.install(getPreferenceStore());
+
+        getSite().getPage().addPostSelectionListener(rangeHighlighter);
     }
 
     @Override
@@ -138,6 +141,8 @@ public class JsonTextEditor extends TextEditor {
             pairsMatcher.dispose();
             pairsMatcher = null;
         }
+
+        getSite().getPage().removePostSelectionListener(rangeHighlighter);
 
         super.dispose();
     }
@@ -231,8 +236,9 @@ public class JsonTextEditor extends TextEditor {
         }
     }
 
-    public void updateContentOutlinePage(JsonContext jsonContext) {
+    public void updateSyntaxTree(JsonContext jsonContext) {
         getOutlinePage().setInput(jsonContext);
+        rangeHighlighter.setInput(jsonContext);
     }
 
     public void updateTabWidth(int tabWidth) {
