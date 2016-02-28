@@ -104,6 +104,10 @@ public class JSONParser extends Parser {
             if ( visitor instanceof JSONVisitor ) return ((JSONVisitor<? extends T>)visitor).visitJson(this);
             else return visitor.visitChildren(this);
         }
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + " [" + getText() + "]";
+        }
     }
 
     public final JsonContext json() throws RecognitionException {
@@ -164,6 +168,10 @@ public class JSONParser extends Parser {
         public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
             if ( visitor instanceof JSONVisitor ) return ((JSONVisitor<? extends T>)visitor).visitObject(this);
             else return visitor.visitChildren(this);
+        }
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + " [" + getText() + "]";
         }
     }
 
@@ -246,6 +254,10 @@ public class JSONParser extends Parser {
             if ( visitor instanceof JSONVisitor ) return ((JSONVisitor<? extends T>)visitor).visitPair(this);
             else return visitor.visitChildren(this);
         }
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + " [" + getText() + "]";
+        }
     }
 
     public final PairContext pair() throws RecognitionException {
@@ -296,6 +308,10 @@ public class JSONParser extends Parser {
         public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
             if ( visitor instanceof JSONVisitor ) return ((JSONVisitor<? extends T>)visitor).visitArray(this);
             else return visitor.visitChildren(this);
+        }
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + " [" + getText() + "]";
         }
     }
 
@@ -381,6 +397,10 @@ public class JSONParser extends Parser {
         public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
             if ( visitor instanceof JSONVisitor ) return ((JSONVisitor<? extends T>)visitor).visitValue(this);
             else return visitor.visitChildren(this);
+        }
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + " [" + getText() + "]";
         }
     }
 
