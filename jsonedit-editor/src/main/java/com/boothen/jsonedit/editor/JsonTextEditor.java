@@ -16,14 +16,24 @@
 package com.boothen.jsonedit.editor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.filebuffers.IDocumentSetupParticipant;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.BadPositionCategoryException;
+import org.eclipse.jface.text.DefaultPositionUpdater;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IPositionUpdater;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.DefaultCharacterPairMatcher;
@@ -35,8 +45,11 @@ import org.eclipse.jface.text.source.projection.ProjectionSupport;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.editors.text.ForwardingDocumentProvider;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.eclipse.ui.texteditor.ChainedPreferenceStore;
+import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
@@ -62,6 +75,10 @@ public class JsonTextEditor extends TextEditor {
     private JsonContentOutlinePage fOutlinePage;
 
     private ProjectionAnnotationModel annotationModel;
+
+    public final static String JSON_CATEGORY = "__json_elements"; //$NON-NLS-1$
+
+    private final IPositionUpdater positionUpdater = new DefaultPositionUpdater(JSON_CATEGORY);
 
 
     public JsonTextEditor() {
@@ -203,6 +220,23 @@ public class JsonTextEditor extends TextEditor {
     protected void handlePreferenceStoreChanged(PropertyChangeEvent event) {
         ((JsonSourceViewerConfiguration) viewerConfiguration).handlePreferenceStoreChanged();
         super.handlePreferenceStoreChanged(event);
+    }
+
+    public void updateDocumentPositions(Collection<Position> newPositions) {
+        IDocument doc = getSourceViewer().getDocument();
+        try {
+            if (doc.containsPositionCategory(JSON_CATEGORY)) {
+                doc.removePositionCategory(JSON_CATEGORY);
+            }
+            doc.addPositionCategory(JSON_CATEGORY);
+            for (Position pos : newPositions) {
+                doc.addPosition(JSON_CATEGORY, pos);
+            }
+        } catch (BadPositionCategoryException | BadLocationException e) {
+            Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.toString(), e);
+            StatusManager.getManager().handle(status);
+        }
+
     }
 
     public void updateFoldingStructure(List<Position> newPositions) {

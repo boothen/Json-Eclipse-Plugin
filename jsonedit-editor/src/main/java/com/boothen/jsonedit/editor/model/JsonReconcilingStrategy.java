@@ -16,8 +16,17 @@
 package com.boothen.jsonedit.editor.model;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.RuleNode;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -46,6 +55,8 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
     private IProgressMonitor monitor;
 
     private JsonFoldingPositionsBuilder foldingPositionsBuilder = new JsonFoldingPositionsBuilder();
+
+    private ParseTreeComparator treeComparator = new ParseTreeComparator();
 
     public JsonReconcilingStrategy(JsonTextEditor textEditor) {
         this.textEditor = textEditor;
@@ -81,7 +92,9 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
             monitor.beginTask("Updating syntax tree", IProgressMonitor.UNKNOWN);
             reconcile(offset, length);
         } catch (Exception e) {
-            StatusManager.getManager().handle(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.toString()));
+            String message = e.toString();
+            Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, message, e);
+            StatusManager.getManager().handle(status);
         } finally {
             monitor.done();
         }
@@ -90,16 +103,23 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
     private void reconcile(int offset, int length) throws IOException {
         final ParseResult result = AntlrAdapter.convert(fDocument);
         final JsonContext syntaxTree = result.getTree();
-        final List<Position> fPositions = foldingPositionsBuilder.getFoldingPositions(syntaxTree);
+
+        final Map<ParseTree, Position> positions = syntaxTree.accept(new PositionVisitor());
+
+        treeComparator.update(syntaxTree, positions);
+
+        final List<Position> foldPositions = foldingPositionsBuilder.getFoldingPositions(syntaxTree);
 
         if (textEditor != null) {
             Display.getDefault().asyncExec(new Runnable() {
                 @Override
                 public void run() {
-                    textEditor.updateFoldingStructure(fPositions);
+                    textEditor.updateDocumentPositions(positions.values());
+                    textEditor.updateFoldingStructure(foldPositions);
                     textEditor.updateSyntaxTree(syntaxTree);
                 }
             });
         }
     }
+
 }

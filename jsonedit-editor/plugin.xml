@@ -178,4 +178,11 @@
          </description>
       </fontDefinition>
     </extension>
+   <extension
+         point="org.eclipse.core.filebuffers.documentSetup">
+      <participant
+            class="com.boothen.jsonedit.editor.DocumentSetup"
+            contentTypeId="com.boothen.jsonedit.core.jsonsource">
+      </participant>
+   </extension>
 </plugin>
