@@ -5,6 +5,7 @@ package com.boothen.jsonedit.outline;
  * in the outline view.
  */
 enum NodeType {
+    ROOT(null, null, null),
     OBJECT("JsonObject.gif", "BLUE", "WHITE"),
     ARRAY("JsonArray.gif", "BLUE", "WHITE"),
     BOOLEAN("JsonBoolean.gif", "BLACK", "WHITE"),

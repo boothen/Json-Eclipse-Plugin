@@ -54,12 +54,10 @@ import com.boothen.jsonedit.model.Segment;
  */
 public class JsonContentOutlinePage extends ContentOutlinePage {
 
-    private JsonContext fInput;
-    private TreeFlattener treeFlattener;
-    private ITextEditor fTextEditor;
-    private ISelectionListener textListener = new MyTextListener();
-    private ISelectionChangedListener treeListener = new MyTreeListener();
-    private Set<Object> treeElements = new HashSet<>();
+    private final ITextEditor fTextEditor;
+    private final ISelectionListener textListener = new MyTextListener();
+    private final ISelectionChangedListener treeListener = new MyTreeListener();
+    private final TreeNode<ParseTree> root = new TreeNode<>();
     private boolean textHasChanged;
 
     public JsonContentOutlinePage(ITextEditor editor) {
@@ -74,9 +72,7 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
         JsonContentProvider provider = new JsonContentProvider();
         viewer.setContentProvider(provider);
         viewer.setLabelProvider(new DelegatingStyledCellLabelProvider(new JsonLabelProvider()));
-        viewer.setInput(fInput);
-
-        treeFlattener = new TreeFlattener(provider);
+        viewer.setInput(root);
 
         fTextEditor.getSite().getPage().addPostSelectionListener(textListener);
         addSelectionChangedListener(treeListener);
@@ -98,7 +94,7 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
      * @param input the input of this outline page
      */
     public void setInput(JsonContext input) {
-        fInput = input;
+        root.setContent(input, NodeType.ROOT);
         update();
     }
 
@@ -112,14 +108,37 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
             Control control = viewer.getControl();
             if (control != null && !control.isDisposed()) {
                 control.setRedraw(false);
-                viewer.setInput(fInput);
-                treeElements.clear();
-                List<Object> elements = treeFlattener.flatten(fInput);
-                treeElements.addAll(elements);
-                viewer.expandToLevel(2);
+                reconcile(root);
                 control.setRedraw(true);
+                viewer.refresh();
             }
         }
+    }
+
+    private JsonNodeTypeVisitor typeVisitor = new JsonNodeTypeVisitor();
+    private JsonContextTreeFilter treeFilter = new JsonContextTreeFilter();
+
+    private void reconcile(TreeNode<ParseTree> parent) {
+        ParseTree json = parent.getContent();
+        List<ParseTree> children = json.accept(treeFilter);
+        for (int i = 0; i < children.size(); i++) {
+            ParseTree newContent = children.get(i);
+            NodeType newType = typeVisitor.visit(newContent);
+
+            TreeNode<ParseTree> child = getOrCreate(parent.getChildren(), i);
+            child.setContent(newContent, newType);
+            reconcile(child);
+        }
+    }
+
+    private static TreeNode<ParseTree> getOrCreate(List<TreeNode<ParseTree>> children, int i) {
+        if (i < children.size()) {
+            return children.get(i);
+        }
+
+        TreeNode<ParseTree> node = new TreeNode<>();
+        children.add(node);
+        return node;
     }
 
     /**
@@ -164,7 +183,8 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
         @Override
         public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 
-            if (fInput == null) {
+            ParseTree json = root.getContent();
+            if (json == null) {
                 return;
             }
 

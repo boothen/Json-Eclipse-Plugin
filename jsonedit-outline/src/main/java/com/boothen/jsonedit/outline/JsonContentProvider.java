@@ -18,10 +18,6 @@
  */
 package com.boothen.jsonedit.outline;
 
-import java.util.List;
-
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -30,8 +26,6 @@ import org.eclipse.jface.viewers.Viewer;
  * It uses the original syntax tree as provided by ANTLR.
  */
 public class JsonContentProvider implements ITreeContentProvider {
-
-    private final JsonContextTreeFilter treeFilter = new JsonContextTreeFilter();
 
     @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
@@ -45,13 +39,8 @@ public class JsonContentProvider implements ITreeContentProvider {
 
     @Override
     public Object[] getChildren(Object parentElement) {
-        if (parentElement instanceof ParserRuleContext) {
-            ParserRuleContext context = (ParserRuleContext) parentElement;
-            List<ParseTree> children = context.accept(treeFilter);
-            return children.toArray();
-        }
-
-        return new Object[0];
+        TreeNode<?> node = (TreeNode<?>) parentElement;
+        return node.getChildren().toArray();
     }
 
     @Override
@@ -61,7 +50,8 @@ public class JsonContentProvider implements ITreeContentProvider {
 
     @Override
     public Object getParent(Object element) {
-        return treeFilter.getParent((ParseTree) element);
+        TreeNode<?> node = (TreeNode<?>) element;
+        return node.getParent();
     }
 
     @Override
