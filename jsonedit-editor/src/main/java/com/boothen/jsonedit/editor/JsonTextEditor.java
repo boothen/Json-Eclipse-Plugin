@@ -16,14 +16,14 @@
 package com.boothen.jsonedit.editor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.eclipse.core.filebuffers.IDocumentSetupParticipant;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -45,11 +45,9 @@ import org.eclipse.jface.text.source.projection.ProjectionSupport;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.editors.text.ForwardingDocumentProvider;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.eclipse.ui.texteditor.ChainedPreferenceStore;
-import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
@@ -270,8 +268,8 @@ public class JsonTextEditor extends TextEditor {
         }
     }
 
-    public void updateSyntaxTree(JsonContext jsonContext) {
-        getOutlinePage().setInput(jsonContext);
+    public void updateSyntaxTree(JsonContext jsonContext, Collection<ParseTree> added, Collection<ParseTree> removed) {
+        getOutlinePage().setInput(jsonContext, added, removed);
         rangeHighlighter.setInput(jsonContext);
     }
 

@@ -18,7 +18,10 @@
  */
 package com.boothen.jsonedit.outline;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -94,21 +97,37 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
      * @param input the input of this outline page
      */
     public void setInput(JsonContext input) {
+        // TODO: remove this method
+        setInput(input, Collections.<ParseTree>emptyList(), Collections.<ParseTree>emptyList());
+    }
+
+    /**
+     * Sets the input of the outline page
+     *
+     * @param input the input of this outline page
+     * @param removed
+     * @param added
+     */
+    public void setInput(JsonContext input, Collection<ParseTree> added, Collection<ParseTree> removed) {
         root.setContent(input, NodeType.ROOT);
-        update();
+        update(added, removed);
+    }
+
+    public void update() {
+        update(Collections.<ParseTree>emptyList(), Collections.<ParseTree>emptyList());
     }
 
     /**
      * Updates the outline page.
      */
-    public void update() {
+    private void update(Collection<ParseTree> added, Collection<ParseTree> removed) {
         TreeViewer viewer = getTreeViewer();
 
         if (viewer != null) {
             Control control = viewer.getControl();
             if (control != null && !control.isDisposed()) {
                 control.setRedraw(false);
-                reconcile(root);
+                reconcile(root, added, removed);
                 control.setRedraw(true);
                 viewer.refresh();
             }
@@ -118,17 +137,44 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
     private JsonNodeTypeVisitor typeVisitor = new JsonNodeTypeVisitor();
     private JsonContextTreeFilter treeFilter = new JsonContextTreeFilter();
 
-    private void reconcile(TreeNode<ParseTree> parent) {
+    private void reconcile(TreeNode<ParseTree> parent, Collection<ParseTree> added, Collection<ParseTree> removed) {
         ParseTree json = parent.getContent();
         List<ParseTree> children = json.accept(treeFilter);
+
+        // first delete obsolete child entries
+        Iterator<TreeNode<ParseTree>> it = parent.getChildren().iterator();
+        while (it.hasNext()) {
+            if (isRemoved(removed, it.next())) {
+                it.remove();
+            }
+        }
+
         for (int i = 0; i < children.size(); i++) {
             ParseTree newContent = children.get(i);
             NodeType newType = typeVisitor.visit(newContent);
 
+            TreeNode<ParseTree> node;
+            if (added.contains(newContent)) {
+                node = new TreeNode<>();
+                parent.getChildren().add(i, node);
+            }
+
             TreeNode<ParseTree> child = getOrCreate(parent.getChildren(), i);
             child.setContent(newContent, newType);
-            reconcile(child);
+            reconcile(child, added, removed);
         }
+    }
+
+    private boolean isRemoved(Collection<ParseTree> removed, TreeNode<ParseTree> start) {
+        ParseTree node = start.getContent();
+        while (node != null) {
+            if (removed.contains(node)) {
+                return true;
+            }
+            node = node.getParent();
+        }
+
+        return false;
     }
 
     private static TreeNode<ParseTree> getOrCreate(List<TreeNode<ParseTree>> children, int i) {

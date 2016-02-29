@@ -106,7 +106,8 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
 
         final Map<ParseTree, Position> positions = syntaxTree.accept(new PositionVisitor());
 
-        treeComparator.update(syntaxTree, positions);
+        final RecordingParseTreeChangeListener changeListener = new RecordingParseTreeChangeListener();
+        treeComparator.update(syntaxTree, positions, changeListener);
 
         final List<Position> foldPositions = foldingPositionsBuilder.getFoldingPositions(syntaxTree);
 
@@ -116,7 +117,7 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
                 public void run() {
                     textEditor.updateDocumentPositions(positions.values());
                     textEditor.updateFoldingStructure(foldPositions);
-                    textEditor.updateSyntaxTree(syntaxTree);
+                    textEditor.updateSyntaxTree(syntaxTree, changeListener.getAdded(), changeListener.getRemoved());
                 }
             });
         }

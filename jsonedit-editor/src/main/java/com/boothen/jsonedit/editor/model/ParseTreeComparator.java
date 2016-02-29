@@ -18,21 +18,22 @@ import com.boothen.jsonedit.editor.Activator;
  */
 public class ParseTreeComparator {
 
-    private JsonContext oldTree;
+    private JsonContext oldRoot;
     private Map<ParseTree, Position> oldPositions = Collections.emptyMap();
 
-    public void update(JsonContext syntaxTree, Map<ParseTree, Position> positions) {
+    public void update(JsonContext syntaxTree, Map<ParseTree, Position> positions, ParseTreeChangeListener listener) {
 
-        if (oldTree != null) {
-            compareTrees(syntaxTree, oldTree, positions, oldPositions);
+        if (oldRoot != null) {
+            compareTrees(syntaxTree, oldRoot, positions, oldPositions, listener);
         }
 
-        oldTree = syntaxTree;
+        oldRoot = syntaxTree;
         oldPositions = positions;
     }
 
-    private static void compareTrees(ParseTree newTree, ParseTree oldTree,
-            Map<ParseTree, Position> newPositions, Map<ParseTree, Position> oldPositions) {
+    private void compareTrees(ParseTree newTree, ParseTree oldTree,
+            Map<ParseTree, Position> newPositions, Map<ParseTree, Position> oldPositions,
+            ParseTreeChangeListener listener) {
 
         int newIdx = 0;
         int oldIdx = 0;
@@ -46,33 +47,18 @@ public class ParseTreeComparator {
             Position oldPos = oldPositions.get(oldChild);
 
             if (Objects.equals(newPos, oldPos)) {
-                compareTrees(newChild, oldChild, newPositions, oldPositions);
+                compareTrees(newChild, oldChild, newPositions, oldPositions, listener);
                 newIdx++;
                 oldIdx++;
             } else {
                 if (oldPos == null || !oldPos.isDeleted && newPos.offset < oldPos.offset) {
-                    nodeAdded(newChild);
+                    listener.nodeAdded(newChild);
                     newIdx++;
                 } else {
-                    nodeRemoved(oldChild);
+                    listener.nodeRemoved(oldChild);
                     oldIdx++;
                 }
             }
         }
-    }
-
-    private static void nodeAdded(ParseTree tree) {
-        report("Added: " + tree.getClass().getSimpleName() + tree.getText());
-    }
-
-    private static void nodeRemoved(ParseTree tree) {
-        report("REMOVED: " + tree.getClass().getSimpleName() + " - " +  tree.getText());
-    }
-
-    /**
-     * @param string
-     */
-    private static void report(String string) {
-        StatusManager.getManager().handle(new Status(IStatus.INFO, Activator.PLUGIN_ID, string));
     }
 }
