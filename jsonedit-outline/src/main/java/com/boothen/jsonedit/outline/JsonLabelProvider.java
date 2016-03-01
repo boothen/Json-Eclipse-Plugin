@@ -56,8 +56,12 @@ public class JsonLabelProvider extends ColumnLabelProvider implements IStyledLab
 
     @Override
     public Image getImage(Object element) {
-        ParseTree context = ((TreeNode<ParseTree>) element).getContent();
-        return context.accept(contextImageVisitor);
+        if (element instanceof ParseTree) {
+            ParseTree context = (ParseTree) element;
+            return context.accept(contextImageVisitor);
+        }
+
+        return null;
     }
 
     /**
@@ -66,9 +70,9 @@ public class JsonLabelProvider extends ColumnLabelProvider implements IStyledLab
     @Override
     public StyledString getStyledText(Object element) {
         StyledString styledString = new StyledString();
-        if (element instanceof TreeNode) {
-            ParseTree context = ((TreeNode<ParseTree>) element).getContent();
-            return contextLabelVisitor.visit(context);
+        if (element instanceof ParseTree) {
+            ParseTree node = (ParseTree) element;
+            return contextLabelVisitor.visit(node);
         }
         return styledString;
     }

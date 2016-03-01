@@ -3,6 +3,8 @@ package com.boothen.jsonedit.editor.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -11,6 +13,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
  */
 public class RecordingParseTreeChangeListener implements ParseTreeChangeListener {
 
+    private final Map<ParseTree, ParseTree> oldToNew = new HashMap<>();
     private final Collection<ParseTree> added = new ArrayList<>();
     private final Collection<ParseTree> removed = new ArrayList<>();
 
@@ -22,6 +25,18 @@ public class RecordingParseTreeChangeListener implements ParseTreeChangeListener
     @Override
     public void nodeRemoved(ParseTree node) {
         removed.add(node);
+    }
+
+    @Override
+    public void sameNode(ParseTree oldNode, ParseTree newNode) {
+        oldToNew.put(oldNode, newNode);
+    }
+
+    /**
+     * @return an unmodifiable view on the recorded mapping from old to new elements
+     */
+    public Map<ParseTree, ParseTree> getMapping() {
+        return Collections.unmodifiableMap(oldToNew);
     }
 
     /**

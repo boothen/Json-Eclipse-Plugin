@@ -18,6 +18,10 @@
  */
 package com.boothen.jsonedit.outline;
 
+import java.util.List;
+
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -27,6 +31,8 @@ import org.eclipse.jface.viewers.Viewer;
  */
 public class JsonContentProvider implements ITreeContentProvider {
 
+    private final JsonContextTreeFilter treeFilter = new JsonContextTreeFilter();
+
     @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
         // must be implemented
@@ -34,13 +40,20 @@ public class JsonContentProvider implements ITreeContentProvider {
 
     @Override
     public Object[] getElements(Object inputElement) {
-        return getChildren(inputElement);
+        // the root input element is wrapped a Container
+        Container<ParseTree> container = (Container<ParseTree>) inputElement;
+        return getChildren(container.getContent());
     }
 
     @Override
     public Object[] getChildren(Object parentElement) {
-        TreeNode<?> node = (TreeNode<?>) parentElement;
-        return node.getChildren().toArray();
+        if (parentElement instanceof ParserRuleContext) {
+            ParserRuleContext context = (ParserRuleContext) parentElement;
+            List<ParseTree> children = context.accept(treeFilter);
+            return children.toArray();
+        }
+
+        return new Object[0];
     }
 
     @Override
@@ -50,8 +63,7 @@ public class JsonContentProvider implements ITreeContentProvider {
 
     @Override
     public Object getParent(Object element) {
-        TreeNode<?> node = (TreeNode<?>) element;
-        return node.getParent();
+        return treeFilter.getParent((ParseTree) element);
     }
 
     @Override

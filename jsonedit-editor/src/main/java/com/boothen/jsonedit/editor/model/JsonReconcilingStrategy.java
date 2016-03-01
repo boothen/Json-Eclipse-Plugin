@@ -117,7 +117,7 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
                 public void run() {
                     textEditor.updateDocumentPositions(positions.values());
                     textEditor.updateFoldingStructure(foldPositions);
-                    textEditor.updateSyntaxTree(syntaxTree, changeListener.getAdded(), changeListener.getRemoved());
+                    textEditor.updateSyntaxTree(syntaxTree, changeListener.getMapping());
                 }
             });
         }

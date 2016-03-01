@@ -17,6 +17,7 @@ package com.boothen.jsonedit.editor;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -150,7 +151,7 @@ public class JsonTextEditor extends TextEditor {
     @Override
     public void dispose() {
         if (fOutlinePage != null)
-            fOutlinePage.setInput(null);
+            fOutlinePage.setInput(null, Collections.<ParseTree, ParseTree>emptyMap());
 
         if (pairsMatcher != null) {
             pairsMatcher.dispose();
@@ -268,8 +269,8 @@ public class JsonTextEditor extends TextEditor {
         }
     }
 
-    public void updateSyntaxTree(JsonContext jsonContext, Collection<ParseTree> added, Collection<ParseTree> removed) {
-        getOutlinePage().setInput(jsonContext, added, removed);
+    public void updateSyntaxTree(JsonContext jsonContext, Map<ParseTree, ParseTree> oldToNew) {
+        getOutlinePage().setInput(jsonContext, oldToNew);
         rangeHighlighter.setInput(jsonContext);
     }
 

@@ -48,6 +48,7 @@ public class ParseTreeComparator {
 
             if (Objects.equals(newPos, oldPos)) {
                 compareTrees(newChild, oldChild, newPositions, oldPositions, listener);
+                listener.sameNode(oldChild, newChild);
                 newIdx++;
                 oldIdx++;
             } else {
