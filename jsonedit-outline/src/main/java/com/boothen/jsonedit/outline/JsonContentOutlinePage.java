@@ -65,6 +65,9 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
     private final Container<ParseTree> root = new Container<>();
     private boolean textHasChanged;
 
+    private TreeFlattener treeFlattener;
+    private Set<Object> treeElements = new HashSet<>();
+
     public JsonContentOutlinePage(ITextEditor editor) {
         fTextEditor = editor;
     }
@@ -78,6 +81,8 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
         viewer.setContentProvider(provider);
         viewer.setLabelProvider(new DelegatingStyledCellLabelProvider(new JsonLabelProvider()));
         viewer.setInput(root);
+
+        treeFlattener = new TreeFlattener(provider);
 
         fTextEditor.getSite().getPage().addPostSelectionListener(textListener);
         addSelectionChangedListener(treeListener);
@@ -116,6 +121,9 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
         if (viewer != null) {
             Control control = viewer.getControl();
             if (control != null && !control.isDisposed()) {
+                List<Object> elements = treeFlattener.flatten(root.getContent());
+                treeElements.addAll(elements);
+
                 Object[] oldExpanded = viewer.getExpandedElements();
                 List<ParseTree> newExpanded = new ArrayList<>();
                 for (Object obj : oldExpanded) {
@@ -185,7 +193,7 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
                 int start = textSelection.getOffset();
                 int length = textSelection.getLength();
 
-                ParseTree element = fInput.accept(new JsonContextTokenFinder(start, start + length));
+                ParseTree element = root.getContent().accept(new JsonContextTokenFinder(start, start + length));
                 while (element != null && !treeElements.contains(element)) {
                     element = element.getParent();
                 }
