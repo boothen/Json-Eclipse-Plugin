@@ -61,32 +61,6 @@
       </menuContribution>
    </extension>
    <extension
-         id="com.boothen.jsonedit.validation.builder"
-         name="JSON Validator"
-         point="org.eclipse.core.resources.builders">
-      <builder
-            callOnEmptyDelta="false"
-            hasNature="false"
-            isConfigurable="false">
-         <run
-               class="com.boothen.jsonedit.validation.IncrementalJsonValidator">
-         </run>
-      </builder>
-   </extension>
-   <extension
-         id="com.boothen.jsonedit.validation.nature"
-         name="JSON Validation Nature"
-         point="org.eclipse.core.resources.natures">
-      <runtime>
-         <run
-               class="com.boothen.jsonedit.validation.nature.JsonValidationNature">
-         </run>
-      </runtime>
-      <builder
-            id="com.boothen.jsonedit.validation.builder">
-      </builder>
-   </extension>
-   <extension
          id="com.boothen.jsonedit.validation.marker"
          name="JSON Validation"
          point="org.eclipse.core.resources.markers">
@@ -112,19 +86,6 @@
             class="com.boothen.jsonedit.preferences.WorkbenchPreferencePage"
             id="com.boothen.jsonedit.preferences.WorkbenchPrefencePage"
             name="JSON Editor">
-      </page>
-   </extension>
-   <extension
-         point="org.eclipse.ui.propertyPages">
-      <page
-            class="com.boothen.jsonedit.preferences.ProjectPropertiesPage"
-            id="com.boothen.jsonedit.preferences.properties"
-            name="JSON Properties">
-         <enabledWhen>
-            <adapt
-                  type="org.eclipse.core.resources.IProject">
-            </adapt>
-         </enabledWhen>
       </page>
    </extension>
     <extension point="org.eclipse.ui.newWizards">

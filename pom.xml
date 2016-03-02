@@ -19,8 +19,6 @@
 		<module>jsonedit-repository</module>
 		<module>jsonedit-test</module>
 		<module>jsonedit-text</module>
-		<module>jsonedit-validation</module>
-		<module>jsonedit-validator</module>
 	</modules>
 
 	<properties>
