@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -47,6 +49,7 @@ import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.ide.ResourceUtil;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.eclipse.ui.texteditor.ChainedPreferenceStore;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
@@ -54,6 +57,7 @@ import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
+import com.boothen.jsonedit.model.AntlrAdapter.ParseError;
 import com.boothen.jsonedit.outline.JsonContentOutlinePage;
 import com.boothen.jsonedit.preferences.JsonPreferences;
 import com.boothen.jsonedit.preferences.JsonPreferencesPlugin;
@@ -283,5 +287,19 @@ public class JsonTextEditor extends TextEditor {
             fOutlinePage = new JsonContentOutlinePage(this);
         }
         return fOutlinePage;
+    }
+
+    /**
+     * @param errors
+     */
+    public void updateSyntaxErrors(List<ParseError> errors) {
+        IResource resource = ResourceUtil.getResource(getEditorInput());
+        try {
+            IDocument doc = getSourceViewer().getDocument();
+            DocumentValidator.refresh(doc, resource, errors);
+        } catch (CoreException e) {
+            StatusManager.getManager().handle(e.getStatus());
+        }
+
     }
 }

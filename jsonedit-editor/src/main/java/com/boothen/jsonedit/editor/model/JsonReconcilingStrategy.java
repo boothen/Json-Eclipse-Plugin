@@ -30,6 +30,7 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Position;
@@ -41,9 +42,11 @@ import org.eclipse.ui.statushandlers.StatusManager;
 
 import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
 import com.boothen.jsonedit.editor.Activator;
+import com.boothen.jsonedit.editor.DocumentValidator;
 import com.boothen.jsonedit.editor.JsonTextEditor;
 import com.boothen.jsonedit.folding.JsonFoldingPositionsBuilder;
 import com.boothen.jsonedit.model.AntlrAdapter;
+import com.boothen.jsonedit.model.AntlrAdapter.ParseError;
 import com.boothen.jsonedit.model.AntlrAdapter.ParseResult;
 
 public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcilingStrategyExtension {
@@ -118,6 +121,7 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
                     textEditor.updateDocumentPositions(positions.values());
                     textEditor.updateFoldingStructure(foldPositions);
                     textEditor.updateSyntaxTree(syntaxTree, changeListener.getMapping());
+                    textEditor.updateSyntaxErrors(result.getErrors());
                 }
             });
         }

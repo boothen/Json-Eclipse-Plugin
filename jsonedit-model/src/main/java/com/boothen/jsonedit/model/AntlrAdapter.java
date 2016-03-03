@@ -20,6 +20,7 @@ import org.eclipse.jface.text.IDocument;
 import com.boothen.jsonedit.antlr.JSONLexer;
 import com.boothen.jsonedit.antlr.JSONParser;
 import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
+
 /**
  *
  */
@@ -61,26 +62,56 @@ public class AntlrAdapter {
     }
 
     public static class ParseError {
-        private Token offender;
-        private Collection<Integer> set;
-        private String localizedMessage;
 
-        public ParseError(Token offender, Collection<Integer> set, String localizedMessage) {
-            this.offender = offender;
-            this.set = set;
-            this.localizedMessage = localizedMessage;
+        private final String msg;
+        private final int line;
+        private final int charPositionInLine;
+        private final Object offendingSymbol;
+        private final Token token;
+
+        public ParseError(String msg, int line, int charPositionInLine, Object offendingSymbol, Token token) {
+            this.msg = msg;
+            this.line = line;
+            this.charPositionInLine = charPositionInLine;
+            this.offendingSymbol = offendingSymbol;
+            this.token = token;
         }
 
-           public Token getOffender() {
-            return offender;
+        /**
+         * @return the message to emit
+         */
+        public String getMessage() {
+            return msg;
         }
 
-        public Collection<Integer> getSet() {
-            return set;
+        /**
+         * @return The character position within that line where the error occurred.
+         */
+        public int getLine() {
+            return line;
         }
 
-        public String getLocalizedMessage() {
-            return localizedMessage;
+        /**
+         * @return line number in the input where the error occurred.
+         */
+        public int getCharPositionInLine() {
+            return charPositionInLine;
+        }
+
+        /**
+         * @return The offending token in the input token stream, unless recognizer is a lexer (then it's null).
+         * If no viable alternative error, the token at which we started production for the decision is not null.
+         */
+        public Object getOffendingSymbol() {
+            return offendingSymbol;
+        }
+
+        /**
+         * @return The current Token when an error occurred. Since not all streams support accessing symbols
+         * by index, we have to track the Token instance itself.
+         */
+        public Token getToken() {
+            return token;
         }
     }
 
@@ -94,9 +125,10 @@ public class AntlrAdapter {
         @Override
         public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
                 String msg, RecognitionException e) {
-            Collection<Integer> set = e.getExpectedTokens().toSet();
-            Token offender = e.getOffendingToken();
-            ParseError error = new ParseError(offender, set, e.getLocalizedMessage());
+            // TODO: investigate why getExpectedTokens() reports illegal state on syntax errors inside Pair
+//          Collection<Integer> set = e.getExpectedTokens().toSet();
+            Token offendingToken = e != null ? e.getOffendingToken() : null;
+            ParseError error = new ParseError(msg, line, charPositionInLine, offendingSymbol, offendingToken);
             errorList.add(error);
         }
 

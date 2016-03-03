@@ -71,14 +71,8 @@
             type="org.eclipse.core.resources.textmarker">
       </super>
       <persistent
-            value="true">
+            value="false">
       </persistent>
-      <attribute
-            name="key">
-      </attribute>
-      <attribute
-            name="violation">
-      </attribute>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
