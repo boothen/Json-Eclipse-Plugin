@@ -46,7 +46,6 @@ import com.boothen.jsonedit.editor.DocumentValidator;
 import com.boothen.jsonedit.editor.JsonTextEditor;
 import com.boothen.jsonedit.folding.JsonFoldingPositionsBuilder;
 import com.boothen.jsonedit.model.AntlrAdapter;
-import com.boothen.jsonedit.model.AntlrAdapter.ParseError;
 import com.boothen.jsonedit.model.AntlrAdapter.ParseResult;
 
 public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcilingStrategyExtension {

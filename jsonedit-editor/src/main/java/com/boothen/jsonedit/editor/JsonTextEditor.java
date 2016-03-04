@@ -57,7 +57,7 @@ import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
-import com.boothen.jsonedit.model.AntlrAdapter.ParseError;
+import com.boothen.jsonedit.model.ParseError;
 import com.boothen.jsonedit.outline.JsonContentOutlinePage;
 import com.boothen.jsonedit.preferences.JsonPreferences;
 import com.boothen.jsonedit.preferences.JsonPreferencesPlugin;

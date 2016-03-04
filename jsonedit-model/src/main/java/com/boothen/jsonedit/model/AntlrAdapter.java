@@ -29,17 +29,22 @@ public class AntlrAdapter {
     public static ParseResult convert(IDocument doc) throws IOException {
         Reader reader = new StringReader(doc.get());
         CharStream stream = new ANTLRInputStream(reader);
-        MyErrorListener errorListener = new MyErrorListener();
 
         JSONLexer lexer = new JSONLexer(stream);
+        LexerErrorListener lexerErrorListener = new LexerErrorListener();
         lexer.removeErrorListeners();
-        lexer.addErrorListener(errorListener);
+        lexer.addErrorListener(lexerErrorListener);
 
         JSONParser parser = new JSONParser(new CommonTokenStream(lexer));
+        ParserErrorListener parserErrorListener = new ParserErrorListener();
         parser.removeErrorListeners();
-        parser.addErrorListener(errorListener);
+        parser.addErrorListener(parserErrorListener);
 
-        ParseResult result = new ParseResult(parser.json(), errorListener.getErrors());
+        ArrayList<ParseError> errors = new ArrayList<>();
+        JsonContext syntaxTree = parser.json();
+        errors.addAll(lexerErrorListener.getErrors());
+        errors.addAll(parserErrorListener.getErrors());
+        ParseResult result = new ParseResult(syntaxTree, errors);
         return result;
     }
 
@@ -61,73 +66,47 @@ public class AntlrAdapter {
         }
     }
 
-    public static class ParseError {
-
-        private final String msg;
-        private final int line;
-        private final int charPositionInLine;
-        private final Object offendingSymbol;
-        private final Token token;
-
-        public ParseError(String msg, int line, int charPositionInLine, Object offendingSymbol, Token token) {
-            this.msg = msg;
-            this.line = line;
-            this.charPositionInLine = charPositionInLine;
-            this.offendingSymbol = offendingSymbol;
-            this.token = token;
-        }
-
-        /**
-         * @return the message to emit
-         */
-        public String getMessage() {
-            return msg;
-        }
-
-        /**
-         * @return The character position within that line where the error occurred.
-         */
-        public int getLine() {
-            return line;
-        }
-
-        /**
-         * @return line number in the input where the error occurred.
-         */
-        public int getCharPositionInLine() {
-            return charPositionInLine;
-        }
-
-        /**
-         * @return The offending token in the input token stream, unless recognizer is a lexer (then it's null).
-         * If no viable alternative error, the token at which we started production for the decision is not null.
-         */
-        public Object getOffendingSymbol() {
-            return offendingSymbol;
-        }
-
-        /**
-         * @return The current Token when an error occurred. Since not all streams support accessing symbols
-         * by index, we have to track the Token instance itself.
-         */
-        public Token getToken() {
-            return token;
-        }
-    }
-
-    private static class MyErrorListener extends BaseErrorListener {
+    private static class LexerErrorListener extends BaseErrorListener {
         private final List<ParseError> errorList = new ArrayList<>();
 
-        public MyErrorListener() {
+        public LexerErrorListener() {
             // public
         }
 
         @Override
         public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
                 String msg, RecognitionException e) {
-            // TODO: investigate why getExpectedTokens() reports illegal state on syntax errors inside Pair
-//          Collection<Integer> set = e.getExpectedTokens().toSet();
             Token offendingToken = e != null ? e.getOffendingToken() : null;
+            ParseError error = new ParseError(msg, line, charPositionInLine, offendingSymbol, offendingToken);
+            errorList.add(error);
+        }
+
+        /**
+         * @return the errorList
+         */
+        public List<ParseError> getErrors() {
+            return errorList;
+        }
+    }
+
+    private static class ParserErrorListener extends BaseErrorListener {
+        private final List<ParseError> errorList = new ArrayList<>();
+
+        public ParserErrorListener() {
+            // public
+        }
+
+        @Override
+        public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
+                String msg, RecognitionException e) {
+            Token offendingToken = null;
+            if (e != null) {
+                offendingToken = e.getOffendingToken();
+            }
+            if (offendingSymbol instanceof Token) {
+                offendingToken = (Token) offendingSymbol;
+            }
+
             ParseError error = new ParseError(msg, line, charPositionInLine, offendingSymbol, offendingToken);
             errorList.add(error);
         }
