@@ -19,17 +19,10 @@
 package com.boothen.jsonedit.outline;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -63,10 +56,8 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
     private final ISelectionListener textListener = new MyTextListener();
     private final ISelectionChangedListener treeListener = new MyTreeListener();
     private final Container<ParseTree> root = new Container<>();
+    private final JsonContentProvider provider = new JsonContentProvider();
     private boolean textHasChanged;
-
-    private TreeFlattener treeFlattener;
-    private Set<Object> treeElements = new HashSet<>();
 
     public JsonContentOutlinePage(ITextEditor editor) {
         fTextEditor = editor;
@@ -77,13 +68,9 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
         super.createControl(parent);
 
         TreeViewer viewer = getTreeViewer();
-        JsonContentProvider provider = new JsonContentProvider();
-        treeFlattener = new TreeFlattener(provider);
         viewer.setContentProvider(provider);
         viewer.setLabelProvider(new DelegatingStyledCellLabelProvider(new JsonLabelProvider()));
         viewer.setInput(root);
-
-        update(Collections.<ParseTree, ParseTree>emptyMap());
 
         fTextEditor.getSite().getPage().addPostSelectionListener(textListener);
         addSelectionChangedListener(treeListener);
@@ -117,11 +104,13 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
     private void update(Map<ParseTree, ParseTree> map) {
         TreeViewer viewer = getTreeViewer();
 
+        // In theory, it should be possible to derive the parent,
+        // but this is not trivial and needs to be reliable
+        provider.refreshParents(root.getContent());
+
         if (viewer != null) {
             Control control = viewer.getControl();
             if (control != null && !control.isDisposed()) {
-                List<Object> elements = treeFlattener.flatten(root.getContent());
-                treeElements.addAll(elements);
 
                 Object[] oldExpanded = viewer.getExpandedElements();
                 Object[] newExpanded = convertExpandedElements(oldExpanded, map);
@@ -198,7 +187,7 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
                 int length = textSelection.getLength();
 
                 ParseTree element = root.getContent().accept(new JsonContextTokenFinder(start, start + length));
-                while (element != null && !treeElements.contains(element)) {
+                while (element != null && !provider.isKnown(element)) {
                     element = element.getParent();
                 }
                 if (element != null) {

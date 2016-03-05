@@ -63,18 +63,4 @@ class JsonContextTreeFilter extends JSONBaseVisitor<List<ParseTree>> {
         }
         return children;
     }
-
-    /**
-     * Retrieves the filtered parent element for a given object
-     * @param element the object to inspect
-     * @return the filtered parent
-     */
-    public ParseTree getParent(ParseTree element) {
-        ParseTree parent = element.getParent();
-        if (parent instanceof ValueContext) {
-            return parent.getParent();
-        } else {
-            return parent;
-        }
-    }
 }

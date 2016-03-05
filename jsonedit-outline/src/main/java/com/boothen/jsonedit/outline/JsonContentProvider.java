@@ -18,7 +18,9 @@
  */
 package com.boothen.jsonedit.outline;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -32,6 +34,8 @@ import org.eclipse.jface.viewers.Viewer;
 public class JsonContentProvider implements ITreeContentProvider {
 
     private final JsonContextTreeFilter treeFilter = new JsonContextTreeFilter();
+    private final ParentProvider parentProvider = new ParentProvider(this);
+    private Map<Object, Object> parents = Collections.emptyMap();
 
     @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
@@ -63,11 +67,24 @@ public class JsonContentProvider implements ITreeContentProvider {
 
     @Override
     public Object getParent(Object element) {
-        return treeFilter.getParent((ParseTree) element);
+        Object parent = parents.get(element);
+        return parent;
     }
 
     @Override
     public void dispose() {
         // must be implemented
+    }
+
+    public void refreshParents(ParseTree tree) {
+        parents = parentProvider.record(tree);
+    }
+
+    /**
+     * @param element the element to test for existance in the syntax tree
+     * @return true if known
+     */
+    public boolean isKnown(ParseTree element) {
+        return parents.containsKey(element);
     }
 }

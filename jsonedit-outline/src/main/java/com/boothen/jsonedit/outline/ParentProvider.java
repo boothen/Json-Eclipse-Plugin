@@ -1,21 +1,21 @@
 package com.boothen.jsonedit.outline;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
 /**
- * Convert the provided tree into a flat list.
+ * Convert the provided tree content into a map (child -> parent)
  */
-class TreeFlattener {
+class ParentProvider {
 
-    private ITreeContentProvider contentProvider;
+    private final ITreeContentProvider contentProvider;
 
     /**
      * @param contentProvider provides the tree content
      */
-    public TreeFlattener(ITreeContentProvider contentProvider) {
+    public ParentProvider(ITreeContentProvider contentProvider) {
         this.contentProvider = contentProvider;
     }
 
@@ -24,15 +24,16 @@ class TreeFlattener {
      * @param root the tree root
      * @return the tree content
      */
-    public List<Object> flatten(Object root) {
-        List<Object> list = new ArrayList<>();
+    public Map<Object, Object> record(Object root) {
+        Map<Object, Object> list = new HashMap<>();
+        list.put(root, null);
         internalAdd(list, root);
         return list;
     }
 
-    private void internalAdd(List<Object> list, Object root) {
-        list.add(root);
+    private void internalAdd(Map<Object, Object> list, Object root) {
         for (Object child : contentProvider.getChildren(root)) {
+            list.put(child, root);
             internalAdd(list, child);
         }
     }
