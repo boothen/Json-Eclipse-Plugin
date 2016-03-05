@@ -41,7 +41,7 @@ public class JsonContentProvider implements ITreeContentProvider {
     @Override
     public Object[] getElements(Object inputElement) {
         // the root input element is wrapped a Container
-        Container<ParseTree> container = (Container<ParseTree>) inputElement;
+        Container<?> container = (Container<?>) inputElement;
         return getChildren(container.getContent());
     }
 

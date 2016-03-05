@@ -78,11 +78,12 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
 
         TreeViewer viewer = getTreeViewer();
         JsonContentProvider provider = new JsonContentProvider();
+        treeFlattener = new TreeFlattener(provider);
         viewer.setContentProvider(provider);
         viewer.setLabelProvider(new DelegatingStyledCellLabelProvider(new JsonLabelProvider()));
         viewer.setInput(root);
 
-        treeFlattener = new TreeFlattener(provider);
+        update(Collections.<ParseTree, ParseTree>emptyMap());
 
         fTextEditor.getSite().getPage().addPostSelectionListener(textListener);
         addSelectionChangedListener(treeListener);
@@ -102,6 +103,7 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
      * Sets the input of the outline page
      *
      * @param input the input of this outline page
+     * @param map the mapping from old to new tree elements
      */
     public void setInput(JsonContext input, Map<ParseTree, ParseTree> map) {
         root.setContent(input);
@@ -122,20 +124,25 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
                 treeElements.addAll(elements);
 
                 Object[] oldExpanded = viewer.getExpandedElements();
-                List<ParseTree> newExpanded = new ArrayList<>();
-                for (Object obj : oldExpanded) {
-                    ParseTree newObj = map.get(obj);
-                    if (newObj != null) {
-                        newExpanded.add(newObj);
-                    }
-                }
+                Object[] newExpanded = convertExpandedElements(oldExpanded, map);
 
                 control.setRedraw(false);
                 viewer.refresh();
-                viewer.setExpandedElements(newExpanded.toArray());
+                viewer.setExpandedElements(newExpanded);
                 control.setRedraw(true);
             }
         }
+    }
+
+    private static Object[] convertExpandedElements(Object[] oldExpanded, Map<ParseTree, ParseTree> map) {
+        List<ParseTree> newExpanded = new ArrayList<>();
+        for (Object obj : oldExpanded) {
+            ParseTree newObj = map.get(obj);
+            if (newObj != null) {
+                newExpanded.add(newObj);
+            }
+        }
+        return newExpanded.toArray();
     }
 
     /**
