@@ -108,9 +108,6 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
         update(map);
     }
 
-    public void update() {
-        update(Collections.<ParseTree, ParseTree>emptyMap());
-    }
     /**
      * Updates the outline page.
      * @param map

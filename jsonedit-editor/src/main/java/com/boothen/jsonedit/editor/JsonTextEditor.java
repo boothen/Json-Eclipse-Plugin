@@ -170,16 +170,12 @@ public class JsonTextEditor extends TextEditor {
     @Override
     public void doRevertToSaved() {
         super.doRevertToSaved();
-        if (fOutlinePage != null)
-            fOutlinePage.update();
     }
 
     @Override
     public void doSave(IProgressMonitor monitor) {
         doAutoFormatOnSave();
         super.doSave(monitor);
-        if (fOutlinePage != null)
-            fOutlinePage.update();
     }
 
     /** The <code>JavaEditor</code> implementation of this
@@ -190,8 +186,6 @@ public class JsonTextEditor extends TextEditor {
     public void doSaveAs() {
         doAutoFormatOnSave();
         super.doSaveAs();
-        if (fOutlinePage != null)
-            fOutlinePage.update();
     }
 
     private void doAutoFormatOnSave() {
