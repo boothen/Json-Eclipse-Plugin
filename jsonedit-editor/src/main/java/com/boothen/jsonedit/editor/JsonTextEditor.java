@@ -22,9 +22,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -69,6 +70,8 @@ import com.boothen.jsonedit.preferences.JsonPreferencesPlugin;
  *
  */
 public class JsonTextEditor extends TextEditor {
+
+    private static String MARKER_ID = "com.boothen.jsonedit.validation.marker";
 
     private final static char[] PAIRS= { '{', '}', '[', ']' };
 
@@ -283,17 +286,36 @@ public class JsonTextEditor extends TextEditor {
         return fOutlinePage;
     }
 
-    /**
-     * @param errors
-     */
-    public void updateSyntaxErrors(List<ParseError> errors) {
+    public void updateProblemMarkers(List<ParseError> problems) {
         IResource resource = ResourceUtil.getResource(getEditorInput());
         try {
             IDocument doc = getSourceViewer().getDocument();
-            DocumentValidator.refresh(doc, resource, errors);
+            updateMarkers(doc, resource, problems);
         } catch (CoreException e) {
             StatusManager.getManager().handle(e.getStatus());
         }
+    }
 
+    private static void updateMarkers(IDocument doc, IResource resource, List<ParseError> probs) throws CoreException {
+
+        resource.deleteMarkers(MARKER_ID, false, 0);
+
+        for (final ParseError problem : probs) {
+            try {
+                IMarker marker = resource.createMarker(MARKER_ID);
+                Token token = problem.getOffendingToken();
+
+                int offset = doc.getLineOffset(problem.getLine() - 1) + problem.getCharPositionInLine();
+                int length = token != null ? token.getText().length() : 1;
+                marker.setAttribute(IMarker.SEVERITY, problem.getSeverity().getMarkerValue());
+                marker.setAttribute(IMarker.LOCATION, "Line " + problem.getLine());
+                marker.setAttribute(IMarker.MESSAGE, problem.getMessage());
+                marker.setAttribute(IMarker.CHAR_START, offset);
+                marker.setAttribute(IMarker.CHAR_END, offset + length);
+            } catch (BadLocationException e) {
+                Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Invalid position", e);
+                StatusManager.getManager().handle(status);
+            }
+        }
     }
 }

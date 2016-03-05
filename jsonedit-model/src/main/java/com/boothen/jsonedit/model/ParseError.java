@@ -1,21 +1,41 @@
 package com.boothen.jsonedit.model;
 
 import org.antlr.v4.runtime.Token;
+import org.eclipse.core.resources.IMarker;
 
 public class ParseError {
+
+    public static enum Severity {
+        INFO(IMarker.SEVERITY_INFO),
+        WARNING(IMarker.SEVERITY_WARNING),
+        ERROR(IMarker.SEVERITY_ERROR);
+
+        private int markerValue;
+
+        Severity(int markerValue) {
+            this.markerValue = markerValue;
+        }
+
+        /**
+         * @return the markerValue
+         */
+        public int getMarkerValue() {
+            return markerValue;
+        }
+    }
 
     private final String msg;
     private final int line;
     private final int charPositionInLine;
-    private final Object offendingSymbol;
-    private final Token token;
+    private final Token offendingToken;
+    private final Severity severity;
 
-    public ParseError(String msg, int line, int charPositionInLine, Object offendingSymbol, Token token) {
+    public ParseError(String msg, int line, int charPositionInLine, Token offendingToken, Severity severity) {
         this.msg = msg;
         this.line = line;
         this.charPositionInLine = charPositionInLine;
-        this.offendingSymbol = offendingSymbol;
-        this.token = token;
+        this.offendingToken = offendingToken;
+        this.severity = severity;
     }
 
     /**
@@ -39,19 +59,14 @@ public class ParseError {
         return charPositionInLine;
     }
 
-    /**
-     * @return The offending token in the input token stream, unless recognizer is a lexer (then it's null).
-     * If no viable alternative error, the token at which we started production for the decision is not null.
-     */
-    public Object getOffendingSymbol() {
-        return offendingSymbol;
+    public Token getOffendingToken() {
+        return offendingToken;
     }
 
     /**
-     * @return The current Token when an error occurred. Since not all streams support accessing symbols
-     * by index, we have to track the Token instance itself.
+     * @return
      */
-    public Token getToken() {
-        return token;
+    public Severity getSeverity() {
+        return severity;
     }
 }
