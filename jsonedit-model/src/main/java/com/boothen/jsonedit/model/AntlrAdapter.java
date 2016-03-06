@@ -2,7 +2,6 @@ package com.boothen.jsonedit.model;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +13,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.Token;
-import org.eclipse.jface.text.IDocument;
 
 import com.boothen.jsonedit.antlr.JSONLexer;
 import com.boothen.jsonedit.antlr.JSONParser;
@@ -26,8 +24,7 @@ import com.boothen.jsonedit.model.ParseError.Severity;
  */
 public class AntlrAdapter {
 
-    public static ParseResult convert(IDocument doc) throws IOException {
-        Reader reader = new StringReader(doc.get());
+    public static ParseResult convert(Reader reader) throws IOException {
         CharStream stream = new ANTLRInputStream(reader);
 
         JSONLexer lexer = new JSONLexer(stream);

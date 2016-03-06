@@ -1,4 +1,4 @@
-package com.boothen.jsonedit.preferences;
+package com.boothen.jsonedit.core;
 
 /**
  * Defines preference constants.

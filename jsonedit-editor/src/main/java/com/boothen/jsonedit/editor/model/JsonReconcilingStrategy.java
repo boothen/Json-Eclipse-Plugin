@@ -16,6 +16,8 @@
 package com.boothen.jsonedit.editor.model;
 
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +99,8 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
     }
 
     private void reconcile(int offset, int length) throws IOException {
-        final ParseResult result = AntlrAdapter.convert(fDocument);
+        Reader reader = new StringReader(fDocument.get());
+        final ParseResult result = AntlrAdapter.convert(reader);
         final JsonContext syntaxTree = result.getTree();
         final List<ParseError> problems = new ArrayList<>();
         problems.addAll(result.getLexerErrors());

@@ -1,7 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension point="org.eclipse.core.runtime.preferences">
-      <initializer class="com.boothen.jsonedit.preferences.JsonPreferenceInitializer"/>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.boothen.jsonedit.preferences.rootpage"
+            class="com.boothen.jsonedit.preferences.colors.JsonSyntaxColorsPreferencePage"
+            id="com.boothen.jsonedit.preferences.colorpage"
+            name="Syntax Coloring">
+      </page>
+      <page
+            class="com.boothen.jsonedit.preferences.JsonRootPreferencePage"
+            id="com.boothen.jsonedit.preferences.rootpage"
+            name="JSON">
+      </page>
+      <page
+            category="com.boothen.jsonedit.preferences.rootpage"
+            class="com.boothen.jsonedit.preferences.format.JsonFormatPreferencePage"
+            id="com.boothen.jsonedit.preferences.formatpage"
+            name="Formatter">
+      </page>
    </extension>
+   <extension
+         point="org.eclipse.ui.themes">
+      <themeElementCategory
+            id="com.boothen.jsonedit.presentation"
+            label="%jsonPresentation.label">
+      </themeElementCategory>
+      <fontDefinition
+            categoryId="com.boothen.jsonedit.presentation"
+            defaultsTo="org.eclipse.jface.textfont"
+            id="com.boothen.jsonedit.fonts.textfont"
+            label="%jsonEditorFontDefiniton.label">
+         <description>
+            %jsonEditorFontDefinition.description
+         </description>
+      </fontDefinition>
+   </extension>
+   
 </plugin>

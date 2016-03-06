@@ -10,7 +10,25 @@ Require-Bundle: org.eclipse.core.resources,
  org.eclipse.ui,
  org.eclipse.ui.editors,
  jsonedit-core,
- org.eclipse.equinox.preferences
-Export-Package: com.boothen.jsonedit.preferences
+ org.eclipse.equinox.preferences,
+ jsonedit-model,
+ org.eclipse.jface.text,
+ jsonedit-text
+Export-Package: com.boothen.jsonedit.preferences;
+  uses:="org.eclipse.ui,
+   org.eclipse.swt.events,
+   org.eclipse.jface.util,
+   org.eclipse.jface.text,
+   org.eclipse.jface.preference,
+   org.eclipse.swt.widgets,
+   org.eclipse.jface.viewers",
+ com.boothen.jsonedit.preferences.format;
+  uses:="org.eclipse.ui,
+   org.eclipse.swt.events,
+   org.eclipse.jface.util,
+   org.eclipse.swt.graphics,
+   org.eclipse.jface.preference,
+   org.eclipse.swt.widgets,
+   org.eclipse.core.runtime.preferences"
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: com.boothen.jsonedit.preferences.JsonPreferencesPlugin
+Bundle-Activator: com.boothen.jsonedit.preferences.Activator

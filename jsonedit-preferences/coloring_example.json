@@ -1,0 +1,6 @@
+"key" : "string",
+"key" : -12.0e+13,
+"key" : true,
+"key" : null,
+"key" : {"key" : "string"},
+"key" : [1, 2, 3]

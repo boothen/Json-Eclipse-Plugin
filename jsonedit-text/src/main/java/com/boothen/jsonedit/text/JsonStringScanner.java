@@ -34,8 +34,7 @@ import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.graphics.Color;
 
 import com.boothen.jsonedit.core.JsonEditorPlugin;
-import com.boothen.jsonedit.preferences.JsonPreferences;
-import com.boothen.jsonedit.preferences.JsonPreferencesPlugin;
+import com.boothen.jsonedit.core.JsonPreferences;
 import com.boothen.jsonedit.text.detector.JsonWhitespaceDetector;
 import com.boothen.jsonedit.text.detector.JsonWordDetector;
 
@@ -82,7 +81,7 @@ public class JsonStringScanner extends RuleBasedScanner implements Reinitable {
     }
 
     private Color getPreferenceColor(String preferenceValue) {
-        IPreferenceStore store = JsonPreferencesPlugin.getDefault().getPreferenceStore();
+        IPreferenceStore store = JsonEditorPlugin.getDefault().getPreferenceStore();
         return JsonEditorPlugin.getColorProvider().getColor(StringConverter.asRGB(store.getString(preferenceValue)));
     }
 }

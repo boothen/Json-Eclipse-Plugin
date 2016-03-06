@@ -1,10 +1,10 @@
-package com.boothen.jsonedit.outline;
+package com.boothen.jsonedit.preferences;
 
 /**
  * Maps elements in the syntax tree to image, foreground and background color
  * in the outline view.
  */
-enum NodeType {
+public enum NodeType {
     ROOT(null, null, null),
     OBJECT("JsonObject.gif", "BLUE", "WHITE"),
     ARRAY("JsonArray.gif", "BLUE", "WHITE"),

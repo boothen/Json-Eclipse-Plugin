@@ -14,6 +14,7 @@ import com.boothen.jsonedit.antlr.JSONParser.ArrayContext;
 import com.boothen.jsonedit.antlr.JSONParser.ObjectContext;
 import com.boothen.jsonedit.antlr.JSONParser.PairContext;
 import com.boothen.jsonedit.antlr.JSONParser.ValueContext;
+import com.boothen.jsonedit.preferences.NodeType;
 
 /**
  * Visits tree nodes in the JsonContext depending on the node type. Does not recurse.

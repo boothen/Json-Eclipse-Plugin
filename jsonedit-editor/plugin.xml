@@ -74,14 +74,6 @@
             value="false">
       </persistent>
    </extension>
-   <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            class="com.boothen.jsonedit.preferences.WorkbenchPreferencePage"
-            id="com.boothen.jsonedit.preferences.WorkbenchPrefencePage"
-            name="JSON Editor">
-      </page>
-   </extension>
     <extension point="org.eclipse.ui.newWizards">
         <category
             id="com.boothen.jsonedit.editor.new.category"
@@ -120,20 +112,7 @@
             id="com.boothen.jsonedit.jsonEditorScope">
         </context>
     </extension>
-   <extension
-         point="org.eclipse.ui.themes">
-        <themeElementCategory label="%jsonPresentation.label" id="com.boothen.jsonedit.presentation"/>
-      <fontDefinition
-            label="%jsonEditorFontDefiniton.label"
-            defaultsTo="org.eclipse.jface.textfont"
-            categoryId="com.boothen.jsonedit.presentation"
-            id="com.boothen.jsonedit.fonts.textfont">
-         <description>
-            %javaEditorFontDefintion.description
-         </description>
-      </fontDefinition>
-    </extension>
-   <extension
+    <extension
          point="org.eclipse.core.filebuffers.documentSetup">
       <participant
             class="com.boothen.jsonedit.editor.DocumentSetup"
