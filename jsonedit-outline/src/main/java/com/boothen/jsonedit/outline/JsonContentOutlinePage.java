@@ -33,7 +33,7 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -109,15 +109,26 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
         provider.refreshParents(root.getContent());
 
         if (viewer != null) {
-            Control control = viewer.getControl();
+            Tree control = viewer.getTree();
             if (control != null && !control.isDisposed()) {
 
                 Object[] oldExpanded = viewer.getExpandedElements();
                 Object[] newExpanded = convertExpandedElements(oldExpanded, map);
 
+                Object oldSelected = viewer.getStructuredSelection().getFirstElement();
+                Object newSelected = map.get(oldSelected);
+
                 control.setRedraw(false);
+
+                textHasChanged = true;
                 viewer.refresh();
                 viewer.setExpandedElements(newExpanded);
+                if (newSelected != null) {
+                    viewer.reveal(newSelected);
+                    viewer.setSelection(new TreeSelection(new TreePath(new Object[] { newSelected })));
+                }
+                textHasChanged = false;
+
                 control.setRedraw(true);
             }
         }
