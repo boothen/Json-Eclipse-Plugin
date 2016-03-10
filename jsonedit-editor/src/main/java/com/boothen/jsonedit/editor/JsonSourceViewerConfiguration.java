@@ -29,8 +29,10 @@ import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
+import com.boothen.jsonedit.antlr.JSONLexer;
 import com.boothen.jsonedit.core.JsonEditorPlugin;
 import com.boothen.jsonedit.core.JsonPreferences;
+import com.boothen.jsonedit.editor.model.AntlrTokenScanner;
 import com.boothen.jsonedit.editor.model.JsonReconcilingStrategy;
 import com.boothen.jsonedit.editor.text.JsonIndentLineAutoEditStrategy;
 import com.boothen.jsonedit.text.JsonStringScanner;
@@ -60,7 +62,8 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
     public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
         PresentationReconciler reconciler= new PresentationReconciler();
 
-        DefaultDamagerRepairer dr = new DefaultDamagerRepairer(jsonStringScanner);
+        JSONLexer lexer = new JSONLexer(null);
+        DefaultDamagerRepairer dr = new DefaultDamagerRepairer(new AntlrTokenScanner(lexer));
         reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
         reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 
