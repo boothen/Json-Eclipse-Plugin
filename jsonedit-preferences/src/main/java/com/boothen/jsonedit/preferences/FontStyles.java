@@ -1,4 +1,4 @@
-package com.boothen.jsonedit.preferences.colors;
+package com.boothen.jsonedit.preferences;
 
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.swt.SWT;

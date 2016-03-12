@@ -59,6 +59,9 @@ public final class JsonColorProvider {
      * @return the color stored in the color table for the given RGB value
      */
     public Color getColor(RGB rgb) {
+        if (rgb == null) {
+            return null;
+        }
 
         Color color = fColorTable.get(rgb);
 

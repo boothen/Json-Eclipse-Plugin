@@ -2,17 +2,14 @@ package com.boothen.jsonedit.model;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonToken;
+import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.ITokenScanner;
-import org.eclipse.swt.graphics.RGB;
 
 import com.boothen.jsonedit.antlr.JSONLexer;
-import com.boothen.jsonedit.core.JsonColorProvider;
-import com.boothen.jsonedit.core.JsonEditorPlugin;
 import com.boothen.jsonedit.core.JsonLog;
 
 /**
@@ -21,16 +18,28 @@ import com.boothen.jsonedit.core.JsonLog;
 public class AntlrTokenScanner implements ITokenScanner {
 
     private int offset;
-    private JSONLexer lexer;
+    private Lexer lexer;
     private CommonToken previous;
     private CommonToken current;
+    private TokenMapping tokenMapping;
 
     public AntlrTokenScanner() {
         this(new JSONLexer(null));
     }
 
-    public AntlrTokenScanner(JSONLexer lexer) {
+    public AntlrTokenScanner(Lexer lexer) {
         this.lexer = lexer;
+        this.tokenMapping = new TokenMapping() {
+            @Override
+            public Object apply(int currentTokenType, int previousTokenType) {
+                return null;
+            }
+        };
+    }
+
+    public AntlrTokenScanner(Lexer lexer, TokenMapping mapping) {
+        this.lexer = lexer;
+        this.tokenMapping = mapping;
     }
 
     @Override
@@ -59,27 +68,11 @@ public class AntlrTokenScanner implements ITokenScanner {
         previous = current;
         current = (CommonToken) token;
 
-        RGB rgb = new RGB(0, 0, 0);
+        int currentType = current.getType();
+        int previousType = previous != null ? previous.getType() : Token.EOF;
+        Object data = tokenMapping.apply(currentType, previousType);
 
-        int tokenTypeIndex = token.getType();
-        switch (tokenTypeIndex) {
-            case JSONLexer.STRING:
-                if (previous != null && previous.getType() == JSONLexer.COLON) {
-                    rgb = new RGB(0, 0, 128);
-                } else {
-                    rgb = new RGB(0, 128, 0);
-                }
-                break;
-
-            case JSONLexer.NUMBER:
-                rgb = new RGB(128, 0, 128);
-                break;
-        }
-
-        JsonColorProvider colorProvider = JsonEditorPlugin.getColorProvider();
-        TextAttribute attribute = new TextAttribute(colorProvider.getColor(rgb));
-
-        return new org.eclipse.jface.text.rules.Token(attribute);
+        return new org.eclipse.jface.text.rules.Token(data);
     }
 
     @Override

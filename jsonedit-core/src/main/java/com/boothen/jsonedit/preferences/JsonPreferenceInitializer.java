@@ -16,15 +16,18 @@
 package com.boothen.jsonedit.preferences;
 
 import static com.boothen.jsonedit.core.JsonPreferences.AUTO_FORMAT_ON_SAVE;
-import static com.boothen.jsonedit.core.JsonPreferences.DEFAULT_COLOR;
 import static com.boothen.jsonedit.core.JsonPreferences.EDITOR_MATCHING_BRACKETS;
 import static com.boothen.jsonedit.core.JsonPreferences.EDITOR_MATCHING_BRACKETS_COLOR;
-import static com.boothen.jsonedit.core.JsonPreferences.ERROR_COLOR;
-import static com.boothen.jsonedit.core.JsonPreferences.NULL_COLOR;
 import static com.boothen.jsonedit.core.JsonPreferences.NUM_SPACES;
 import static com.boothen.jsonedit.core.JsonPreferences.SPACES_FOR_TABS;
-import static com.boothen.jsonedit.core.JsonPreferences.STRING_COLOR;
-import static com.boothen.jsonedit.core.JsonPreferences.VALUE_COLOR;
+import static com.boothen.jsonedit.core.JsonPreferences.STYLE_BOOLEAN_BOLD;
+import static com.boothen.jsonedit.core.JsonPreferences.STYLE_BOOLEAN_COLOR;
+import static com.boothen.jsonedit.core.JsonPreferences.STYLE_ERROR_COLOR;
+import static com.boothen.jsonedit.core.JsonPreferences.STYLE_KEY_COLOR;
+import static com.boothen.jsonedit.core.JsonPreferences.STYLE_NULL_BOLD;
+import static com.boothen.jsonedit.core.JsonPreferences.STYLE_NULL_COLOR;
+import static com.boothen.jsonedit.core.JsonPreferences.STYLE_NUMBER_COLOR;
+import static com.boothen.jsonedit.core.JsonPreferences.STYLE_TEXT_COLOR;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -49,11 +52,19 @@ public class JsonPreferenceInitializer extends AbstractPreferenceInitializer {
         node.setDefault(NUM_SPACES, 4);
         node.setDefault(EDITOR_MATCHING_BRACKETS, true);
         node.setDefault(AUTO_FORMAT_ON_SAVE, false);
-        node.setDefault(EDITOR_MATCHING_BRACKETS_COLOR, StringConverter.asString(new RGB(0, 128, 0)));
-        node.setDefault(STRING_COLOR, StringConverter.asString(new RGB(0, 128, 0)));
-        node.setDefault(VALUE_COLOR, StringConverter.asString(new RGB(0, 0, 128)));
-        node.setDefault(NULL_COLOR, StringConverter.asString(new RGB(128, 0, 128)));
-        node.setDefault(ERROR_COLOR, StringConverter.asString(new RGB(255, 0, 0)));
-        node.setDefault(DEFAULT_COLOR, StringConverter.asString(new RGB(0, 0, 0)));
+        node.setDefault(EDITOR_MATCHING_BRACKETS_COLOR, colorToString(0, 128, 0));
+        node.setDefault(STYLE_KEY_COLOR, colorToString(0, 128, 0));
+        node.setDefault(STYLE_TEXT_COLOR, colorToString(0, 0, 128));
+        node.setDefault(STYLE_NULL_COLOR, colorToString(0, 0, 0));
+        node.setDefault(STYLE_BOOLEAN_COLOR, colorToString(0, 0, 0));
+        node.setDefault(STYLE_NUMBER_COLOR, colorToString(0, 0, 128));
+        node.setDefault(STYLE_ERROR_COLOR, colorToString(224, 0, 0));
+
+        node.setDefault(STYLE_NULL_BOLD, true);
+        node.setDefault(STYLE_BOOLEAN_BOLD, true);
+    }
+
+    private static String colorToString(int red, int green, int blue) {
+        return StringConverter.asString(new RGB(red, green, blue));
     }
 }
