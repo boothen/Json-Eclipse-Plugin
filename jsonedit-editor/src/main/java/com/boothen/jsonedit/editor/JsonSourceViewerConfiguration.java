@@ -29,13 +29,11 @@ import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
-import com.boothen.jsonedit.antlr.JSONLexer;
 import com.boothen.jsonedit.core.JsonEditorPlugin;
 import com.boothen.jsonedit.core.JsonPreferences;
-import com.boothen.jsonedit.editor.model.AntlrTokenScanner;
 import com.boothen.jsonedit.editor.model.JsonReconcilingStrategy;
 import com.boothen.jsonedit.editor.text.JsonIndentLineAutoEditStrategy;
-import com.boothen.jsonedit.text.JsonStringScanner;
+import com.boothen.jsonedit.model.AntlrTokenScanner;
 import com.boothen.jsonedit.text.LineEndingUtil;
 
 /**
@@ -45,7 +43,6 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
 
     private JsonTextEditor textEditor;
     private JsonIndentLineAutoEditStrategy jsonIndentLineAutoEditStrategy;
-    private JsonStringScanner jsonStringScanner;
 
     public JsonSourceViewerConfiguration(JsonTextEditor textEditor) {
         super();
@@ -55,15 +52,13 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
         int numSpaces = store.getInt(JsonPreferences.NUM_SPACES);
         String lineEnding = "\n";
         jsonIndentLineAutoEditStrategy = new JsonIndentLineAutoEditStrategy(spaces, numSpaces, lineEnding);
-        jsonStringScanner = new JsonStringScanner();
     }
 
     @Override
     public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
         PresentationReconciler reconciler= new PresentationReconciler();
 
-        JSONLexer lexer = new JSONLexer(null);
-        DefaultDamagerRepairer dr = new DefaultDamagerRepairer(new AntlrTokenScanner(lexer));
+        DefaultDamagerRepairer dr = new DefaultDamagerRepairer(new AntlrTokenScanner());
         reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
         reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 
@@ -95,8 +90,6 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
         String lineEnding = getTextEditorLineEnding();
         textEditor.updateTabWidth(numSpaces);
         jsonIndentLineAutoEditStrategy.initPreferences(spaces, numSpaces, lineEnding);
-        jsonStringScanner.reinit();
-
     }
 
     private String getTextEditorLineEnding() {

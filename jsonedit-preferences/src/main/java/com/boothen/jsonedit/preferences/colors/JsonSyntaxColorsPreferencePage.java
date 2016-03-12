@@ -30,9 +30,9 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.boothen.jsonedit.core.BundleUtils;
+import com.boothen.jsonedit.model.AntlrTokenScanner;
 import com.boothen.jsonedit.preferences.Activator;
 import com.boothen.jsonedit.preferences.NodeType;
-import com.boothen.jsonedit.text.JsonStringScanner;
 
 /**
  * @author denis.mirochnik
@@ -261,7 +261,7 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
     private IPresentationReconciler createPresentationReconciler() {
         PresentationReconciler reconciler = new PresentationReconciler();
 
-        DefaultDamagerRepairer dr = new DefaultDamagerRepairer(new JsonStringScanner());
+        DefaultDamagerRepairer dr = new DefaultDamagerRepairer(new AntlrTokenScanner());
         reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
         reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 

@@ -1,4 +1,4 @@
-package com.boothen.jsonedit.editor.model;
+package com.boothen.jsonedit.model;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonToken;
@@ -24,6 +24,10 @@ public class AntlrTokenScanner implements ITokenScanner {
     private JSONLexer lexer;
     private CommonToken previous;
     private CommonToken current;
+
+    public AntlrTokenScanner() {
+        this(new JSONLexer(null));
+    }
 
     public AntlrTokenScanner(JSONLexer lexer) {
         this.lexer = lexer;
