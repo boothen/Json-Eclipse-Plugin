@@ -11,6 +11,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextViewer;
 
 import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
+import com.boothen.jsonedit.core.JsonLog;
 import com.boothen.jsonedit.model.AntlrAdapter;
 
 /**
@@ -30,7 +31,7 @@ public class TextFormatter {
             Reader reader = new StringReader(jsonText);
             mElement = AntlrAdapter.convert(reader).getTree();
         } catch (IOException e) {
-            // TODO: handle exception with status handler
+            JsonLog.logError(e);
             mElement = null;
         }
     }
@@ -44,8 +45,7 @@ public class TextFormatter {
             try {
                 document.replace(0, length, format);
             } catch (final BadLocationException e) {
-                //                String text = "Attempting to access a non-existing position";
-                // TODO: handle exception
+                JsonLog.logError("Attempting to access a non-existing position", e);
             }
         } else {
             mViewer.setDocument(new Document(format));

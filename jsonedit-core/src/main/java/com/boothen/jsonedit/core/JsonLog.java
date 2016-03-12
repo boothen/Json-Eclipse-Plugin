@@ -4,20 +4,20 @@
  * Licensed under the Eclipse Public License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *   
+ *
  * https://eclipse.org/org/documents/epl-v10.html
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.boothen.jsonedit.log;
+package com.boothen.jsonedit.core;
 
-import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.ui.statushandlers.StatusManager;
 
 /**
  * Logging helper class.
@@ -27,29 +27,12 @@ import org.eclipse.core.runtime.Status;
  */
 public class JsonLog {
 
-    private static JsonLog singleton;
-
-    private String pluginId;
-    private ILog log;
-
-    private JsonLog(String pluginId, ILog log) {
-        this.pluginId = pluginId;
-        this.log = log;
-    }
-
-    public static JsonLog getInstance(String pluginId, ILog log) {
-        if (singleton != null) {
-            return singleton;
-        }
-        singleton = new JsonLog(pluginId, log);
-        return singleton;
-    }
     /**
      * Log info method.
      * @param message
      */
     public static void logInfo(String message) {
-        log(IStatus.INFO, IStatus.OK, message, null);
+        report(IStatus.INFO, IStatus.OK, message, null);
     }
 
     /**
@@ -66,7 +49,7 @@ public class JsonLog {
      * @param exception
      */
     public static void logError(String message, Throwable exception) {
-        log(IStatus.ERROR, IStatus.OK, message, exception);
+        report(IStatus.ERROR, IStatus.OK, message, exception);
     }
 
     /**
@@ -77,28 +60,13 @@ public class JsonLog {
      * @param message
      * @param exception
      */
-    public static void log(int severity, int code, String message, Throwable exception) {
-        log(createStatus(severity, code, message, exception));
-    }
-
-    /**
-     * Create status method.
-     *
-     * @param severity
-     * @param code
-     * @param message
-     * @param exception
-     * @return
-     */
-    public static IStatus createStatus(int severity, int code, String message, Throwable exception) {
-        return new Status(severity, singleton.pluginId, code, message, exception);
-    }
-
-    /**
-     * Log status method.
-     * @param status
-     */
-    public static void log(IStatus status) {
-        singleton.log.log(status);
+    private static void report(int severity, int code, String message, Throwable exception) {
+        String pluginId = JsonEditorPlugin.PLUGIN_ID;
+        if (exception == null) {
+            // this will provide the stack trace
+            exception = new RuntimeException();
+        }
+        Status status = new Status(severity, pluginId, code, message, exception);
+        StatusManager.getManager().handle(status, StatusManager.LOG);
     }
 }

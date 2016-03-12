@@ -5,8 +5,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import com.boothen.jsonedit.log.JsonLog;
-
 /**
  * The activator class controls the plug-in life cycle
  */
@@ -26,7 +24,6 @@ public class Activator extends AbstractUIPlugin {
      * The constructor
      */
     public Activator() {
-        JsonLog.getInstance(PLUGIN_ID, super.getLog());
         if (PlatformUI.isWorkbenchRunning() || Display.getCurrent() != null) {
             getImageRegistry();
         }

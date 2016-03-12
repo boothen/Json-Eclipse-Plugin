@@ -11,7 +11,6 @@
 		<module>jsonedit-feature</module>
 		<module>jsonedit-editor</module>
 		<module>jsonedit-folding</module>
-		<module>jsonedit-log</module>
 		<module>jsonedit-model</module>
 		<module>jsonedit-outline</module>
 		<module>jsonedit-preferences</module>

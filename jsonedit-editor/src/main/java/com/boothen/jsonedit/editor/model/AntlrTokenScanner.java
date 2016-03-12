@@ -13,6 +13,7 @@ import org.eclipse.swt.graphics.RGB;
 import com.boothen.jsonedit.antlr.JSONLexer;
 import com.boothen.jsonedit.core.JsonColorProvider;
 import com.boothen.jsonedit.core.JsonEditorPlugin;
+import com.boothen.jsonedit.core.JsonLog;
 
 /**
  * Use the ANTLR lexer to extract tokens from a document.
@@ -35,8 +36,7 @@ public class AntlrTokenScanner implements ITokenScanner {
             String text = document.get(offset, length);
             lexer.setInputStream(new ANTLRInputStream(text));
         } catch (BadLocationException e) {
-            // TODO: handle exceptions
-            e.printStackTrace();
+            JsonLog.logError("Attempting to access a non-existing position", e);
         }
     }
 
