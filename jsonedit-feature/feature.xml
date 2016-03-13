@@ -98,13 +98,6 @@ All Recipient&apos;s rights under this Agreement shall terminate if it fails
          unpack="false"/>
 
    <plugin
-         id="jsonedit-log"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="jsonedit-model"
          download-size="0"
          install-size="0"
@@ -120,13 +113,6 @@ All Recipient&apos;s rights under this Agreement shall terminate if it fails
 
    <plugin
          id="jsonedit-preferences"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="jsonedit-reader"
          download-size="0"
          install-size="0"
          version="0.0.0"

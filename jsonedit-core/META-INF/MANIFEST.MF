@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: JSON Editor Core
 Bundle-SymbolicName: jsonedit-core;singleton:=true
 Bundle-Version: 0.9.8
-Bundle-Activator: com.boothen.jsonedit.core.JsonEditorPlugin
+Bundle-Activator: com.boothen.jsonedit.core.JsonCorePlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jface.text,
@@ -14,4 +14,5 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: Boothen Technology
-Export-Package: com.boothen.jsonedit.core
+Export-Package: com.boothen.jsonedit.core,
+ com.boothen.jsonedit.core.preferences

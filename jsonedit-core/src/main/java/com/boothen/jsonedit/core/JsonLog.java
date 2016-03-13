@@ -61,7 +61,7 @@ public class JsonLog {
      * @param exception
      */
     private static void report(int severity, int code, String message, Throwable exception) {
-        String pluginId = JsonEditorPlugin.PLUGIN_ID;
+        String pluginId = JsonCorePlugin.PLUGIN_ID;
         if (exception == null) {
             // this will provide the stack trace
             exception = new RuntimeException();

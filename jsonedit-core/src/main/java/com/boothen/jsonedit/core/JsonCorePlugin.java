@@ -26,7 +26,7 @@ import org.osgi.framework.BundleContext;
  * @author Matt Garner
  *
  */
-public class JsonEditorPlugin extends AbstractUIPlugin {
+public class JsonCorePlugin extends AbstractUIPlugin {
 
     /**
      * The plug-in ID
@@ -36,7 +36,7 @@ public class JsonEditorPlugin extends AbstractUIPlugin {
 
     private static final JsonColorProvider colorProvider = new JsonColorProvider();
 
-    private static JsonEditorPlugin plugin;
+    private static JsonCorePlugin plugin;
 
     @Override
     public void start(BundleContext context) throws Exception {
@@ -55,7 +55,7 @@ public class JsonEditorPlugin extends AbstractUIPlugin {
      * Returns the shared instance
      * @return the shared instance
      */
-    public static JsonEditorPlugin getDefault() {
+    public static JsonCorePlugin getDefault() {
         return plugin;
     }
 

@@ -13,28 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.boothen.jsonedit.preferences;
+package com.boothen.jsonedit.core.preferences;
 
-import static com.boothen.jsonedit.core.JsonPreferences.AUTO_FORMAT_ON_SAVE;
-import static com.boothen.jsonedit.core.JsonPreferences.EDITOR_MATCHING_BRACKETS;
-import static com.boothen.jsonedit.core.JsonPreferences.EDITOR_MATCHING_BRACKETS_COLOR;
-import static com.boothen.jsonedit.core.JsonPreferences.NUM_SPACES;
-import static com.boothen.jsonedit.core.JsonPreferences.SPACES_FOR_TABS;
-import static com.boothen.jsonedit.core.JsonPreferences.STYLE_BOOLEAN_BOLD;
-import static com.boothen.jsonedit.core.JsonPreferences.STYLE_BOOLEAN_COLOR;
-import static com.boothen.jsonedit.core.JsonPreferences.STYLE_ERROR_COLOR;
-import static com.boothen.jsonedit.core.JsonPreferences.STYLE_KEY_COLOR;
-import static com.boothen.jsonedit.core.JsonPreferences.STYLE_NULL_BOLD;
-import static com.boothen.jsonedit.core.JsonPreferences.STYLE_NULL_COLOR;
-import static com.boothen.jsonedit.core.JsonPreferences.STYLE_NUMBER_COLOR;
-import static com.boothen.jsonedit.core.JsonPreferences.STYLE_TEXT_COLOR;
+import static com.boothen.jsonedit.core.preferences.JsonPreferences.AUTO_FORMAT_ON_SAVE;
+import static com.boothen.jsonedit.core.preferences.JsonPreferences.EDITOR_MATCHING_BRACKETS;
+import static com.boothen.jsonedit.core.preferences.JsonPreferences.EDITOR_MATCHING_BRACKETS_COLOR;
+import static com.boothen.jsonedit.core.preferences.JsonPreferences.NUM_SPACES;
+import static com.boothen.jsonedit.core.preferences.JsonPreferences.SPACES_FOR_TABS;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.swt.graphics.RGB;
 
-import com.boothen.jsonedit.core.JsonEditorPlugin;
+import com.boothen.jsonedit.core.JsonCorePlugin;
 
 /**
  *
@@ -46,22 +38,23 @@ public class JsonPreferenceInitializer extends AbstractPreferenceInitializer {
     @Override
     public void initializeDefaultPreferences() {
 //        IEclipsePreferences node = DefaultScope.INSTANCE.getNode(JsonPreferencesPlugin.PLUGIN_ID);
-        IPreferenceStore node = JsonEditorPlugin.getDefault().getPreferenceStore();
+        IPreferenceStore node = JsonCorePlugin.getDefault().getPreferenceStore();
 
         node.setDefault(SPACES_FOR_TABS, true);
         node.setDefault(NUM_SPACES, 4);
         node.setDefault(EDITOR_MATCHING_BRACKETS, true);
         node.setDefault(AUTO_FORMAT_ON_SAVE, false);
         node.setDefault(EDITOR_MATCHING_BRACKETS_COLOR, colorToString(0, 128, 0));
-        node.setDefault(STYLE_KEY_COLOR, colorToString(0, 128, 0));
-        node.setDefault(STYLE_TEXT_COLOR, colorToString(0, 0, 128));
-        node.setDefault(STYLE_NULL_COLOR, colorToString(0, 0, 0));
-        node.setDefault(STYLE_BOOLEAN_COLOR, colorToString(0, 0, 0));
-        node.setDefault(STYLE_NUMBER_COLOR, colorToString(0, 0, 128));
-        node.setDefault(STYLE_ERROR_COLOR, colorToString(224, 0, 0));
 
-        node.setDefault(STYLE_NULL_BOLD, true);
-        node.setDefault(STYLE_BOOLEAN_BOLD, true);
+        node.setDefault(TokenStyle.KEY.color(), colorToString(0, 128, 0));
+        node.setDefault(TokenStyle.TEXT.color(), colorToString(0, 0, 128));
+        node.setDefault(TokenStyle.NULL.color(), colorToString(0, 0, 0));
+        node.setDefault(TokenStyle.BOOLEAN.color(), colorToString(0, 0, 0));
+        node.setDefault(TokenStyle.NUMBER.color(), colorToString(0, 0, 128));
+        node.setDefault(TokenStyle.ERROR.color(), colorToString(224, 0, 0));
+
+        node.setDefault(TokenStyle.NULL.isBold(), true);
+        node.setDefault(TokenStyle.BOOLEAN.isBold(), true);
     }
 
     private static String colorToString(int red, int green, int blue) {

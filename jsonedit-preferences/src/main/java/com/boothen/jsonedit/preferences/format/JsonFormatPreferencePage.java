@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-import com.boothen.jsonedit.core.JsonEditorPlugin;
+import com.boothen.jsonedit.core.JsonCorePlugin;
 
 /**
  * @author denis.mirochnik
@@ -233,7 +233,7 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
     @Override
     public void init(IWorkbench workbench)
     {
-        setPreferenceStore(JsonEditorPlugin.getDefault().getPreferenceStore());
+        setPreferenceStore(JsonCorePlugin.getDefault().getPreferenceStore());
     }
 
     @Override

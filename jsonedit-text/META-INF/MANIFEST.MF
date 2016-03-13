@@ -9,7 +9,6 @@ Require-Bundle: org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.jface.text,
  org.eclipse.ui,
- jsonedit-reader,
  jsonedit-model,
  jsonedit-core
 Import-Package: com.boothen.jsonedit.core

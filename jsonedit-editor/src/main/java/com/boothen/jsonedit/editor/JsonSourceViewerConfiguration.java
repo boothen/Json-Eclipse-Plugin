@@ -30,12 +30,13 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
 import com.boothen.jsonedit.antlr.JSONLexer;
-import com.boothen.jsonedit.core.JsonEditorPlugin;
-import com.boothen.jsonedit.core.JsonPreferences;
+import com.boothen.jsonedit.core.JsonCorePlugin;
+import com.boothen.jsonedit.core.preferences.JsonPreferences;
 import com.boothen.jsonedit.editor.model.JsonReconcilingStrategy;
 import com.boothen.jsonedit.editor.text.JsonIndentLineAutoEditStrategy;
 import com.boothen.jsonedit.model.AntlrTokenScanner;
 import com.boothen.jsonedit.model.TokenMapping;
+import com.boothen.jsonedit.preferences.JsonTokenMapping;
 import com.boothen.jsonedit.text.LineEndingUtil;
 
 /**
@@ -49,7 +50,7 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
     public JsonSourceViewerConfiguration(JsonTextEditor textEditor) {
         super();
         this.textEditor = textEditor;
-        IPreferenceStore store = JsonEditorPlugin.getDefault().getPreferenceStore();
+        IPreferenceStore store = JsonCorePlugin.getDefault().getPreferenceStore();
         boolean spaces = store.getBoolean(JsonPreferences.SPACES_FOR_TABS);
         int numSpaces = store.getInt(JsonPreferences.NUM_SPACES);
         String lineEnding = "\n";
@@ -61,7 +62,8 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
         PresentationReconciler reconciler= new PresentationReconciler();
 
         JSONLexer lexer = new JSONLexer(null);
-        TokenMapping mapping = new JsonTokenMapping();
+        IPreferenceStore store = JsonCorePlugin.getDefault().getPreferenceStore();
+        TokenMapping mapping = new JsonTokenMapping(store);
         AntlrTokenScanner scanner = new AntlrTokenScanner(lexer, mapping);
         DefaultDamagerRepairer dr = new DefaultDamagerRepairer(scanner);
         reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
@@ -88,7 +90,7 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
     }
 
     public void handlePreferenceStoreChanged() {
-        IPreferenceStore store = JsonEditorPlugin.getDefault().getPreferenceStore();
+        IPreferenceStore store = JsonCorePlugin.getDefault().getPreferenceStore();
         boolean spaces = store.getBoolean(JsonPreferences.SPACES_FOR_TABS);
         int numSpaces = store.getInt(JsonPreferences.NUM_SPACES);
 

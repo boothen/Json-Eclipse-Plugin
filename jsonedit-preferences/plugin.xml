@@ -12,7 +12,7 @@
       <page
             class="com.boothen.jsonedit.preferences.JsonRootPreferencePage"
             id="com.boothen.jsonedit.preferences.rootpage"
-            name="JSON">
+            name="JSON Editor">
       </page>
       <page
             category="com.boothen.jsonedit.preferences.rootpage"

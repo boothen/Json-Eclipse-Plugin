@@ -2,6 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension point="org.eclipse.core.runtime.preferences">
-      <initializer class="com.boothen.jsonedit.preferences.JsonPreferenceInitializer"/>
+      <initializer class="com.boothen.jsonedit.core.preferences.JsonPreferenceInitializer"/>
    </extension>
 </plugin>

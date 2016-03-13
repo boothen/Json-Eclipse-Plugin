@@ -1,4 +1,4 @@
-package com.boothen.jsonedit.editor;
+package com.boothen.jsonedit.preferences;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.StringConverter;
@@ -9,8 +9,8 @@ import org.eclipse.swt.graphics.RGB;
 
 import com.boothen.jsonedit.antlr.JSONLexer;
 import com.boothen.jsonedit.core.JsonColorProvider;
-import com.boothen.jsonedit.core.JsonEditorPlugin;
-import com.boothen.jsonedit.core.JsonPreferences;
+import com.boothen.jsonedit.core.JsonCorePlugin;
+import com.boothen.jsonedit.core.preferences.TokenStyle;
 import com.boothen.jsonedit.model.TokenMapping;
 
 
@@ -19,18 +19,22 @@ import com.boothen.jsonedit.model.TokenMapping;
  */
 public class JsonTokenMapping implements TokenMapping {
 
-    private final IPreferenceStore preferenceStore = JsonEditorPlugin.getDefault().getPreferenceStore();
-    private final JsonColorProvider colorProvider = JsonEditorPlugin.getColorProvider();
+    private final IPreferenceStore preferenceStore;
+    private final JsonColorProvider colorProvider = JsonCorePlugin.getColorProvider();
+
+    public JsonTokenMapping(IPreferenceStore preferenceStore) {
+        this.preferenceStore = preferenceStore;
+    }
 
     @Override
     public Object apply(int currentTokenType, int previousTokenType) {
-        String id = getIdentifier(currentTokenType, previousTokenType);
+        TokenStyle styleId = getIdentifier(currentTokenType, previousTokenType);
 
-        boolean isBold = preferenceStore.getBoolean(id + ".isBold");
-        boolean isItalic = preferenceStore.getBoolean(id + ".isItalic");
+        boolean isBold = preferenceStore.getBoolean(styleId.isBold());
+        boolean isItalic = preferenceStore.getBoolean(styleId.isItalic());
         int style = getStyle(isBold, isItalic);
 
-        String colorText = preferenceStore.getString(id + JsonPreferences.COLOR_ENTRY);
+        String colorText = preferenceStore.getString(styleId.color());
         Color color = getColor(colorText);
 
         TextAttribute attribute = new TextAttribute(color, null, style);
@@ -49,27 +53,27 @@ public class JsonTokenMapping implements TokenMapping {
         return style;
     }
 
-    private static String getIdentifier(int currentTokenType, int previousTokenType) {
+    private static TokenStyle getIdentifier(int currentTokenType, int previousTokenType) {
         switch (currentTokenType) {
         case JSONLexer.STRING:
             if (previousTokenType == JSONLexer.COLON) {
-                return JsonPreferences.STYLE_TEXT;
+                return TokenStyle.TEXT;
             } else {
-                return JsonPreferences.STYLE_KEY;
+                return TokenStyle.KEY;
             }
 
         case JSONLexer.NUMBER:
-            return JsonPreferences.STYLE_NUMBER;
+            return TokenStyle.NUMBER;
 
         case JSONLexer.TRUE:
         case JSONLexer.FALSE:
-            return JsonPreferences.STYLE_BOOLEAN;
+            return TokenStyle.BOOLEAN;
 
         case JSONLexer.NULL:
-            return JsonPreferences.STYLE_NULL;
+            return TokenStyle.NULL;
 
         default:
-            return null;
+            return TokenStyle.DEFAULT;
         }
     }
 }

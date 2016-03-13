@@ -13,8 +13,10 @@ import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionEvent;
@@ -29,22 +31,25 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
+import com.boothen.jsonedit.antlr.JSONLexer;
 import com.boothen.jsonedit.core.BundleUtils;
+import com.boothen.jsonedit.core.JsonCorePlugin;
+import com.boothen.jsonedit.core.JsonLog;
+import com.boothen.jsonedit.core.preferences.TokenStyle;
 import com.boothen.jsonedit.model.AntlrTokenScanner;
 import com.boothen.jsonedit.preferences.Activator;
-import com.boothen.jsonedit.preferences.NodeType;
+import com.boothen.jsonedit.preferences.FontStyles;
+import com.boothen.jsonedit.preferences.JsonTokenMapping;
 
 /**
  * @author denis.mirochnik
  */
-public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IWorkbenchPreferencePage, ISelectionChangedListener, IPropertyChangeListener, SelectionListener
+public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IWorkbenchPreferencePage, IPropertyChangeListener, SelectionListener
 {
     private Button mEnabledButton;
     private ColorSelector mSelector;
     private Button mBoldButton;
     private Button mItalicButton;
-    private Button mUnderButton;
-    private Button mStrikeButton;
 
     @Override
     protected Control createContents(Composite parent)
@@ -94,7 +99,7 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
             IPresentationReconciler reconciler = createPresentationReconciler();
             reconciler.install(textViewer);
         } catch (IOException e) {
-            // TODO: handle properly
+            JsonLog.logError("Could not load example json file", e);
         }
 
         mBoldButton = new Button(appearanceComposite, SWT.CHECK);
@@ -113,35 +118,24 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
         mItalicButton.setText("Italic");
         mItalicButton.addSelectionListener(this);
 
-        mUnderButton = new Button(appearanceComposite, SWT.CHECK);
-        final FormData fd_btnCheckButton_1 = new FormData();
-        fd_btnCheckButton_1.top = new FormAttachment(colorButton, 10);
-        fd_btnCheckButton_1.left = new FormAttachment(mItalicButton, 10);
-        mUnderButton.setLayoutData(fd_btnCheckButton_1);
-        mUnderButton.setText("Underline");
-        mUnderButton.addSelectionListener(this);
-
-        mStrikeButton = new Button(appearanceComposite, SWT.CHECK);
-        final FormData fd_btnCheckButton_2 = new FormData();
-        fd_btnCheckButton_2.top = new FormAttachment(mUnderButton, 10);
-        fd_btnCheckButton_2.left = new FormAttachment(mItalicButton, 10);
-        mStrikeButton.setLayoutData(fd_btnCheckButton_2);
-        mStrikeButton.setText("Strikethrough");
-        mStrikeButton.addSelectionListener(this);
-
         listViewer.setContentProvider(new ColorsContentProvider());
         listViewer.setLabelProvider(new ColorsLabelProvider());
-//        listViewer.addSelectionChangedListener(this);
-        listViewer.setInput(NodeType.values());
-//        listViewer.setSelection(new StructuredSelection(NodeType.));
+        listViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+            @Override
+            public void selectionChanged(SelectionChangedEvent event) {
+                IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+                TokenStyle style = (TokenStyle) selection.getFirstElement();
+                updateSelection(style);
+            }
+        });
+
+        listViewer.setInput(TokenStyle.values());
+        listViewer.setSelection(new StructuredSelection(TokenStyle.KEY));
 
         return appearanceComposite;
     }
 
-    @Override
-    public void selectionChanged(SelectionChangedEvent event) {
-        updateSelection();
-    }
 
     @Override
     public void propertyChange(PropertyChangeEvent event)
@@ -153,7 +147,7 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
         }
     }
 
-    private void updateSelection()
+    private void updateSelection(TokenStyle style)
     {
 //        final int style = mSelection.getOwnStyle(mPreferenceStore);
 //
@@ -215,17 +209,15 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
     @Override
     public void init(IWorkbench workbench)
     {
-//        setPreferenceStore(JsonPlugin.getDefault().getPreferenceStore());
+        setPreferenceStore(JsonCorePlugin.getDefault().getPreferenceStore());
     }
 
     private int collectStyle()
     {
         final boolean bold = mBoldButton.getSelection();
         final boolean italic = mItalicButton.getSelection();
-        final boolean under = mUnderButton.getSelection();
-        final boolean strike = mStrikeButton.getSelection();
 
-        return FontStyles.merge(bold, italic, under, strike);
+        return FontStyles.merge(bold, italic, false, false);
     }
 
     @Override
@@ -261,7 +253,10 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
     private IPresentationReconciler createPresentationReconciler() {
         PresentationReconciler reconciler = new PresentationReconciler();
 
-        DefaultDamagerRepairer dr = new DefaultDamagerRepairer(new AntlrTokenScanner());
+        JSONLexer lexer = new JSONLexer(null);
+        JsonTokenMapping mapping = new JsonTokenMapping(getPreferenceStore());
+        AntlrTokenScanner scanner = new AntlrTokenScanner(lexer, mapping);
+        DefaultDamagerRepairer dr = new DefaultDamagerRepairer(scanner);
         reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
         reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 
