@@ -4,13 +4,14 @@ package com.boothen.jsonedit.core.preferences;
  * TODO: describe
  */
 public enum TokenStyle {
+
+    DEFAULT,
     KEY,
     TEXT,
     NUMBER,
     BOOLEAN,
     NULL,
-    ERROR,
-    DEFAULT;
+    ERROR;
 
     public String base() {
         String name = name();
@@ -30,7 +31,7 @@ public enum TokenStyle {
     }
 
     public String isItalic() {
-        return base() + separator() + "isBold";
+        return base() + separator() + "isItalic";
     }
 
     @Override
