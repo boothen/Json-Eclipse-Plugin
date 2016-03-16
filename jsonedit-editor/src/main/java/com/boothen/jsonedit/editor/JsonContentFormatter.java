@@ -9,40 +9,36 @@ import org.eclipse.jface.text.formatter.IFormattingContext;
 import org.eclipse.jface.text.formatter.IFormattingStrategy;
 
 /**
- * @author denis.mirochnik
+ * TODO: describe
  */
-public class JsonContentFormatter implements IContentFormatter, IContentFormatterExtension
-{
-    private final JsonFormatStrategy mStrategy;
+public class JsonContentFormatter implements IContentFormatter, IContentFormatterExtension {
 
-    public JsonContentFormatter(JsonTextEditor editor)
-    {
-        mStrategy = new JsonFormatStrategy(editor);
+    private final JsonFormatStrategy strategy;
+
+    public JsonContentFormatter() {
+        strategy = new JsonFormatStrategy();
     }
 
     @Override
-    public void format(IDocument document, IRegion region)
-    {
+    public void format(IDocument document, IRegion region) {
+        throw new UnsupportedOperationException("Not implemented in favor of the IContentFormatterExtension");
     }
 
     @Override
-    public IFormattingStrategy getFormattingStrategy(String contentType)
-    {
-        if (IDocument.DEFAULT_CONTENT_TYPE.equals(contentType))
-        {
-            return mStrategy;
+    public void format(IDocument document, IFormattingContext context) {
+        context.setProperty(FormattingContextProperties.CONTEXT_MEDIUM, document);
+        strategy.formatterStarts(context);
+        strategy.format();
+        strategy.formatterStops();
+    }
+
+    @Override
+    public IFormattingStrategy getFormattingStrategy(String contentType) {
+        if (IDocument.DEFAULT_CONTENT_TYPE.equals(contentType)) {
+            return strategy;
         }
 
         return null;
     }
 
-    @Override
-    public void format(IDocument document, IFormattingContext context)
-    {
-        context.setProperty(FormattingContextProperties.CONTEXT_MEDIUM, document);
-
-        mStrategy.formatterStarts(context);
-        mStrategy.format();
-        mStrategy.formatterStops();
-    }
 }

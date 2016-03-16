@@ -195,7 +195,7 @@ public class JsonTextEditor extends TextEditor {
         IPreferenceStore store = getPreferenceStore();
         boolean autoFormatOnSave = store.getBoolean(JsonPreferences.AUTO_FORMAT_ON_SAVE);
         if (autoFormatOnSave) {
-            new JsonFormatStrategy(this).format(); // TODO: consider storing this
+            new JsonFormatStrategy().format(); // TODO: consider storing this
         }
     }
 
