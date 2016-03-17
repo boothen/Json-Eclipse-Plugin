@@ -62,6 +62,7 @@ import com.boothen.jsonedit.core.JsonCorePlugin;
 import com.boothen.jsonedit.core.preferences.JsonPreferences;
 import com.boothen.jsonedit.model.ParseError;
 import com.boothen.jsonedit.outline.JsonContentOutlinePage;
+import com.boothen.jsonedit.preferences.format.JsonFormatStrategy;
 
 /**
  * JsonTextEditor is the TextEditor instance used by the plugin.

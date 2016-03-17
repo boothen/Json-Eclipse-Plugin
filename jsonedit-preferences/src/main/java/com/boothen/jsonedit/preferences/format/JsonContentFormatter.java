@@ -1,7 +1,8 @@
-package com.boothen.jsonedit.editor;
+package com.boothen.jsonedit.preferences.format;
 
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.formatter.FormattingContext;
 import org.eclipse.jface.text.formatter.FormattingContextProperties;
 import org.eclipse.jface.text.formatter.IContentFormatter;
 import org.eclipse.jface.text.formatter.IContentFormatterExtension;
@@ -21,7 +22,9 @@ public class JsonContentFormatter implements IContentFormatter, IContentFormatte
 
     @Override
     public void format(IDocument document, IRegion region) {
-        throw new UnsupportedOperationException("Not implemented in favor of the IContentFormatterExtension");
+        IFormattingContext context = new FormattingContext();
+        context.setProperty(FormattingContextProperties.CONTEXT_REGION, region);
+        format(document, context);
     }
 
     @Override

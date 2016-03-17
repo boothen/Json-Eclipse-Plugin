@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.eclipse.jface.preference.ColorSelector;
 import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
@@ -54,8 +55,6 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
         gridLayout.numColumns = 2 * 4 + 1;
         container.setLayout(gridLayout);
 
-        createFont(container, gridLayout.numColumns);
-
         for (TokenStyle style : TokenStyle.values()) {
             createLabel(container, style);
             createColorSelector(container, style);
@@ -68,10 +67,13 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
         }
 
         textViewer = createTextViewer(container, gridLayout.numColumns);
+
+        createFontHint(container, gridLayout.numColumns);
+
         return container;
     }
 
-    private void createFont(final Composite container, int numColumns) {
+    private void createFontHint(final Composite container, int numColumns) {
         Link fontHint = new Link(container, SWT.NONE);
         fontHint.addSelectionListener(new SelectionAdapter() {
                 @Override
@@ -84,7 +86,7 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
                                     "selectFont:com.boothen.jsonedit.fonts.textfont"); //$NON-NLS-1$
                 }
         });
-        fontHint.setText("JSON editor preferences. See <a href=\"org.eclipse.ui.preferencePages.GeneralTextEditor\">"
+        fontHint.setText("See <a href=\"org.eclipse.ui.preferencePages.GeneralTextEditor\">"
                 + "'Text Editors'</a> for general text editor preferences and "
                 + "<a href=\"org.eclipse.ui.preferencePages.ColorsAndFonts\">'Colors and Fonts'</a> "
                 + "to configure the font.");
@@ -167,6 +169,7 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
         layoutData.horizontalAlignment = SWT.FILL;
         layoutData.verticalAlignment = SWT.FILL;
         viewer.getTextWidget().setLayoutData(layoutData);
+        viewer.getTextWidget().setFont(JFaceResources.getFont(Activator.FONT_ID));
         viewer.setEditable(false);
 
         try {

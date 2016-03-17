@@ -35,6 +35,7 @@ import com.boothen.jsonedit.editor.model.JsonReconcilingStrategy;
 import com.boothen.jsonedit.model.AntlrTokenScanner;
 import com.boothen.jsonedit.model.TokenMapping;
 import com.boothen.jsonedit.preferences.JsonTokenMapping;
+import com.boothen.jsonedit.preferences.format.JsonContentFormatter;
 import com.boothen.jsonedit.text.LineEndingUtil;
 
 /**

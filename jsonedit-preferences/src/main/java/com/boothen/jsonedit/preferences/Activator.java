@@ -13,6 +13,8 @@ public class Activator extends AbstractUIPlugin {
      */
     public static final String PLUGIN_ID = "jsonedit-preferences";
 
+    public static final String FONT_ID = "com.boothen.jsonedit.fonts.textfont";
+
     private static Activator plugin;
 
     @Override
