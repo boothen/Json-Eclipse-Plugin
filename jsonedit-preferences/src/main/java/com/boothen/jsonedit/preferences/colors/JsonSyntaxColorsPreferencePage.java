@@ -23,8 +23,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import com.boothen.jsonedit.antlr.JSONLexer;
 import com.boothen.jsonedit.core.BundleUtils;
@@ -51,6 +54,8 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
         gridLayout.numColumns = 2 * 4 + 1;
         container.setLayout(gridLayout);
 
+        createFont(container, gridLayout.numColumns);
+
         for (TokenStyle style : TokenStyle.values()) {
             createLabel(container, style);
             createColorSelector(container, style);
@@ -64,6 +69,30 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
 
         textViewer = createTextViewer(container, gridLayout.numColumns);
         return container;
+    }
+
+    private void createFont(final Composite container, int numColumns) {
+        Link fontHint = new Link(container, SWT.NONE);
+        fontHint.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    Shell shell = container.getShell();
+                    if ("org.eclipse.ui.preferencePages.GeneralTextEditor".equals(e.text)) //$NON-NLS-1$
+                            PreferencesUtil.createPreferenceDialogOn(shell, e.text, null, null);
+                    else if ("org.eclipse.ui.preferencePages.ColorsAndFonts".equals(e.text)) //$NON-NLS-1$
+                            PreferencesUtil.createPreferenceDialogOn(shell, e.text, null,
+                                    "selectFont:com.boothen.jsonedit.fonts.textfont"); //$NON-NLS-1$
+                }
+        });
+        fontHint.setText("JSON editor preferences. See <a href=\"org.eclipse.ui.preferencePages.GeneralTextEditor\">"
+                + "'Text Editors'</a> for general text editor preferences and "
+                + "<a href=\"org.eclipse.ui.preferencePages.ColorsAndFonts\">'Colors and Fonts'</a> "
+                + "to configure the font.");
+
+        GridData fontHintData = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
+        fontHintData.widthHint = 150; // only expand further if anyone else requires it
+        fontHintData.horizontalSpan = numColumns;
+        fontHint.setLayoutData(fontHintData);
     }
 
 
