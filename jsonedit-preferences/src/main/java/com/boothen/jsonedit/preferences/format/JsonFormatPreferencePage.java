@@ -7,8 +7,10 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextViewer;
+import org.eclipse.jface.text.WhitespaceCharacterPainter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -34,6 +36,8 @@ import com.boothen.jsonedit.preferences.format.JsonFormatter.Affix;
  */
 public class JsonFormatPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
+    private static final String SHOW_WHITESPACE_PREF = "showWhitespaceInPrefPage";
+
     private final JsonContentFormatter formatter = new JsonContentFormatter();
 
     private final SelectionAdapter refreshViewer = new SelectionAdapter() {
@@ -44,6 +48,8 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
     };
 
     private TextViewer textViewer;
+
+    private WhitespaceCharacterPainter painter;
 
     @Override
     public void init(IWorkbench workbench) {
@@ -72,10 +78,38 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
             createAffixConfigGroup(container, JSONLexer.VOCABULARY, tokenType, false);
         }
 
-        textViewer = createTextViewer(container, gridLayout.numColumns);
+        createTextViewer(container, gridLayout.numColumns);
         refreshViewer();
 
+        createWhitespaceCheckbox(container, gridLayout.numColumns);
+
         return container;
+    }
+
+    /**
+     * @param container
+     */
+    private void createWhitespaceCheckbox(Composite container, int numColumns) {
+        Button showWhitespaceCheckbox = new Button(container, SWT.CHECK);
+        showWhitespaceCheckbox.setText("Show whitespace on this page");
+        showWhitespaceCheckbox.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                Button button = (Button) e.widget;
+                boolean enabled = button.getSelection();
+                getPreferenceStore().setValue(SHOW_WHITESPACE_PREF, enabled);
+                if (enabled) {
+                    textViewer.addPainter(painter);
+                } else {
+                    textViewer.removePainter(painter);
+                }
+            }
+        });
+
+        GridData fontHintData = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
+        fontHintData.widthHint = 150; // only expand further if anyone else requires it
+        fontHintData.horizontalSpan = numColumns;
+        showWhitespaceCheckbox.setLayoutData(fontHintData);
     }
 
     private Group createAffixConfigGroup(Composite container, Vocabulary vocab, int token, boolean preOrSuf) {
@@ -110,8 +144,8 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
         return off;
     }
 
-    private TextViewer createTextViewer(Composite appearanceComposite, int numColumns) {
-        TextViewer viewer = new TextViewer(appearanceComposite, SWT.BORDER);
+    private void createTextViewer(Composite appearanceComposite, int numColumns) {
+        textViewer = new TextViewer(appearanceComposite, SWT.BORDER);
         GridData layoutData = new GridData();
         layoutData.horizontalSpan = numColumns;
         layoutData.grabExcessHorizontalSpace = true;
@@ -120,18 +154,45 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
         layoutData.verticalAlignment = SWT.FILL;
         layoutData.widthHint = 150;  // only expand further if anyone else requires it
         layoutData.heightHint = 150; // only expand further if anyone else requires it
-        viewer.getTextWidget().setLayoutData(layoutData);
-        viewer.getTextWidget().setFont(JFaceResources.getFont(Activator.FONT_ID));
-        viewer.setEditable(false);
+        textViewer.getTextWidget().setLayoutData(layoutData);
+        textViewer.getTextWidget().setFont(JFaceResources.getFont(Activator.FONT_ID));
+        textViewer.setEditable(false);
 
         try {
             String text = BundleUtils.readFile(Activator.getDefault().getBundle(), "/formatter_example.json");
-            viewer.setDocument(new Document(text));
+            textViewer.setDocument(new Document(text));
         } catch (IOException e) {
             JsonLog.logError("Could not load example json file", e);
         }
 
-        return viewer;
+        painter = createWhitespacePainter(textViewer);
+        if (getPreferenceStore().getBoolean(SHOW_WHITESPACE_PREF)) {
+            textViewer.addPainter(painter);
+        }
+    }
+
+    private static WhitespaceCharacterPainter createWhitespacePainter(ITextViewer viewer) {
+        int alpha = 80;
+        boolean showLeading = true;
+        boolean showEnclosed = true;
+        boolean showTrailing = true;
+        boolean showLineDelimiter = false;
+        boolean showLeadingSpaces = showLeading;
+        boolean showEnclosedSpaces = showEnclosed;
+        boolean showTrailingSpaces = showTrailing;
+        boolean showLeadingIdeographicSpaces = showLeading;
+        boolean showEnclosedIdeographicSpaces = showEnclosed;
+        boolean showTrailingIdeographicSpace = showTrailing;
+        boolean showLeadingTabs = showLeading;
+        boolean showEnclosedTabs = showEnclosed;
+        boolean showTrailingTabs = showTrailing;
+        boolean showCarriageReturn = showLineDelimiter;
+        boolean showLineFeed = showLineDelimiter;
+        return new WhitespaceCharacterPainter(viewer,
+                showLeadingSpaces, showEnclosedSpaces, showTrailingSpaces,
+                showLeadingIdeographicSpaces, showEnclosedIdeographicSpaces,
+                showTrailingIdeographicSpace, showLeadingTabs, showEnclosedTabs,
+                showTrailingTabs, showCarriageReturn, showLineFeed, alpha);
     }
 
     private void refreshViewer() {
