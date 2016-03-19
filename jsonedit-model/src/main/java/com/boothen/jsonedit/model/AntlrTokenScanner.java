@@ -57,16 +57,22 @@ public class AntlrTokenScanner implements ITokenScanner {
     public IToken nextToken() {
         Token token = lexer.nextToken();
 
+        previous = current;
+
+        if (!(token instanceof CommonToken)) {
+            current = null;
+            return org.eclipse.jface.text.rules.Token.UNDEFINED;
+        }
+
+        current = (CommonToken) token;
+
         if (token.getType() == Token.EOF) {
             return org.eclipse.jface.text.rules.Token.EOF;
         }
 
-        if (!(token instanceof CommonToken)) {
-            return org.eclipse.jface.text.rules.Token.UNDEFINED;
+        if (token.getType() == JSONLexer.WS) {
+            return org.eclipse.jface.text.rules.Token.WHITESPACE;
         }
-
-        previous = current;
-        current = (CommonToken) token;
 
         int currentType = current.getType();
         int previousType = previous != null ? previous.getType() : Token.EOF;

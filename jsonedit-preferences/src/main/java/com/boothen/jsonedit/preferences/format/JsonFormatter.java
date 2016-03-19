@@ -44,20 +44,23 @@ public class JsonFormatter {
         Token token = lexer.nextToken();
         boolean isFirst = true;
         while (token.getType() != Token.EOF) {
-            if (!isFirst) {
-                String prefix = prefix(token);
-                if (prefix != null) {
-                    buffer.append(prefix);
+            // format only content that is parsed (no whitespace)
+            if (token.getChannel() == Token.DEFAULT_CHANNEL) {
+                if (!isFirst) {
+                    String prefix = prefix(token);
+                    if (prefix != null) {
+                        buffer.append(prefix);
+                    }
                 }
-            }
 
-            buffer.append(token.getText());
-            String suffix = suffix(token);
-            if (suffix != null) {
-                buffer.append(suffix);
+                buffer.append(token.getText());
+                String suffix = suffix(token);
+                if (suffix != null) {
+                    buffer.append(suffix);
+                }
+                isFirst = false;
             }
             token = lexer.nextToken();
-            isFirst = false;
         }
 
         return buffer.toString();
