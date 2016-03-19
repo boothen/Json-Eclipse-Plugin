@@ -126,7 +126,7 @@ public class JSONLexer extends Lexer {
         "\2\2\177\u0080\5\37\20\2\u0080\"\3\2\2\2\u0081\u0083\t\t\2\2\u0082\u0081"+
         "\3\2\2\2\u0083\u0084\3\2\2\2\u0084\u0082\3\2\2\2\u0084\u0085\3\2\2\2\u0085"+
         "\u0086\3\2\2\2\u0086\u0087\b\22\2\2\u0087$\3\2\2\2\20\2(*\62=DGJPSvy}"+
-        "\u0084\3\b\2\2";
+        "\u0084\3\2\3\2";
     public static final ATN _ATN =
         new ATNDeserializer().deserialize(_serializedATN.toCharArray());
     static {
