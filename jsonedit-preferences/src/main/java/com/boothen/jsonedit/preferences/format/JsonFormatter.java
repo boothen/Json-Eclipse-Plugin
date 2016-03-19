@@ -1,10 +1,10 @@
 package com.boothen.jsonedit.preferences.format;
 
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.antlr.v4.runtime.Token;
+import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.boothen.jsonedit.antlr.JSONLexer;
 /**
@@ -20,13 +20,13 @@ public class JsonFormatter {
     private Set<FormatterRule> enabledTriggers = new LinkedHashSet<>();
     private String newline;
 
-    public JsonFormatter(String newline, Map prefs) {
+    public JsonFormatter(String newline, IPreferenceStore store) {
         this.newline = newline;
         JSONLexer lexer = new JSONLexer(null);
         for (int i = 0; i < lexer.getTokenNames().length; i++) {
             String name = JSONLexer.VOCABULARY.getSymbolicName(i);
-            String prefix = convertAffix(toAffix(prefs.get(name + ".prefix")));
-            String suffix = convertAffix(toAffix(prefs.get(name + ".suffix")));
+            String prefix = convertAffix(toAffix(store.getString(name + ".prefix")));
+            String suffix = convertAffix(toAffix(store.getString(name + ".suffix")));
             if (prefix != null || suffix != null) {
                 enabledTriggers.add(new FormatterRule(i, prefix, suffix));
             }
@@ -42,8 +42,8 @@ public class JsonFormatter {
         StringBuffer buffer = new StringBuffer();
 
         Token token = lexer.nextToken();
+        boolean isFirst = true;
         while (token.getType() != Token.EOF) {
-            boolean isFirst = token.getTokenIndex() > 0;
             if (!isFirst) {
                 String prefix = prefix(token);
                 if (prefix != null) {
@@ -57,6 +57,7 @@ public class JsonFormatter {
                 buffer.append(suffix);
             }
             token = lexer.nextToken();
+            isFirst = false;
         }
 
         return buffer.toString();

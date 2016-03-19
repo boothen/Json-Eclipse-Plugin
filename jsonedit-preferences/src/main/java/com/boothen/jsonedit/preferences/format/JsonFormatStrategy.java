@@ -1,9 +1,7 @@
 package com.boothen.jsonedit.preferences.format;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.antlr.v4.runtime.ANTLRInputStream;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Region;
@@ -13,6 +11,7 @@ import org.eclipse.jface.text.formatter.FormattingContextProperties;
 import org.eclipse.jface.text.formatter.IFormattingContext;
 
 import com.boothen.jsonedit.antlr.JSONLexer;
+import com.boothen.jsonedit.core.JsonCorePlugin;
 import com.boothen.jsonedit.core.JsonLog;
 
 /**
@@ -35,11 +34,8 @@ public class JsonFormatStrategy extends ContextBasedFormattingStrategy {
 
         String delimiter = TextUtilities.getDefaultLineDelimiter(document);
 
-        Map<String, Object> map = new HashMap<String, Object>(); // TODO: fix this
-        map.put(JSONLexer.VOCABULARY.getSymbolicName(JSONLexer.BEGIN_OBJECT), JsonFormatter.Affix.NEWLINE);
-        map.put(JSONLexer.VOCABULARY.getSymbolicName(JSONLexer.END_OBJECT), JsonFormatter.Affix.NEWLINE);
-
-        JsonFormatter formatter = new JsonFormatter(delimiter, map);
+        IPreferenceStore store = JsonCorePlugin.getDefault().getPreferenceStore();
+        JsonFormatter formatter = new JsonFormatter(delimiter, store);
 
         try {
             String content = document.get(region.getOffset(), region.getLength());
