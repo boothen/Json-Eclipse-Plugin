@@ -2,14 +2,14 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JSON Editor
 Bundle-SymbolicName: jsonedit-editor;singleton:=true
-Bundle-Version: 0.9.8
+Bundle-Version: 1.0.0.beta1
 Bundle-Activator: com.boothen.jsonedit.editor.Activator
-Require-Bundle: jsonedit-core;bundle-version="0.9.8",
- jsonedit-folding;bundle-version="0.9.8",
- jsonedit-model;bundle-version="0.9.8",
- jsonedit-preferences;bundle-version="0.9.8",
- jsonedit-text;bundle-version="0.9.8",
- jsonedit-outline;bundle-version="0.9.8",
+Require-Bundle: jsonedit-core,
+ jsonedit-folding,
+ jsonedit-model,
+ jsonedit-preferences,
+ jsonedit-text,
+ jsonedit-outline,
  org.eclipse.ui.editors,
  org.eclipse.text,
  org.eclipse.core.runtime,

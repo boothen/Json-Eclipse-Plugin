@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="JSON Editor" url="https://github.com/boothen/Json-Eclipse-Plugin/">
+      This is the update site for JSON Editor
+   </description>
+   <feature url="features/jsonedit-feature_1.0.0.beta1.jar" id="jsonedit-feature" version="1.0.0.beta1">
+      <category name="jsonedit"/>
+   </feature>
+   <category-def name="jsonedit" label="JSON Editor"/>
+</site>

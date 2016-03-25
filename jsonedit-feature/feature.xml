@@ -2,7 +2,7 @@
 <feature
       id="jsonedit-feature"
       label="JSON Editor Plugin"
-      version="0.9.8"
+      version="1.0.0.beta1"
       provider-name="Boothen Technology"
       plugin="jsonedit-core">
 
@@ -82,6 +82,22 @@ All Recipient&apos;s rights under this Agreement shall terminate if it fails
    <url>
       <update label="Json Editor Plugin Latest" url="https://sourceforge.net/projects/eclipsejsonedit/files/update/"/>
    </url>
+
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.views"/>
+      <import plugin="org.antlr.antlr4-runtime-osgi" version="4.5.2" match="perfect"/>
+      <import plugin="org.eclipse.equinox.preferences"/>
+      <import plugin="org.eclipse.text"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.ui.workbench"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor"/>
+   </requires>
 
    <plugin
          id="jsonedit-core"

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JSON Editor Outline View
 Bundle-SymbolicName: jsonedit-outline
-Bundle-Version: 0.9.8
+Bundle-Version: 1.0.0.beta1
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: Boothen Technology
 Require-Bundle: org.eclipse.jface.text,
