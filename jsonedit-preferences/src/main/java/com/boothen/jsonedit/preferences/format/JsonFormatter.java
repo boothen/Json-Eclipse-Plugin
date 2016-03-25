@@ -1,7 +1,7 @@
 package com.boothen.jsonedit.preferences.format;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -17,7 +17,9 @@ public class JsonFormatter {
         SPACE,
         NEWLINE
     }
-    private Set<FormatterRule> enabledTriggers = new LinkedHashSet<>();
+    private final Map<Integer, Affix> prefixes = new HashMap<>();
+    private final Map<Integer, Affix> suffixes = new HashMap<>();
+
     private String newline;
 
     public JsonFormatter(String newline, IPreferenceStore store) {
@@ -25,10 +27,15 @@ public class JsonFormatter {
         int vocabularySize = new JSONLexer(null).getTokenNames().length;
         for (int i = 0; i < vocabularySize; i++) {
             String name = JSONLexer.VOCABULARY.getSymbolicName(i);
+
             Affix prefix = toAffix(store.getString(name + ".prefix"));
+            if (prefix != Affix.NONE) {
+                prefixes.put(i, prefix);
+            }
+
             Affix suffix = toAffix(store.getString(name + ".suffix"));
-            if (prefix != null || suffix != null) {
-                enabledTriggers.add(new FormatterRule(i, prefix, suffix));
+            if (suffix != Affix.NONE) {
+                suffixes.put(i, suffix);
             }
         }
     }
@@ -41,18 +48,18 @@ public class JsonFormatter {
     public String format(JSONLexer lexer) {
         StringBuffer buffer = new StringBuffer();
 
+        Token prevToken = null; // only on default channel
         Token token = lexer.nextToken();
-        boolean isFirst = true;
         while (token.getType() != Token.EOF) {
             // format only content that is parsed (no whitespace)
             if (token.getChannel() == Token.DEFAULT_CHANNEL) {
-                if (!isFirst) {
-                    addPrefix(token, buffer);
+                if (prevToken != null) {
+                    addPrefix(token, prevToken, buffer);
                 }
 
                 buffer.append(token.getText());
                 addSuffix(token, buffer);
-                isFirst = false;
+                prevToken = token;
             }
             token = lexer.nextToken();
         }
@@ -60,28 +67,23 @@ public class JsonFormatter {
         return buffer.toString();
     }
 
-    private void addPrefix(Token token, StringBuffer buffer) {
-        for (FormatterRule format : enabledTriggers) {
-            if (format.getType() == token.getType()) {
-                Affix prefix = format.getPrefix();
-                if (prefix != Affix.NONE) {
-                    String text = convertAffix(prefix);
-                    buffer.append(text);
-                }
+    private void addPrefix(Token token, Token prevToken, StringBuffer buffer) {
+        Affix prefix = prefixes.get(token.getType());
+        if (prefix != null) {
+            Affix prevSuffix = suffixes.get(prevToken.getType());
+            // prefix only if different from last written suffix (avoid double newlines)
+            if (prefix != prevSuffix) {
+                String text = convertAffix(prefix);
+                buffer.append(text);
             }
         }
     }
 
-
     private void addSuffix(Token token, StringBuffer buffer) {
-        for (FormatterRule format : enabledTriggers) {
-            if (format.getType() == token.getType()) {
-                Affix suffix = format.getSuffix();
-                if (suffix != Affix.NONE) {
-                    String text = convertAffix(suffix);
-                    buffer.append(text);
-                }
-            }
+        Affix prefix = suffixes.get(token.getType());
+        if (prefix != null) {
+            String text = convertAffix(prefix);
+            buffer.append(text);
         }
     }
 
@@ -108,30 +110,4 @@ public class JsonFormatter {
 
         return Affix.NONE;
     }
-
-    private static class FormatterRule {
-
-        private final int type;
-        private final Affix prefix;
-        private final Affix suffix;
-
-        public FormatterRule(int type, Affix prefix, Affix suffix) {
-            this.type = type;
-            this.prefix = prefix;
-            this.suffix = suffix;
-        }
-
-        public int getType() {
-            return type;
-        }
-
-        public Affix getPrefix() {
-            return prefix;
-        }
-
-        public Affix getSuffix() {
-            return suffix;
-        }
-    }
-
 }
