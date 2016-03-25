@@ -22,11 +22,11 @@ public class JsonFormatter {
 
     public JsonFormatter(String newline, IPreferenceStore store) {
         this.newline = newline;
-        JSONLexer lexer = new JSONLexer(null);
-        for (int i = 0; i < lexer.getTokenNames().length; i++) {
+        int vocabularySize = new JSONLexer(null).getTokenNames().length;
+        for (int i = 0; i < vocabularySize; i++) {
             String name = JSONLexer.VOCABULARY.getSymbolicName(i);
-            String prefix = convertAffix(toAffix(store.getString(name + ".prefix")));
-            String suffix = convertAffix(toAffix(store.getString(name + ".suffix")));
+            Affix prefix = toAffix(store.getString(name + ".prefix"));
+            Affix suffix = toAffix(store.getString(name + ".suffix"));
             if (prefix != null || suffix != null) {
                 enabledTriggers.add(new FormatterRule(i, prefix, suffix));
             }
@@ -47,17 +47,11 @@ public class JsonFormatter {
             // format only content that is parsed (no whitespace)
             if (token.getChannel() == Token.DEFAULT_CHANNEL) {
                 if (!isFirst) {
-                    String prefix = prefix(token);
-                    if (prefix != null) {
-                        buffer.append(prefix);
-                    }
+                    addPrefix(token, buffer);
                 }
 
                 buffer.append(token.getText());
-                String suffix = suffix(token);
-                if (suffix != null) {
-                    buffer.append(suffix);
-                }
+                addSuffix(token, buffer);
                 isFirst = false;
             }
             token = lexer.nextToken();
@@ -66,32 +60,32 @@ public class JsonFormatter {
         return buffer.toString();
     }
 
-    private String prefix(Token token) {
+    private void addPrefix(Token token, StringBuffer buffer) {
         for (FormatterRule format : enabledTriggers) {
             if (format.getType() == token.getType()) {
-                // only the first hit is returned
-                return format.getPrefix();
+                Affix prefix = format.getPrefix();
+                if (prefix != Affix.NONE) {
+                    String text = convertAffix(prefix);
+                    buffer.append(text);
+                }
             }
         }
-        return null;
     }
 
 
-    private String suffix(Token token) {
+    private void addSuffix(Token token, StringBuffer buffer) {
         for (FormatterRule format : enabledTriggers) {
             if (format.getType() == token.getType()) {
-                // only the first hit is returned
-                return format.getSuffix();
+                Affix suffix = format.getSuffix();
+                if (suffix != Affix.NONE) {
+                    String text = convertAffix(suffix);
+                    buffer.append(text);
+                }
             }
         }
-        return null;
     }
 
     private String convertAffix(Affix affix) {
-        if (affix == null) {
-            return null;
-        }
-
         switch (affix) {
         case NEWLINE:
             return newline;
@@ -118,10 +112,10 @@ public class JsonFormatter {
     private static class FormatterRule {
 
         private final int type;
-        private final String prefix;
-        private final String suffix;
+        private final Affix prefix;
+        private final Affix suffix;
 
-        public FormatterRule(int type, String prefix, String suffix) {
+        public FormatterRule(int type, Affix prefix, Affix suffix) {
             this.type = type;
             this.prefix = prefix;
             this.suffix = suffix;
@@ -131,11 +125,11 @@ public class JsonFormatter {
             return type;
         }
 
-        public String getPrefix() {
+        public Affix getPrefix() {
             return prefix;
         }
 
-        public String getSuffix() {
+        public Affix getSuffix() {
             return suffix;
         }
     }
