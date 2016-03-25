@@ -1,5 +1,6 @@
 package com.boothen.jsonedit.preferences.format;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.formatter.FormattingContext;
@@ -16,8 +17,8 @@ public class JsonContentFormatter implements IContentFormatter, IContentFormatte
 
     private final JsonFormatStrategy strategy;
 
-    public JsonContentFormatter() {
-        strategy = new JsonFormatStrategy();
+    public JsonContentFormatter(IPreferenceStore store) {
+        strategy = new JsonFormatStrategy(store);
     }
 
     @Override

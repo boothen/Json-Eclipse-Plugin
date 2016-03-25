@@ -38,7 +38,6 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
 
     private static final String SHOW_WHITESPACE_PREF = "showWhitespaceInPrefPage";
 
-    private final JsonContentFormatter formatter = new JsonContentFormatter();
 
     private final SelectionAdapter refreshViewer = new SelectionAdapter() {
         @Override
@@ -48,12 +47,14 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
     };
 
     private TextViewer textViewer;
-
+    private JsonContentFormatter formatter;
     private WhitespaceCharacterPainter painter;
 
     @Override
     public void init(IWorkbench workbench) {
-        setPreferenceStore(JsonCorePlugin.getDefault().getPreferenceStore());
+        IPreferenceStore preferenceStore = JsonCorePlugin.getDefault().getPreferenceStore();
+        setPreferenceStore(preferenceStore);
+        formatter = new JsonContentFormatter(preferenceStore);
     }
 
     @Override

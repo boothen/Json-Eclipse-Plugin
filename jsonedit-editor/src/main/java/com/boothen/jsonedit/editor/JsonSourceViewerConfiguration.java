@@ -16,7 +16,6 @@
 package com.boothen.jsonedit.editor;
 
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.formatter.IContentFormatter;
@@ -29,14 +28,11 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
 import com.boothen.jsonedit.antlr.JSONLexer;
-import com.boothen.jsonedit.core.JsonCorePlugin;
-import com.boothen.jsonedit.core.preferences.JsonPreferences;
 import com.boothen.jsonedit.editor.model.JsonReconcilingStrategy;
 import com.boothen.jsonedit.model.AntlrTokenScanner;
 import com.boothen.jsonedit.model.TokenMapping;
 import com.boothen.jsonedit.preferences.JsonTokenMapping;
 import com.boothen.jsonedit.preferences.format.JsonContentFormatter;
-import com.boothen.jsonedit.text.LineEndingUtil;
 
 /**
  * Configures the text editor.
@@ -45,7 +41,8 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
 
     private JsonTextEditor textEditor;
 
-    public JsonSourceViewerConfiguration(JsonTextEditor textEditor) {
+    public JsonSourceViewerConfiguration(JsonTextEditor textEditor, IPreferenceStore iPreferenceStore) {
+        super(iPreferenceStore);
         this.textEditor = textEditor;
     }
 
@@ -54,8 +51,7 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
         PresentationReconciler reconciler= new PresentationReconciler();
 
         JSONLexer lexer = new JSONLexer(null);
-        IPreferenceStore store = JsonCorePlugin.getDefault().getPreferenceStore();
-        TokenMapping mapping = new JsonTokenMapping(store);
+        TokenMapping mapping = new JsonTokenMapping(fPreferenceStore);
         AntlrTokenScanner scanner = new AntlrTokenScanner(lexer, mapping);
         DefaultDamagerRepairer dr = new DefaultDamagerRepairer(scanner);
         reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
@@ -66,7 +62,7 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
 
     @Override
     public IContentFormatter getContentFormatter(ISourceViewer sourceViewer) {
-        IContentFormatter fmt = new JsonContentFormatter();
+        IContentFormatter fmt = new JsonContentFormatter(fPreferenceStore);
         return fmt;
     }
 
@@ -83,17 +79,8 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
 //    }
 
     public void handlePreferenceStoreChanged() {
-        IPreferenceStore store = JsonCorePlugin.getDefault().getPreferenceStore();
-        boolean spaces = store.getBoolean(JsonPreferences.SPACES_FOR_TABS);
-        int numSpaces = store.getInt(JsonPreferences.NUM_SPACES);
-
-        String lineEnding = getTextEditorLineEnding();
-        textEditor.updateTabWidth(numSpaces);
+//        boolean spacesForTabs = fPreferenceStore.getBoolean(EDITOR_SPACES_FOR_TABS);
+//        int tabWidth = fPreferenceStore.getInt(EDITOR_TAB_WIDTH);
 //        jsonIndentLineAutoEditStrategy.initPreferences(spaces, numSpaces, lineEnding);
-    }
-
-    private String getTextEditorLineEnding() {
-        IFile file = textEditor.getEditorInput().getAdapter(IFile.class);
-        return LineEndingUtil.determineProjectLineEnding(file);
     }
 }

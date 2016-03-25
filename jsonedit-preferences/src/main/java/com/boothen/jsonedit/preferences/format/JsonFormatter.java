@@ -1,5 +1,8 @@
 package com.boothen.jsonedit.preferences.format;
 
+import static org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants.EDITOR_SPACES_FOR_TABS;
+import static org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants.EDITOR_TAB_WIDTH;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +10,7 @@ import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.boothen.jsonedit.antlr.JSONLexer;
+
 /**
  * TODO: describe
  */
@@ -21,6 +25,7 @@ public class JsonFormatter {
     private final Map<Integer, Affix> suffixes = new HashMap<>();
 
     private String newline;
+    private JsonIndenter indenter;
 
     public JsonFormatter(String newline, IPreferenceStore store) {
         this.newline = newline;
@@ -38,6 +43,10 @@ public class JsonFormatter {
                 suffixes.put(i, suffix);
             }
         }
+
+        boolean spacesForTabs = store.getBoolean(EDITOR_SPACES_FOR_TABS);
+        int tabWidth = store.getInt(EDITOR_TAB_WIDTH);
+        indenter = new JsonIndenter(tabWidth, spacesForTabs);
     }
 
     /**
@@ -53,6 +62,7 @@ public class JsonFormatter {
         while (token.getType() != Token.EOF) {
             // format only content that is parsed (no whitespace)
             if (token.getChannel() == Token.DEFAULT_CHANNEL) {
+                indenter.updateIndentLevel(token);
                 if (prevToken != null) {
                     addPrefix(token, prevToken, buffer);
                 }
@@ -75,15 +85,21 @@ public class JsonFormatter {
             if (prefix != prevSuffix) {
                 String text = convertAffix(prefix);
                 buffer.append(text);
+                if (prefix == Affix.NEWLINE) {
+                    indenter.indent(buffer);
+                }
             }
         }
     }
 
     private void addSuffix(Token token, StringBuffer buffer) {
-        Affix prefix = suffixes.get(token.getType());
-        if (prefix != null) {
-            String text = convertAffix(prefix);
+        Affix suffix = suffixes.get(token.getType());
+        if (suffix != null) {
+            String text = convertAffix(suffix);
             buffer.append(text);
+            if (suffix == Affix.NEWLINE) {
+                indenter.indent(buffer);
+            }
         }
     }
 

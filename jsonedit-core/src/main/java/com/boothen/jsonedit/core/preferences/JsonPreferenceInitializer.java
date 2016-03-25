@@ -18,8 +18,6 @@ package com.boothen.jsonedit.core.preferences;
 import static com.boothen.jsonedit.core.preferences.JsonPreferences.AUTO_FORMAT_ON_SAVE;
 import static com.boothen.jsonedit.core.preferences.JsonPreferences.EDITOR_MATCHING_BRACKETS;
 import static com.boothen.jsonedit.core.preferences.JsonPreferences.EDITOR_MATCHING_BRACKETS_COLOR;
-import static com.boothen.jsonedit.core.preferences.JsonPreferences.NUM_SPACES;
-import static com.boothen.jsonedit.core.preferences.JsonPreferences.SPACES_FOR_TABS;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -40,10 +38,8 @@ public class JsonPreferenceInitializer extends AbstractPreferenceInitializer {
 //        IEclipsePreferences node = DefaultScope.INSTANCE.getNode(JsonPreferencesPlugin.PLUGIN_ID);
         IPreferenceStore node = JsonCorePlugin.getDefault().getPreferenceStore();
 
-        node.setDefault(SPACES_FOR_TABS, true);
-        node.setDefault(NUM_SPACES, 4);
-        node.setDefault(EDITOR_MATCHING_BRACKETS, true);
         node.setDefault(AUTO_FORMAT_ON_SAVE, false);
+        node.setDefault(EDITOR_MATCHING_BRACKETS, true);
         node.setDefault(EDITOR_MATCHING_BRACKETS_COLOR, colorToString(0, 128, 0));
 
         node.setDefault(TokenStyle.KEY.color(), colorToString(0, 128, 0));

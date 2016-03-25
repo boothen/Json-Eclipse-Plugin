@@ -11,7 +11,6 @@ import org.eclipse.jface.text.formatter.FormattingContextProperties;
 import org.eclipse.jface.text.formatter.IFormattingContext;
 
 import com.boothen.jsonedit.antlr.JSONLexer;
-import com.boothen.jsonedit.core.JsonCorePlugin;
 import com.boothen.jsonedit.core.JsonLog;
 
 /**
@@ -21,20 +20,26 @@ public class JsonFormatStrategy extends ContextBasedFormattingStrategy {
 
     private IDocument document;
     private Region region;
+    private IPreferenceStore store;
+
+    public JsonFormatStrategy(IPreferenceStore store) {
+        this.store = store;
+    }
 
     @Override
     public void formatterStarts(IFormattingContext context) {
         super.formatterStarts(context);
         region = (Region) context.getProperty(FormattingContextProperties.CONTEXT_REGION);
         document = (IDocument) context.getProperty(FormattingContextProperties.CONTEXT_MEDIUM);
+        if (region == null) {
+            region = new Region(0, document.getLength());
+        }
     }
 
     @Override
     public void format() {
 
         String delimiter = TextUtilities.getDefaultLineDelimiter(document);
-
-        IPreferenceStore store = JsonCorePlugin.getDefault().getPreferenceStore();
         JsonFormatter formatter = new JsonFormatter(delimiter, store);
 
         try {

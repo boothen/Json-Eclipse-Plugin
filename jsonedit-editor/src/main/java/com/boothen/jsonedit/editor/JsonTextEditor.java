@@ -39,6 +39,7 @@ import org.eclipse.jface.text.DefaultPositionUpdater;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IPositionUpdater;
 import org.eclipse.jface.text.Position;
+import org.eclipse.jface.text.formatter.IContentFormatter;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.DefaultCharacterPairMatcher;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -62,7 +63,6 @@ import com.boothen.jsonedit.core.JsonCorePlugin;
 import com.boothen.jsonedit.core.preferences.JsonPreferences;
 import com.boothen.jsonedit.model.ParseError;
 import com.boothen.jsonedit.outline.JsonContentOutlinePage;
-import com.boothen.jsonedit.preferences.format.JsonFormatStrategy;
 
 /**
  * JsonTextEditor is the TextEditor instance used by the plugin.
@@ -77,7 +77,7 @@ public class JsonTextEditor extends TextEditor {
     private final static char[] PAIRS= { '{', '}', '[', ']' };
 
     private DefaultCharacterPairMatcher pairsMatcher = new DefaultCharacterPairMatcher(PAIRS);
-    private JsonSourceViewerConfiguration viewerConfiguration = new JsonSourceViewerConfiguration(this);
+    private JsonSourceViewerConfiguration viewerConfiguration;
     private RangeHighlighter rangeHighlighter = new RangeHighlighter(this);
     private JsonContentOutlinePage fOutlinePage;
 
@@ -87,9 +87,7 @@ public class JsonTextEditor extends TextEditor {
 
     private final IPositionUpdater positionUpdater = new DefaultPositionUpdater(JSON_CATEGORY);
 
-
     public JsonTextEditor() {
-        setSourceViewerConfiguration(viewerConfiguration);
     }
 
     @Override
@@ -143,6 +141,10 @@ public class JsonTextEditor extends TextEditor {
         IPreferenceStore store = getPreferenceStore();
         IPreferenceStore myStore = JsonCorePlugin.getDefault().getPreferenceStore();
         setPreferenceStore(new ChainedPreferenceStore(new IPreferenceStore[] { store, myStore }));
+
+        // set source viewer configuration before TextEditor constructor is called
+        viewerConfiguration = new JsonSourceViewerConfiguration(this, getPreferenceStore());
+        setSourceViewerConfiguration(viewerConfiguration);
     }
 
     @Override
@@ -182,10 +184,6 @@ public class JsonTextEditor extends TextEditor {
         super.doSave(monitor);
     }
 
-    /** The <code>JavaEditor</code> implementation of this
-     * <code>AbstractTextEditor</code> method performs any extra
-     * save as behavior required by the java editor.
-     */
     @Override
     public void doSaveAs() {
         doAutoFormatOnSave();
@@ -196,7 +194,10 @@ public class JsonTextEditor extends TextEditor {
         IPreferenceStore store = getPreferenceStore();
         boolean autoFormatOnSave = store.getBoolean(JsonPreferences.AUTO_FORMAT_ON_SAVE);
         if (autoFormatOnSave) {
-            new JsonFormatStrategy().format(); // TODO: consider storing this
+            ISourceViewer viewer = getSourceViewer();
+            IContentFormatter formatter = viewerConfiguration.getContentFormatter(viewer);
+            IDocument document = viewer.getDocument();
+            formatter.format(document, null);
         }
     }
 
