@@ -91,7 +91,7 @@ All Recipient&apos;s rights under this Agreement shall terminate if it fails
       <import plugin="org.eclipse.ui.editors"/>
       <import plugin="org.eclipse.ui.ide"/>
       <import plugin="org.eclipse.ui.views"/>
-      <import plugin="org.antlr.antlr4-runtime-osgi" version="4.5.2" match="perfect"/>
+      <import plugin="org.antlr.antlr4-runtime-osgi" version="4.5.2.1" match="perfect"/>
       <import plugin="org.eclipse.equinox.preferences"/>
       <import plugin="org.eclipse.text"/>
       <import plugin="org.eclipse.jface"/>
