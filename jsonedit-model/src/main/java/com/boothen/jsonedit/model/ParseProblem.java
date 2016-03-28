@@ -3,7 +3,7 @@ package com.boothen.jsonedit.model;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.core.resources.IMarker;
 
-public class ParseError {
+public class ParseProblem {
 
     public static enum Severity {
         INFO(IMarker.SEVERITY_INFO),
@@ -30,7 +30,7 @@ public class ParseError {
     private final Token offendingToken;
     private final Severity severity;
 
-    public ParseError(String msg, int line, int charPositionInLine, Token offendingToken, Severity severity) {
+    public ParseProblem(String msg, int line, int charPositionInLine, Token offendingToken, Severity severity) {
         this.msg = msg;
         this.line = line;
         this.charPositionInLine = charPositionInLine;

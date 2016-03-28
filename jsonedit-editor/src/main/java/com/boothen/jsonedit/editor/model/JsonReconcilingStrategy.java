@@ -40,9 +40,9 @@ import com.boothen.jsonedit.editor.Activator;
 import com.boothen.jsonedit.editor.JsonTextEditor;
 import com.boothen.jsonedit.folding.JsonFoldingPositionsBuilder;
 import com.boothen.jsonedit.model.AntlrAdapter;
-import com.boothen.jsonedit.model.AntlrAdapter.ParseResult;
 import com.boothen.jsonedit.model.DuplicateKeyFinder;
-import com.boothen.jsonedit.model.ParseError;
+import com.boothen.jsonedit.model.ParseProblem;
+import com.boothen.jsonedit.model.ParseResult;
 
 public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcilingStrategyExtension {
 
@@ -102,7 +102,7 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
         Reader reader = new StringReader(fDocument.get());
         final ParseResult result = AntlrAdapter.convert(reader);
         final JsonContext syntaxTree = result.getTree();
-        final List<ParseError> problems = new ArrayList<>();
+        final List<ParseProblem> problems = new ArrayList<>();
         problems.addAll(result.getLexerErrors());
         problems.addAll(result.getParserErrors());
 

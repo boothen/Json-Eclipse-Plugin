@@ -17,6 +17,9 @@ public class DuplicateKeyFinder extends JSONBaseVisitor<Void> {
 
     private DuplicateKeyListener listener;
 
+    /**
+     * @param listener a single listener
+     */
     public DuplicateKeyFinder(DuplicateKeyListener listener) {
         this.listener = listener;
     }

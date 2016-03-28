@@ -23,10 +23,17 @@ public class AntlrTokenScanner implements ITokenScanner {
     private CommonToken current;
     private TokenMapping tokenMapping;
 
+    /**
+     * Uses the default JSONLexer
+     */
     public AntlrTokenScanner() {
         this(new JSONLexer(null));
     }
 
+    /**
+     * Uses the given JSONLexer
+     * @param lexer the lexer to use
+     */
     public AntlrTokenScanner(Lexer lexer) {
         this.lexer = lexer;
         this.tokenMapping = new TokenMapping() {
@@ -37,6 +44,10 @@ public class AntlrTokenScanner implements ITokenScanner {
         };
     }
 
+    /**
+     * @param lexer the lexer to use
+     * @param mapping the mapping from token type to result
+     */
     public AntlrTokenScanner(Lexer lexer, TokenMapping mapping) {
         this.lexer = lexer;
         this.tokenMapping = mapping;

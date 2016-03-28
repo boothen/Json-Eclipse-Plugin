@@ -9,5 +9,4 @@ Require-Bundle: org.eclipse.jface.text,
  org.antlr.antlr4-runtime-osgi;bundle-version="4.5.2",
  jsonedit-core
 Export-Package: com.boothen.jsonedit.antlr,
- com.boothen.jsonedit.model,
- com.boothen.jsonedit.type
+ com.boothen.jsonedit.model

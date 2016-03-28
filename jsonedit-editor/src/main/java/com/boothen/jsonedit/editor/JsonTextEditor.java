@@ -61,7 +61,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
 import com.boothen.jsonedit.core.JsonCorePlugin;
 import com.boothen.jsonedit.core.preferences.JsonPreferences;
-import com.boothen.jsonedit.model.ParseError;
+import com.boothen.jsonedit.model.ParseProblem;
 import com.boothen.jsonedit.outline.JsonContentOutlinePage;
 
 /**
@@ -288,7 +288,7 @@ public class JsonTextEditor extends TextEditor {
         return fOutlinePage;
     }
 
-    public void updateProblemMarkers(List<ParseError> problems) {
+    public void updateProblemMarkers(List<ParseProblem> problems) {
         IResource resource = ResourceUtil.getResource(getEditorInput());
         try {
             IDocument doc = getSourceViewer().getDocument();
@@ -298,11 +298,11 @@ public class JsonTextEditor extends TextEditor {
         }
     }
 
-    private static void updateMarkers(IDocument doc, IResource resource, List<ParseError> probs) throws CoreException {
+    private static void updateMarkers(IDocument doc, IResource resource, List<ParseProblem> probs) throws CoreException {
 
         resource.deleteMarkers(MARKER_ID, false, 0);
 
-        for (final ParseError problem : probs) {
+        for (final ParseProblem problem : probs) {
             try {
                 IMarker marker = resource.createMarker(MARKER_ID);
                 Token token = problem.getOffendingToken();

@@ -7,15 +7,15 @@ import java.util.List;
 import org.antlr.v4.runtime.Token;
 
 import com.boothen.jsonedit.model.DuplicateKeyListener;
-import com.boothen.jsonedit.model.ParseError;
-import com.boothen.jsonedit.model.ParseError.Severity;
+import com.boothen.jsonedit.model.ParseProblem;
+import com.boothen.jsonedit.model.ParseProblem.Severity;
 
 /**
  * TODO: describe
  */
 class DuplicateWarningGenerator implements DuplicateKeyListener {
 
-    private final List<ParseError> warnings = new ArrayList<>();
+    private final List<ParseProblem> warnings = new ArrayList<>();
 
     @Override
     public void reportDuplicate(String key, Token first, Token second) {
@@ -23,13 +23,13 @@ class DuplicateWarningGenerator implements DuplicateKeyListener {
                 key, first.getLine(), first.getCharPositionInLine());
         int line = second.getLine();
         int posInLine = second.getCharPositionInLine();
-        warnings.add(new ParseError(errorMessage, line, posInLine, second, Severity.WARNING));
+        warnings.add(new ParseProblem(errorMessage, line, posInLine, second, Severity.WARNING));
     }
 
     /**
      * @return the warnings
      */
-    public List<ParseError> getWarnings() {
+    public List<ParseProblem> getWarnings() {
         return Collections.unmodifiableList(warnings);
     }
 

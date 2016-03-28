@@ -7,7 +7,6 @@ public class Segment {
     public Segment(int start, int stop) {
         this.start = start;
         this.stop = stop;
-
     }
 
     public int getStart() {
