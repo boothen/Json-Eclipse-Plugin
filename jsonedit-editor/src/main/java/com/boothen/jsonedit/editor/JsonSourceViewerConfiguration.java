@@ -17,6 +17,8 @@ package com.boothen.jsonedit.editor;
 
 
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
+import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.formatter.IContentFormatter;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
@@ -73,14 +75,8 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
         return reconciler;
     }
 
-//    @Override
-//    public IAutoEditStrategy[] getAutoEditStrategies(ISourceViewer sourceViewer, String contentType) {
-//        return new IAutoEditStrategy[] { jsonIndentLineAutoEditStrategy };
-//    }
-
-    public void handlePreferenceStoreChanged() {
-//        boolean spacesForTabs = fPreferenceStore.getBoolean(EDITOR_SPACES_FOR_TABS);
-//        int tabWidth = fPreferenceStore.getInt(EDITOR_TAB_WIDTH);
-//        jsonIndentLineAutoEditStrategy.initPreferences(spaces, numSpaces, lineEnding);
+    @Override
+    public IAutoEditStrategy[] getAutoEditStrategies(ISourceViewer sourceViewer, String contentType) {
+        return new IAutoEditStrategy[] { new DefaultIndentLineAutoEditStrategy() };
     }
 }

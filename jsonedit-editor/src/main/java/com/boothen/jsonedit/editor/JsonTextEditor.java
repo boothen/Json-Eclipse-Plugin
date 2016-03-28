@@ -35,9 +35,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPositionCategoryException;
-import org.eclipse.jface.text.DefaultPositionUpdater;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IPositionUpdater;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.formatter.IContentFormatter;
 import org.eclipse.jface.text.source.Annotation;
@@ -84,8 +82,6 @@ public class JsonTextEditor extends TextEditor {
     private ProjectionAnnotationModel annotationModel;
 
     public final static String JSON_CATEGORY = "__json_elements"; //$NON-NLS-1$
-
-    private final IPositionUpdater positionUpdater = new DefaultPositionUpdater(JSON_CATEGORY);
 
     public JsonTextEditor() {
     }
@@ -220,8 +216,10 @@ public class JsonTextEditor extends TextEditor {
 
     @Override
     protected void handlePreferenceStoreChanged(PropertyChangeEvent event) {
-        ((JsonSourceViewerConfiguration) viewerConfiguration).handlePreferenceStoreChanged();
         super.handlePreferenceStoreChanged(event);
+
+        // TODO: invalidate only when coloring scheme changes
+        getSourceViewer().invalidateTextPresentation();
     }
 
     public void updateDocumentPositions(Collection<Position> newPositions) {

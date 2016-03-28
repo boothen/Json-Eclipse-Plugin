@@ -3,6 +3,7 @@ package com.boothen.jsonedit.preferences.colors;
 import java.io.IOException;
 
 import org.eclipse.jface.preference.ColorSelector;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.StringConverter;
@@ -38,6 +39,7 @@ import com.boothen.jsonedit.core.preferences.TokenStyle;
 import com.boothen.jsonedit.model.AntlrTokenScanner;
 import com.boothen.jsonedit.preferences.Activator;
 import com.boothen.jsonedit.preferences.JsonTokenMapping;
+import com.boothen.jsonedit.preferences.OverlayPreferenceStore;
 
 /**
  * Preference page for color and text style configuration
@@ -46,6 +48,19 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
 
     private static final int ROW_HEIGHT = 22;
     private TextViewer textViewer;
+    private OverlayPreferenceStore preferenceStore;
+
+    public JsonSyntaxColorsPreferencePage() {
+        // TODO: implement performDefaults: update existing widgets with changed selection
+        noDefaultAndApplyButton();
+    }
+
+    @Override
+    public void init(IWorkbench workbench) {
+        IPreferenceStore orgStore = JsonCorePlugin.getDefault().getPreferenceStore();
+        preferenceStore = new OverlayPreferenceStore(orgStore);
+        setPreferenceStore(preferenceStore);
+    }
 
     @Override
     protected Control createContents(Composite parent) {
@@ -184,44 +199,9 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
     }
 
     @Override
-    public boolean performOk()
-    {
-//        final IPreferenceStore store = JsonPlugin.getDefault().getPreferenceStore();
-//        final TokenType[] types = TokenType.values();
-//
-//        for (final TokenType type : types)
-//        {
-//            store.setValue(type.getEnabledKey(), type.isEnabled(mPreferenceStore));
-//            store.setValue(type.getKey(), StringConverter.asString(type.getOwnColor(mPreferenceStore)));
-//            store.setValue(type.getStyleKey(), type.getOwnStyle(mPreferenceStore));
-//        }
-
-        return true;
-    }
-
-    @Override
-    protected void performDefaults()
-    {
-        super.performDefaults();
-
-//        final IPreferenceStore store = JsonPlugin.getDefault().getPreferenceStore();
-//        final TokenType[] types = TokenType.values();
-//
-//        for (final TokenType type : types)
-//        {
-//            mPreferenceStore.setValue(type.getEnabledKey(), store.getDefaultBoolean(type.getEnabledKey()));
-//            mPreferenceStore.setValue(type.getKey(), store.getDefaultString(type.getKey()));
-//            mPreferenceStore.setValue(type.getStyleKey(), store.getDefaultInt(type.getStyleKey()));
-//        }
-//
-//        updateSelection();
-//        mHighlighter.update();
-    }
-
-    @Override
-    public void init(IWorkbench workbench)
-    {
-        setPreferenceStore(JsonCorePlugin.getDefault().getPreferenceStore());
+    public boolean performOk() {
+        preferenceStore.writeThrough();
+        return super.performOk();
     }
 
     void refreshViewer() {

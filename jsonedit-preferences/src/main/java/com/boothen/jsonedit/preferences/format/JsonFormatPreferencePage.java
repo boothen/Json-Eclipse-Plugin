@@ -29,6 +29,7 @@ import com.boothen.jsonedit.core.BundleUtils;
 import com.boothen.jsonedit.core.JsonCorePlugin;
 import com.boothen.jsonedit.core.JsonLog;
 import com.boothen.jsonedit.preferences.Activator;
+import com.boothen.jsonedit.preferences.OverlayPreferenceStore;
 import com.boothen.jsonedit.preferences.format.JsonFormatter.Affix;
 
 /**
@@ -49,10 +50,17 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
     private TextViewer textViewer;
     private JsonContentFormatter formatter;
     private WhitespaceCharacterPainter painter;
+    private OverlayPreferenceStore preferenceStore;
+
+    public JsonFormatPreferencePage() {
+        // TODO: implement performDefaults: update existing widgets with changed selection
+        noDefaultAndApplyButton();
+    }
 
     @Override
     public void init(IWorkbench workbench) {
-        IPreferenceStore preferenceStore = JsonCorePlugin.getDefault().getPreferenceStore();
+        IPreferenceStore orgStore = JsonCorePlugin.getDefault().getPreferenceStore();
+        preferenceStore = new OverlayPreferenceStore(orgStore);
         setPreferenceStore(preferenceStore);
         formatter = new JsonContentFormatter(preferenceStore);
     }
@@ -87,9 +95,12 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
         return container;
     }
 
-    /**
-     * @param container
-     */
+    @Override
+    public boolean performOk() {
+        preferenceStore.writeThrough();
+        return super.performOk();
+    }
+
     private void createWhitespaceCheckbox(Composite container, int numColumns) {
         Button showWhitespaceCheckbox = new Button(container, SWT.CHECK);
         showWhitespaceCheckbox.setText("Show whitespace on this page");
@@ -111,6 +122,7 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
         fontHintData.widthHint = 150; // only expand further if anyone else requires it
         fontHintData.horizontalSpan = numColumns;
         showWhitespaceCheckbox.setLayoutData(fontHintData);
+        showWhitespaceCheckbox.setSelection(getPreferenceStore().getBoolean(SHOW_WHITESPACE_PREF));
     }
 
     private Group createAffixConfigGroup(Composite container, Vocabulary vocab, int token, boolean preOrSuf) {
