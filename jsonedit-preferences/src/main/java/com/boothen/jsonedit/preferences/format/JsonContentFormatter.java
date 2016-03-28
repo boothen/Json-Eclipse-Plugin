@@ -11,12 +11,16 @@ import org.eclipse.jface.text.formatter.IFormattingContext;
 import org.eclipse.jface.text.formatter.IFormattingStrategy;
 
 /**
- * TODO: describe
+ * An eclipse content formatter that formats using a {@link JsonFormatStrategy}.
  */
 public class JsonContentFormatter implements IContentFormatter, IContentFormatterExtension {
 
     private final JsonFormatStrategy strategy;
 
+    /**
+     * Takes a store that contains general text editor settings such as tab width, but also token-specifics.
+     * @param store the store that provides the format settings
+     */
     public JsonContentFormatter(IPreferenceStore store) {
         strategy = new JsonFormatStrategy(store);
     }

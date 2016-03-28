@@ -15,13 +15,16 @@ import com.boothen.jsonedit.model.TokenMapping;
 
 
 /**
- * TODO: describe
+ * Maps JSON token types to JFace {@link TextAttribute} instances.
  */
 public class JsonTokenMapping implements TokenMapping {
 
     private final IPreferenceStore preferenceStore;
     private final JsonColorProvider colorProvider = JsonCorePlugin.getColorProvider();
 
+    /**
+     * @param preferenceStore the store that provides {@link TokenStyle} information.
+     */
     public JsonTokenMapping(IPreferenceStore preferenceStore) {
         this.preferenceStore = preferenceStore;
     }

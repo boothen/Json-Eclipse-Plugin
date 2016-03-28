@@ -1,5 +1,6 @@
 package com.boothen.jsonedit.preferences;
 
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -13,6 +14,9 @@ public class Activator extends AbstractUIPlugin {
      */
     public static final String PLUGIN_ID = "jsonedit-preferences";
 
+    /**
+     * The font ID of JSON text editor. Query with {@link JFaceResources#getFont}.
+     */
     public static final String FONT_ID = "com.boothen.jsonedit.fonts.textfont";
 
     private static Activator plugin;

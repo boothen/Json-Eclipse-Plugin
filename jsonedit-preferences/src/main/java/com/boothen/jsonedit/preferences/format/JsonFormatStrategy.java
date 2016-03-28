@@ -14,7 +14,8 @@ import com.boothen.jsonedit.antlr.JSONLexer;
 import com.boothen.jsonedit.core.JsonLog;
 
 /**
- * @author denis.mirochnik
+ * A formatting strategy that extract information from the formatting context and delegates
+ * the formatting to a {@link JsonFormatter}.
  */
 public class JsonFormatStrategy extends ContextBasedFormattingStrategy {
 

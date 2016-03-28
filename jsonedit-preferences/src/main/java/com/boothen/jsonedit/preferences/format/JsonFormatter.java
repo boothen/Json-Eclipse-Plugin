@@ -51,7 +51,6 @@ public class JsonFormatter {
 
     /**
      * @param lexer
-     * @param map
      * @return
      */
     public String format(JSONLexer lexer) {

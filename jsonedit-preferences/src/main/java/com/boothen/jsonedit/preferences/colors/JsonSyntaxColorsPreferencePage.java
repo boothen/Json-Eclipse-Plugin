@@ -40,7 +40,7 @@ import com.boothen.jsonedit.preferences.Activator;
 import com.boothen.jsonedit.preferences.JsonTokenMapping;
 
 /**
- * @author denis.mirochnik
+ * Preference page for color and text style configuration
  */
 public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
@@ -48,8 +48,7 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
     private TextViewer textViewer;
 
     @Override
-    protected Control createContents(Composite parent)
-    {
+    protected Control createContents(Composite parent) {
         final Composite container = new Composite(parent, SWT.NONE);
         GridLayout gridLayout = new GridLayout();
         gridLayout.numColumns = 2 * 4 + 1;
@@ -115,8 +114,8 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                Button button = (Button) e.widget;
-                getPreferenceStore().setValue(style.isBold(), button.getSelection());
+                Button source = (Button) e.widget;
+                getPreferenceStore().setValue(style.isBold(), source.getSelection());
                 refreshViewer();
             }
         });

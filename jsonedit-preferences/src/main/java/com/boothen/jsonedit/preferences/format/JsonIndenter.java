@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.Token;
 import com.boothen.jsonedit.antlr.JSONLexer;
 
 /**
- * TODO: describe
+ * Indents JSON code snippets.
  */
 public class JsonIndenter {
 

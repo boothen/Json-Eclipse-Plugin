@@ -13,6 +13,9 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
  */
 public class JsonRootPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
+    /**
+     * The only constructor
+     */
     public JsonRootPreferencePage() {
         setDescription("Expand the tree to edit preferences for a specific feature.");
         noDefaultAndApplyButton();
@@ -26,6 +29,7 @@ public class JsonRootPreferencePage extends PreferencePage implements IWorkbench
         return new Composite(parent, SWT.NULL);
     }
 
+    @Override
     public void init(IWorkbench workbench) {
         // Do nothing
     }
