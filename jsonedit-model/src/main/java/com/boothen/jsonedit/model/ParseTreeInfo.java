@@ -11,14 +11,16 @@ public class ParseTreeInfo {
 
     /**
      * @param treeNode the node to inspect
-     * @return a segment describing the corresponding text range in the document
+     * @return a segment describing the corresponding text range in the document or <code>null</code>.
      */
     public static Segment getSegment(ParseTree treeNode) {
         if (treeNode instanceof ParserRuleContext) {
             ParserRuleContext ctx = (ParserRuleContext) treeNode;
-            int start = ctx.start.getStartIndex();
-            int stop = ctx.stop.getStopIndex();
-            return new Segment(start, stop);
+            if (ctx.exception == null) {
+                int start = ctx.start.getStartIndex();
+                int stop = ctx.stop.getStopIndex();
+                return new Segment(start, stop);
+            }
         }
         if (treeNode instanceof TerminalNode) {
             TerminalNode t = (TerminalNode) treeNode;

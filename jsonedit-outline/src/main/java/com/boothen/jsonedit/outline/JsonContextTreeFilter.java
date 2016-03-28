@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -43,9 +44,15 @@ class JsonContextTreeFilter extends JSONBaseVisitor<List<ParseTree>> {
 
     @Override
     public List<ParseTree> visitPair(PairContext ctx) {
-        ValueContext value = ctx.value();
-        ParseTree child = value.getChild(0);
-        return visit(child);
+        if (ctx.exception == null) {
+            ValueContext value = ctx.value();
+            if (value.exception == null) {
+                ParseTree child = value.getChild(0);
+                return visit(child);
+            }
+        }
+
+        return Collections.emptyList();
     }
 
     @Override
@@ -57,10 +64,23 @@ class JsonContextTreeFilter extends JSONBaseVisitor<List<ParseTree>> {
         List<ParseTree> children = new ArrayList<>();
         for (int i = 0; i < ctx.getChildCount(); i++) {
             ParseTree child = ctx.getChild(i);
-            if (!(child instanceof TerminalNode)) {
+            if (shouldAdd(child)) {
                 children.add(child);
             }
         }
         return children;
+    }
+
+    private boolean shouldAdd(ParseTree child) {
+        if (child instanceof TerminalNode) {
+            return false;
+        }
+        if (child instanceof ParserRuleContext) {
+            ParserRuleContext ctx = (ParserRuleContext) child;
+            if (ctx.exception != null) {
+                return false;
+            }
+        }
+        return true;
     }
 }

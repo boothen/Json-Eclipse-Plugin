@@ -24,13 +24,6 @@ public class AntlrTokenScanner implements ITokenScanner {
     private TokenMapping tokenMapping;
 
     /**
-     * Uses the default JSONLexer
-     */
-    public AntlrTokenScanner() {
-        this(new JSONLexer(null));
-    }
-
-    /**
      * Uses the given JSONLexer
      * @param lexer the lexer to use
      */

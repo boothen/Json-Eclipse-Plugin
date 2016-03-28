@@ -5,13 +5,9 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.text.Position;
-import org.eclipse.ui.statushandlers.StatusManager;
 
 import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
-import com.boothen.jsonedit.editor.Activator;
 
 /**
  * Compares two parse trees.
@@ -47,12 +43,18 @@ public class ParseTreeComparator {
             Position oldPos = oldPositions.get(oldChild);
 
             if (Objects.equals(newPos, oldPos)) {
-                compareTrees(newChild, oldChild, newPositions, oldPositions, listener);
+                if (newPos != null && oldPos != null) {
+                    // no error nodes
+                    compareTrees(newChild, oldChild, newPositions, oldPositions, listener);
+                }
                 listener.sameNode(oldChild, newChild);
                 newIdx++;
                 oldIdx++;
             } else {
-                if (oldPos == null || !oldPos.isDeleted && newPos.offset < oldPos.offset) {
+                if (newPos == null) {
+                    // probably a (incomplete) node with an exception and invalid position offsets
+                    newIdx++;
+                } else if (oldPos == null || !oldPos.isDeleted && newPos.offset < oldPos.offset) {
                     listener.nodeAdded(newChild);
                     newIdx++;
                 } else {

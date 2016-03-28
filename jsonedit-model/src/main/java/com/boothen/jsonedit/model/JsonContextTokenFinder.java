@@ -57,6 +57,11 @@ public class JsonContextTokenFinder extends JSONBaseVisitor<ParseTree> {
 
     private boolean fullyInside(ParseTree treeNode) {
         Segment segment = ParseTreeInfo.getSegment(treeNode);
+        if (segment == null) {
+            // bail out on an erroneous nodes
+            return false;
+        }
+
         return (segment.getStart() <= textStart && textStop <= segment.getStop());
     }
 }

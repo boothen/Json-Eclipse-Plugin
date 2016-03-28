@@ -53,6 +53,7 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
         PresentationReconciler reconciler= new PresentationReconciler();
 
         JSONLexer lexer = new JSONLexer(null);
+        lexer.removeErrorListeners(); // don't print lexer errors to stderr
         TokenMapping mapping = new JsonTokenMapping(fPreferenceStore);
         AntlrTokenScanner scanner = new AntlrTokenScanner(lexer, mapping);
         DefaultDamagerRepairer dr = new DefaultDamagerRepairer(scanner);

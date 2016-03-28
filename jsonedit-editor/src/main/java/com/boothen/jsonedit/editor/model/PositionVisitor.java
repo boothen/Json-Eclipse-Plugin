@@ -22,10 +22,14 @@ class PositionVisitor extends AbstractParseTreeVisitor<Map<ParseTree, Position>>
     @Override
     public Map<ParseTree, Position> visitChildren(RuleNode node) {
         ParserRuleContext ctx = (ParserRuleContext) node;
-        positions.put(node, createPosition(ctx.start, ctx.stop));
 
-        for (int i=0; i<node.getChildCount(); i++) {
-            node.getChild(i).accept(this);
+        // Add successful rule matches only
+        if (ctx.exception == null) {
+            positions.put(node, createPosition(ctx.start, ctx.stop));
+
+            for (int i=0; i<node.getChildCount(); i++) {
+                node.getChild(i).accept(this);
+            }
         }
 
         return positions;
@@ -40,8 +44,7 @@ class PositionVisitor extends AbstractParseTreeVisitor<Map<ParseTree, Position>>
 
     @Override
     public Map<ParseTree, Position> visitErrorNode(ErrorNode node) {
-        Token symbol = node.getSymbol();
-        positions.put(node, createPosition(symbol, symbol));
+        // ignore error tokens - they have invalid positions
         return positions;
     }
 

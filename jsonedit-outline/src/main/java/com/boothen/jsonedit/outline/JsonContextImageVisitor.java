@@ -42,6 +42,10 @@ class JsonContextImageVisitor extends JSONBaseVisitor<Image> {
     public Image visitPair(PairContext ctx) {
         ValueContext value = ctx.value();
 
+        if (value.exception != null) {
+            return getCachedImage(NodeType.ERROR);
+        }
+
         TerminalNode node = value.getChild(TerminalNode.class, 0);
         if (node != null) {
             return visitTerminal(node);

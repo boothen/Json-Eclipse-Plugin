@@ -31,11 +31,14 @@ public class DuplicateKeyFinder extends JSONBaseVisitor<Void> {
             ParseTree child = ctx.getChild(i);
             if (child instanceof PairContext) {
                 PairContext pair = (PairContext) child;
-                Token keyToken = pair.STRING().getSymbol();
-                String key = keyToken.getText();
-                Token existing = keys.put(key, keyToken);
-                if (existing != null) {
-                    listener.reportDuplicate(key, existing, keyToken);
+                // Evaluate successful rule matches only
+                if (pair.exception == null) {
+                    Token keyToken = pair.STRING().getSymbol();
+                    String key = keyToken.getText();
+                    Token existing = keys.put(key, keyToken);
+                    if (existing != null) {
+                        listener.reportDuplicate(key, existing, keyToken);
+                    }
                 }
             }
         }
