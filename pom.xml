@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.boothen</groupId>
 	<artifactId>jsonedit-parent</artifactId>
-	<version>0.9.8</version>
+	<version>1.0.0.beta2</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>jsonedit-core</module>
@@ -14,8 +14,6 @@
 		<module>jsonedit-model</module>
 		<module>jsonedit-outline</module>
 		<module>jsonedit-preferences</module>
-		<module>jsonedit-reader</module>
-		<module>jsonedit-repository</module>
 		<module>jsonedit-test</module>
 		<module>jsonedit-text</module>
 	</modules>
@@ -104,6 +102,35 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-versions-plugin</artifactId>
 				<version>${tycho.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-repository-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<includeAllDependencies>false</includeAllDependencies>
+					<compress>false</compress>
+					<repositoryName>eclipse-json-editor</repositoryName>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-director-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+					<execution>
+						<id>materialize-products</id>
+						<goals>
+							<goal>materialize-products</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>archive-products</id>
+						<goals>
+							<goal>archive-products</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
