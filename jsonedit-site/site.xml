@@ -6,6 +6,9 @@
    <feature url="features/org.antlr.v4_4.5.2.jar" id="org.antlr.v4" version="4.5.2">
       <category name="antlr4"/>
    </feature>
+   <feature url="features/jsonedit-feature_1.0.0.beta1.jar" id="jsonedit-feature" version="1.0.0.beta1">
+      <category name="jsonedit"/>
+   </feature>
    <feature url="features/jsonedit-feature_1.0.0.beta2.jar" id="jsonedit-feature" version="1.0.0.beta2">
       <category name="jsonedit"/>
    </feature>
