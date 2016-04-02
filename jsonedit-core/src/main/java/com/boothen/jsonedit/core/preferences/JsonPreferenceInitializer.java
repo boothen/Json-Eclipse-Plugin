@@ -18,6 +18,7 @@ package com.boothen.jsonedit.core.preferences;
 import static com.boothen.jsonedit.core.preferences.JsonPreferences.AUTO_FORMAT_ON_SAVE;
 import static com.boothen.jsonedit.core.preferences.JsonPreferences.EDITOR_MATCHING_BRACKETS;
 import static com.boothen.jsonedit.core.preferences.JsonPreferences.EDITOR_MATCHING_BRACKETS_COLOR;
+import static com.boothen.jsonedit.core.preferences.JsonPreferences.EDITOR_TRAILING_NEWLINE;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -39,6 +40,7 @@ public class JsonPreferenceInitializer extends AbstractPreferenceInitializer {
         IPreferenceStore node = JsonCorePlugin.getDefault().getPreferenceStore();
 
         node.setDefault(AUTO_FORMAT_ON_SAVE, false);
+        node.setDefault(EDITOR_TRAILING_NEWLINE, true);
         node.setDefault(EDITOR_MATCHING_BRACKETS, true);
         node.setDefault(EDITOR_MATCHING_BRACKETS_COLOR, colorToString(0, 128, 0));
 

@@ -28,6 +28,7 @@ import com.boothen.jsonedit.antlr.JSONLexer;
 import com.boothen.jsonedit.core.BundleUtils;
 import com.boothen.jsonedit.core.JsonCorePlugin;
 import com.boothen.jsonedit.core.JsonLog;
+import com.boothen.jsonedit.core.preferences.JsonPreferences;
 import com.boothen.jsonedit.preferences.Activator;
 import com.boothen.jsonedit.preferences.OverlayPreferenceStore;
 import com.boothen.jsonedit.preferences.format.JsonFormatter.Affix;
@@ -87,6 +88,7 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
             createAffixConfigGroup(container, JSONLexer.VOCABULARY, tokenType, false);
         }
 
+        createNewlineCheckbox(container, gridLayout.numColumns);
         createTextViewer(container, gridLayout.numColumns);
         refreshViewer();
 
@@ -102,9 +104,10 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
     }
 
     private void createWhitespaceCheckbox(Composite container, int numColumns) {
-        Button showWhitespaceCheckbox = new Button(container, SWT.CHECK);
-        showWhitespaceCheckbox.setText("Show whitespace on this page");
-        showWhitespaceCheckbox.addSelectionListener(new SelectionAdapter() {
+        Button checkbox = new Button(container, SWT.CHECK);
+        checkbox.setText("Show whitespace on this page");
+        checkbox.setSelection(getPreferenceStore().getBoolean(SHOW_WHITESPACE_PREF));
+        checkbox.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 Button button = (Button) e.widget;
@@ -119,10 +122,27 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
         });
 
         GridData fontHintData = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
-        fontHintData.widthHint = 150; // only expand further if anyone else requires it
         fontHintData.horizontalSpan = numColumns;
-        showWhitespaceCheckbox.setLayoutData(fontHintData);
-        showWhitespaceCheckbox.setSelection(getPreferenceStore().getBoolean(SHOW_WHITESPACE_PREF));
+        checkbox.setLayoutData(fontHintData);
+    }
+
+    private void createNewlineCheckbox(Composite container, int numColumns) {
+        Button checkbox = new Button(container, SWT.CHECK);
+        checkbox.setText("Add newline at end of file");
+        checkbox.setSelection(getPreferenceStore().getBoolean(JsonPreferences.EDITOR_TRAILING_NEWLINE));
+        checkbox.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                Button button = (Button) e.widget;
+                boolean enabled = button.getSelection();
+                getPreferenceStore().setValue(JsonPreferences.EDITOR_TRAILING_NEWLINE, enabled);
+            }
+        });
+        checkbox.addSelectionListener(refreshViewer);
+
+        GridData fontHintData = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
+        fontHintData.horizontalSpan = numColumns;
+        checkbox.setLayoutData(fontHintData);
     }
 
     private Group createAffixConfigGroup(Composite container, Vocabulary vocab, int token, boolean preOrSuf) {
@@ -189,7 +209,7 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
         boolean showLeading = true;
         boolean showEnclosed = true;
         boolean showTrailing = true;
-        boolean showLineDelimiter = false;
+        boolean showLineDelimiter = true;
         boolean showLeadingSpaces = showLeading;
         boolean showEnclosedSpaces = showEnclosed;
         boolean showTrailingSpaces = showTrailing;

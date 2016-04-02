@@ -7,12 +7,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.Vocabulary;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 
 import com.boothen.jsonedit.antlr.JSONLexer;
 
 /**
- * TODO: describe
+ * Reads from a token source and writes formatted and indented text.
+ * The following preferences are respected:
+ * <ul>
+ * <li>{@link Vocabulary#getSymbolicName}<code>(i) + .prefix=(NONE, SPACE, NEWLINE)</code></li>
+ * <li>{@link Vocabulary#getSymbolicName}<code>(i) + .suffix=(NONE, SPACE, NEWLINE)</code></li>
+ * <li>{@link AbstractDecoratedTextEditorPreferenceConstants#EDITOR_SPACES_FOR_TABS}</li>
+ * <li>{@link AbstractDecoratedTextEditorPreferenceConstants#EDITOR_TAB_WIDTH}</li>
+ * </ul>
  */
 public class JsonFormatter {
 
@@ -24,11 +33,16 @@ public class JsonFormatter {
     private final Map<Integer, Affix> prefixes = new HashMap<>();
     private final Map<Integer, Affix> suffixes = new HashMap<>();
 
-    private String newline;
+    private String lineDelim;
     private JsonIndenter indenter;
 
-    public JsonFormatter(String newline, IPreferenceStore store) {
-        this.newline = newline;
+    /**
+     * @param delimiter the line delimiter to write
+     * @param store the store that defines the format style
+     */
+    public JsonFormatter(String delimiter, IPreferenceStore store) {
+        this.lineDelim = delimiter;
+        // TODO: use Vocabulary.getMaxTokenType() in ANTLR 4.5.3+
         int vocabularySize = new JSONLexer(null).getTokenNames().length;
         for (int i = 0; i < vocabularySize; i++) {
             String name = JSONLexer.VOCABULARY.getSymbolicName(i);
@@ -50,8 +64,8 @@ public class JsonFormatter {
     }
 
     /**
-     * @param lexer
-     * @return
+     * @param lexer the lexer that provides the tokens
+     * @return formatted and indented tokens as a single text string
      */
     public String format(JSONLexer lexer) {
         StringBuffer buffer = new StringBuffer();
@@ -105,7 +119,7 @@ public class JsonFormatter {
     private String convertAffix(Affix affix) {
         switch (affix) {
         case NEWLINE:
-            return newline;
+            return lineDelim;
         case SPACE:
             return " ";
         default:
