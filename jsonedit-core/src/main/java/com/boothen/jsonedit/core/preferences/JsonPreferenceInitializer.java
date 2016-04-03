@@ -44,6 +44,13 @@ public class JsonPreferenceInitializer extends AbstractPreferenceInitializer {
         node.setDefault(EDITOR_MATCHING_BRACKETS, true);
         node.setDefault(EDITOR_MATCHING_BRACKETS_COLOR, colorToString(0, 128, 0));
 
+        node.setDefault("BEGIN_ARRAY.suffix", "NEWLINE");
+        node.setDefault("BEGIN_OBJECT.suffix", "NEWLINE");
+        node.setDefault("COLON.suffix", "SPACE");
+        node.setDefault("COMMA.suffix", "NEWLINE");
+        node.setDefault("END_OBJECT.prefix", "NEWLINE");
+        node.setDefault("END_ARRAY.prefix", "NEWLINE");
+
         node.setDefault(TokenStyle.KEY.color(), colorToString(0, 128, 0));
         node.setDefault(TokenStyle.TEXT.color(), colorToString(0, 0, 128));
         node.setDefault(TokenStyle.NULL.color(), colorToString(0, 0, 0));

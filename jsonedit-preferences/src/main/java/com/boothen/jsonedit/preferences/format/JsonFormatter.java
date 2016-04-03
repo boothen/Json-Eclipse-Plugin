@@ -75,12 +75,24 @@ public class JsonFormatter {
         while (token.getType() != Token.EOF) {
             // format only content that is parsed (no whitespace)
             if (token.getChannel() == Token.DEFAULT_CHANNEL) {
-                indenter.updateIndentLevel(token);
+
+                // closing elements are processed first so they are
+                // one level above already
+                if (indenter.decreasesIndent(token)) {
+                    indenter.decreaseIndent();
+                }
                 if (prevToken != null) {
                     addPrefix(token, prevToken, buffer);
                 }
 
                 buffer.append(token.getText());
+
+                // opening elements are "post-processed": only sub-elements
+                // should have a higher indentation
+                if (indenter.increasesIndent(token)) {
+                    indenter.increaseIndent();
+                }
+
                 addSuffix(token, buffer);
                 prevToken = token;
             }
@@ -91,9 +103,16 @@ public class JsonFormatter {
     }
 
     private void addPrefix(Token token, Token prevToken, StringBuffer buffer) {
+        Affix prevSuffix = suffixes.get(prevToken.getType());
         Affix prefix = prefixes.get(token.getType());
+
+        // apply indentation from the previous element
+        // if this token is a closing element, the indent level has been reduced
+        if (prevSuffix == Affix.NEWLINE) {
+            indenter.indent(buffer);
+        }
+
         if (prefix != null) {
-            Affix prevSuffix = suffixes.get(prevToken.getType());
             // prefix only if different from last written suffix (avoid double newlines)
             if (prefix != prevSuffix) {
                 String text = convertAffix(prefix);
@@ -110,9 +129,8 @@ public class JsonFormatter {
         if (suffix != null) {
             String text = convertAffix(suffix);
             buffer.append(text);
-            if (suffix == Affix.NEWLINE) {
-                indenter.indent(buffer);
-            }
+            // indentation cannot happen here, since the next element could be a closing tag
+            // thus decreasing the indentation
         }
     }
 

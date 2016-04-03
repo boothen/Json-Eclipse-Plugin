@@ -21,15 +21,40 @@ public class JsonIndenter {
     }
 
     public void updateIndentLevel(Token token) {
+        if (increasesIndent(token)) {
+            increaseIndent();
+        }
+
+        if (decreasesIndent(token)) {
+            decreaseIndent();
+        }
+    }
+
+    public void increaseIndent() {
+        level++;
+    }
+
+    public void decreaseIndent() {
+        level--;
+    }
+
+    public boolean increasesIndent(Token token) {
         switch (token.getType()) {
         case JSONLexer.BEGIN_OBJECT:
         case JSONLexer.BEGIN_ARRAY:
-            level++;
-            break;
+            return true;
+        default:
+            return false;
+        }
+    }
 
+    public boolean decreasesIndent(Token token) {
+        switch (token.getType()) {
         case JSONLexer.END_OBJECT:
         case JSONLexer.END_ARRAY:
-            level--;
+            return true;
+        default:
+            return false;
         }
     }
 
