@@ -64,16 +64,29 @@ public class JsonFormatter {
     }
 
     /**
-     * @param lexer the lexer that provides the tokens
+     * @param formatStart the offset of the text that should be formatted in chars.
+     * @param lexer the lexer that provides the tokens starting at the <b>beginning of the document</b>.
      * @return formatted and indented tokens as a single text string
      */
-    public String format(JSONLexer lexer) {
+    public String format(int formatStart, JSONLexer lexer) {
         StringBuffer buffer = new StringBuffer();
 
-        Token prevToken = null; // only on default channel
         Token token = lexer.nextToken();
+
+        // update indent level only until we hit the starting position
         while (token.getType() != Token.EOF) {
-            // format only content that is parsed (no whitespace)
+            if (token.getStartIndex() < formatStart) {
+                indenter.updateIndentLevel(token);
+            } else {
+                indenter.indent(buffer);
+                break;
+            }
+            token = lexer.nextToken();
+        }
+
+        Token prevToken = null; // only on default channel
+        while (token.getType() != Token.EOF) {
+            // ignore existing whitespace by using the default channel only
             if (token.getChannel() == Token.DEFAULT_CHANNEL) {
 
                 // closing elements are processed first so they are

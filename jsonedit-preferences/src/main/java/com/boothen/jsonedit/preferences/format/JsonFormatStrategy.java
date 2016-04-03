@@ -54,10 +54,10 @@ public class JsonFormatStrategy extends ContextBasedFormattingStrategy {
             // must be computed before the document is changed (formatted)
             boolean endIncluded = (endIndex == document.getLength());
 
-            String content = document.get(region.getOffset(), region.getLength());
+            String content = document.get(0, region.getOffset() + region.getLength());
             JSONLexer lexer = new JSONLexer(new ANTLRInputStream(content));
             lexer.removeErrorListeners();
-            String format = formatter.format(lexer);
+            String format = formatter.format(region.getOffset(), lexer);
             document.replace(region.getOffset(), region.getLength(), format);
 
             boolean appendNewline = store.getBoolean(JsonPreferences.EDITOR_TRAILING_NEWLINE);
