@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.text.formatter.ContextBasedFormattingStrategy;
@@ -50,15 +51,19 @@ public class JsonFormatStrategy extends ContextBasedFormattingStrategy {
         JsonFormatter formatter = new JsonFormatter(delimiter, store);
 
         try {
-            int endIndex = region.getOffset() + region.getLength();
+            int endOffset = region.getOffset() + region.getLength();
             // must be computed before the document is changed (formatted)
-            boolean endIncluded = (endIndex == document.getLength());
+            boolean endIncluded = (endOffset == document.getLength());
 
-            String content = document.get(0, region.getOffset() + region.getLength());
+            int lineStartOffset = getLineStartOffset(region.getOffset());
+            int lineEndOffset = getLineEndOffset(endOffset);
+
+            String content = document.get(0, lineEndOffset);
             JSONLexer lexer = new JSONLexer(new ANTLRInputStream(content));
             lexer.removeErrorListeners();
-            String format = formatter.format(region.getOffset(), lexer);
-            document.replace(region.getOffset(), region.getLength(), format);
+
+            String format = formatter.format(lineStartOffset, lexer);
+            document.replace(lineStartOffset, lineEndOffset - lineStartOffset, format);
 
             boolean appendNewline = store.getBoolean(JsonPreferences.EDITOR_TRAILING_NEWLINE);
             if (appendNewline && endIncluded) {
@@ -72,6 +77,15 @@ public class JsonFormatStrategy extends ContextBasedFormattingStrategy {
         } catch (BadLocationException e) {
             JsonLog.logError("Unable to format JSON region", e);
         }
+    }
+
+    private int getLineStartOffset(int offset) throws BadLocationException {
+        return document.getLineInformationOfOffset(offset).getOffset();
+    }
+
+    private int getLineEndOffset(int offset) throws BadLocationException {
+        IRegion line = document.getLineInformationOfOffset(offset);
+        return line.getOffset() + line.getLength();
     }
 
     @Override
