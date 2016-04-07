@@ -74,13 +74,8 @@ public class JsonFormatter {
         Token token = lexer.nextToken();
 
         // update indent level only until we hit the starting position
-        while (token.getType() != Token.EOF) {
-            if (token.getStartIndex() < formatStart) {
-                indenter.updateIndentLevel(token);
-            } else {
-                indenter.indent(buffer);
-                break;
-            }
+        while (token.getType() != Token.EOF && token.getStartIndex() < formatStart) {
+            indenter.updateIndentLevel(token);
             token = lexer.nextToken();
         }
 
@@ -96,6 +91,10 @@ public class JsonFormatter {
                 }
                 if (prevToken != null) {
                     addPrefix(token, prevToken, buffer);
+                } else {
+                    // a one time action: indent the first written token AFTER the
+                    // indenter level has been adjusted
+                    indenter.indent(buffer);
                 }
 
                 buffer.append(token.getText());

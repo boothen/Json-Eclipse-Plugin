@@ -4,7 +4,6 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.text.formatter.ContextBasedFormattingStrategy;
@@ -84,8 +83,9 @@ public class JsonFormatStrategy extends ContextBasedFormattingStrategy {
     }
 
     private int getLineEndOffset(int offset) throws BadLocationException {
-        IRegion line = document.getLineInformationOfOffset(offset);
-        return line.getOffset() + line.getLength();
+        int line = document.getLineOfOffset(offset);
+        // getLineLength() includes the line delimiter in contrast to getLineInformation()
+        return document.getLineOffset(line) + document.getLineLength(line);
     }
 
     @Override
