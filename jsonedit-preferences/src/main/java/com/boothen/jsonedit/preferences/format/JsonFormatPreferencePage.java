@@ -11,6 +11,11 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.WhitespaceCharacterPainter;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.ListViewer;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -21,6 +26,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -49,6 +55,7 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
     };
 
     private TextViewer textViewer;
+    private ListViewer listViewer;
     private JsonContentFormatter formatter;
     private WhitespaceCharacterPainter painter;
     private OverlayPreferenceStore preferenceStore;
@@ -71,22 +78,10 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
 
         Composite container = new Composite(parent, SWT.NONE);
         GridLayout gridLayout = new GridLayout();
-        gridLayout.numColumns = 4;
+        gridLayout.numColumns = 3;
         container.setLayout(gridLayout);
 
-        int[] tokenTypes = {
-                JSONLexer.BEGIN_OBJECT,
-                JSONLexer.END_OBJECT,
-                JSONLexer.BEGIN_ARRAY,
-                JSONLexer.END_ARRAY,
-                JSONLexer.COLON,
-                JSONLexer.COMMA,
-        };
-
-        for (int tokenType : tokenTypes) {
-            createAffixConfigGroup(container, JSONLexer.VOCABULARY, tokenType, true);
-            createAffixConfigGroup(container, JSONLexer.VOCABULARY, tokenType, false);
-        }
+        createAffixConfigGroup(container, JSONLexer.VOCABULARY);
 
         createNewlineCheckbox(container, gridLayout.numColumns);
         createTextViewer(container, gridLayout.numColumns);
@@ -95,6 +90,88 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
         createWhitespaceCheckbox(container, gridLayout.numColumns);
 
         return container;
+    }
+
+    /**
+     * @param container
+     * @param vocabulary
+     */
+    private void createAffixConfigGroup(Composite container, final Vocabulary vocabulary) {
+
+        Object[] tokenTypes = {
+                JSONLexer.BEGIN_OBJECT,
+                JSONLexer.END_OBJECT,
+                JSONLexer.BEGIN_ARRAY,
+                JSONLexer.END_ARRAY,
+                JSONLexer.COLON,
+                JSONLexer.COMMA,
+        };
+
+        listViewer = new ListViewer(container, SWT.BORDER | SWT.V_SCROLL);
+        listViewer.setContentProvider(ArrayContentProvider.getInstance());
+        listViewer.setLabelProvider(new LabelProvider() {
+            @Override
+            public String getText(Object element) {
+                int type = (Integer)element;
+                return vocabulary.getLiteralName(type) + "  " + vocabulary.getSymbolicName(type);
+            }
+        });
+        listViewer.setInput(tokenTypes);
+
+        final Group prefixGroup = createConfigGroup(container, vocabulary, "prefix", "Before");
+        final Group suffixGroup = createConfigGroup(container, vocabulary, "suffix", "After");
+
+        listViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+            @Override
+            public void selectionChanged(SelectionChangedEvent event) {
+                Integer token = (Integer) listViewer.getStructuredSelection().getFirstElement();
+                String symbol = vocabulary.getSymbolicName(token);
+                String prefixValue = preferenceStore.getString(symbol + ".prefix");
+                String suffixValue = preferenceStore.getString(symbol + ".suffix");
+                for (int i = 0; i < 3; i++) {
+                    Button prefixButton = (Button) prefixGroup.getChildren()[i];
+                    String prefixName = prefixButton.getData().toString();
+                    prefixButton.setSelection(prefixName.equals(prefixValue));
+
+                    Button suffixButton = (Button) suffixGroup.getChildren()[i];
+                    String suffixName = suffixButton.getData().toString();
+                    suffixButton.setSelection(suffixName.equals(suffixValue));
+                }
+            }
+        });
+
+        List list = listViewer.getList();
+        list.setLayoutData(new GridData());
+    }
+
+    private Group createConfigGroup(Composite container, Vocabulary vocab, String key, String text) {
+
+        Group group = new Group(container, SWT.NONE);
+        group.setText(text);
+        group.setLayout(new RowLayout(SWT.VERTICAL));
+
+        // must be in the same order as the Affix enum value
+        createRadioButton(group, Affix.NONE, vocab, key, "Nothing");
+        createRadioButton(group, Affix.SPACE, vocab, key, "Space");
+        createRadioButton(group, Affix.NEWLINE, vocab, key, "Newline");
+
+        GridData layoutData = new GridData();
+        layoutData.verticalAlignment = SWT.FILL;
+        layoutData.horizontalAlignment = SWT.FILL;
+        layoutData.grabExcessHorizontalSpace = true;
+        group.setLayoutData(layoutData);
+        return group;
+    }
+
+    private Button createRadioButton(Group group, Affix affix, Vocabulary vocab, String key, String text) {
+        IPreferenceStore store = getPreferenceStore();
+        Button off = new Button(group, SWT.RADIO);
+        off.addSelectionListener(new FormatChangeListener(store, vocab, key));
+        off.addSelectionListener(refreshViewer);
+        off.setData(affix);
+        off.setText(text);
+        return off;
     }
 
     @Override
@@ -143,38 +220,6 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
         GridData fontHintData = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
         fontHintData.horizontalSpan = numColumns;
         checkbox.setLayoutData(fontHintData);
-    }
-
-    private Group createAffixConfigGroup(Composite container, Vocabulary vocab, int token, boolean preOrSuf) {
-        String symbol = vocab.getSymbolicName(token);
-        String literal = vocab.getLiteralName(token);
-        String subkey = preOrSuf ? "prefix" : "suffix";
-        String affixText = preOrSuf ? "Before" : "After";
-        return createConfigGroup(container, symbol + "." + subkey, affixText + " " + literal);
-    }
-
-    private Group createConfigGroup(Composite container, String key, String text) {
-
-        Group group = new Group(container, SWT.NONE);
-        group.setText(text);
-        group.setLayout(new RowLayout(SWT.VERTICAL));
-
-        createRadioButton(group, key, Affix.NONE, "Nothing");
-        createRadioButton(group, key, Affix.NEWLINE, "Newline");
-        createRadioButton(group, key, Affix.SPACE, "Space");
-
-        group.setLayoutData(new GridData());
-        return group;
-    }
-
-    private Button createRadioButton(Group group, String key, Affix affix, String text) {
-        IPreferenceStore store = getPreferenceStore();
-        Button off = new Button(group, SWT.RADIO);
-        off.setSelection(affix.name().equals(store.getString(key)));
-        off.addSelectionListener(new FormatChangeListener(store, key, affix));
-        off.addSelectionListener(refreshViewer);
-        off.setText(text);
-        return off;
     }
 
     private void createTextViewer(Composite appearanceComposite, int numColumns) {
@@ -232,4 +277,33 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
         Region region = new Region(0, textViewer.getDocument().getLength());
         formatter.format(textViewer.getDocument(), region);
     }
+
+    private class FormatChangeListener extends SelectionAdapter {
+
+        private IPreferenceStore prefStore;
+        private Vocabulary vocab;
+        private String key;
+
+        public FormatChangeListener(IPreferenceStore prefStore, Vocabulary vocab, String key) {
+            this.prefStore = prefStore;
+            this.vocab = vocab;
+            this.key = key;
+        }
+
+        @Override
+        public void widgetSelected(SelectionEvent e) {
+            Button button = (Button)e.widget;
+
+            Integer token = (Integer) listViewer.getStructuredSelection().getFirstElement();
+
+            if (button.getSelection()) {
+                String affixName = button.getData().toString();
+                String symbol = vocab.getSymbolicName(token);
+                String storeKey = symbol + "." + key;
+                prefStore.setValue(storeKey, affixName);
+            }
+        }
+
+    }
+
 }
