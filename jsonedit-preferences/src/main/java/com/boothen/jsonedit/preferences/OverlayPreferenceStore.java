@@ -15,6 +15,8 @@ import org.eclipse.jface.util.PropertyChangeEvent;
  * org.eclipse.ui.internal.editors.text.OverlayPreferenceStore.
  * <p>
  * It does not perfectly adhere to the interface, so use with care.
+ * <p>
+ * The {@link #writeThrough} method persists changes to this instance to the parent.
  */
 public class OverlayPreferenceStore implements IPreferenceStore {
 
@@ -22,6 +24,10 @@ public class OverlayPreferenceStore implements IPreferenceStore {
     private final List<IPropertyChangeListener> listeners = new ArrayList<>();
     private final IPreferenceStore parent;
 
+    /**
+     * Takes a preference store that is used to retrieve data.
+     * @param parent the parent preference store
+     */
     public OverlayPreferenceStore(IPreferenceStore parent) {
         this.parent = parent;
     }
