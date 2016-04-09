@@ -198,9 +198,11 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
                 int length = textSelection.getLength();
 
                 ParseTree element = root.getContent().accept(new JsonContextTokenFinder(start, start + length));
+                // similar code exists in QuickOutlinePopup
                 while (element != null && !provider.isKnown(element)) {
                     element = element.getParent();
                 }
+
                 if (element != null) {
                     textHasChanged = true;
                     getTreeViewer().reveal(element);

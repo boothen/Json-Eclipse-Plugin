@@ -16,6 +16,8 @@
 
 package com.boothen.jsonedit.quickoutline;
 
+import java.util.regex.Pattern;
+
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.PopupDialog;
@@ -26,10 +28,12 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
@@ -45,23 +49,41 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 
+import com.boothen.jsonedit.core.JsonLog;
+import com.boothen.jsonedit.model.JsonContextTokenFinder;
+import com.boothen.jsonedit.model.ParseTreeInfo;
+import com.boothen.jsonedit.model.Segment;
 import com.boothen.jsonedit.outline.Container;
 import com.boothen.jsonedit.outline.JsonContentProvider;
 import com.boothen.jsonedit.outline.JsonLabelProvider;
 
+/**
+ * An information control that shows a quick outline of an ANTLR {@link ParseTree} inside a shell.
+ */
 public class QuickOutlinePopup extends AbstractInformationControl implements IInformationControlExtension2 {
 
     private final JsonContentProvider contentProvider = new JsonContentProvider();
     private final JsonLabelProvider labelProvider = new JsonLabelProvider();
 
+    private final ISourceViewer sourceViewer;
+
     private TreeViewer treeViewer;
-    private final ISourceViewer mEditor;
     private Text filterText;
 
-    public QuickOutlinePopup(Shell parentShell, ISourceViewer editor) {
+    private Pattern pattern = Pattern.compile(".*");
+
+    /**
+     * Creates an abstract information control with the given shell as parent.
+     * The control will not be resizable and show a status line.
+     *
+     * @param parentShell the parent of this control's shell
+     * @param sourceViewer the linked source viewer
+     */
+    public QuickOutlinePopup(Shell parentShell, ISourceViewer sourceViewer) {
         super(parentShell, "Regular expressions enabled");
-        mEditor = editor;
+        this.sourceViewer = sourceViewer;
         create();
     }
 
@@ -77,10 +99,12 @@ public class QuickOutlinePopup extends AbstractInformationControl implements IIn
 
         final NamePatternFilter namePatternFilter = new NamePatternFilter();
         filterText.addModifyListener(new ModifyListener() {
+
             @Override
             public void modifyText(ModifyEvent e) {
                 String text = ((Text) e.widget).getText();
-                namePatternFilter.setPattern(text);
+                pattern = Pattern.compile(text, Pattern.CASE_INSENSITIVE);
+                namePatternFilter.setPattern(pattern);
                 stringMatcherUpdated();
             }
         });
@@ -104,7 +128,49 @@ public class QuickOutlinePopup extends AbstractInformationControl implements IIn
             treeViewer.getControl().setRedraw(false);
             treeViewer.refresh();
             treeViewer.expandAll();
+            selectFirstMatch();
             treeViewer.getControl().setRedraw(true);
+    }
+
+    /**
+     * Selects the first element in the tree which matches the current filter pattern.
+     */
+    private void selectFirstMatch() {
+        final Tree tree = treeViewer.getTree();
+        TreeItem element = findElement(tree.getItems());
+
+        if (element != null) {
+            tree.setSelection(element);
+            tree.showItem(element);
+        } else {
+            treeViewer.setSelection(StructuredSelection.EMPTY);
+        }
+    }
+
+    private TreeItem findElement(TreeItem[] items) {
+
+        // First search at same level
+        for (int i= 0; i < items.length; i++) {
+                final TreeItem item= items[i];
+                ParseTree element= (ParseTree)item.getData();
+                if (element != null) {
+                    String label= labelProvider.getText(element);
+                    if (pattern.matcher(label).find()) {
+                        return item;
+                    }
+                }
+        }
+
+        // Go one level down for each item
+        for (int i= 0; i < items.length; i++) {
+            final TreeItem item = items[i];
+            TreeItem foundItem = findElement(item.getItems());
+            if (foundItem != null) {
+                return foundItem;
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -117,21 +183,23 @@ public class QuickOutlinePopup extends AbstractInformationControl implements IIn
         // but this is not trivial and needs to be reliable
         contentProvider.refreshParents(parseTree);
 
-        final ISelection selection = mEditor.getSelectionProvider().getSelection();
+        final ISelection selection = sourceViewer.getSelectionProvider().getSelection();
 
+        // try to find the element that contains the text cursor in sourceViewer and pre-select it
         if (selection instanceof ITextSelection) {
-            final ITextSelection textSelection = (ITextSelection) selection;
-            final int start = textSelection.getOffset();
+            ITextSelection textSelection = (ITextSelection) selection;
+            int start = textSelection.getOffset();
+            int length = textSelection.getLength();
 
-            //            final JsonElement found = mFinder.findSelectedScope(start, (JsonElement) input);
-            Object found = null;
+            ParseTree element = parseTree.accept(new JsonContextTokenFinder(start, start + length));
+            // similar code exists in JsonContentOutlinePage
+            while (element != null && !contentProvider.isKnown(element)) {
+                element = element.getParent();
+            }
 
-            if (found != null) {
-
-                final TreeSelection treeSelection = new TreeSelection(new TreePath(new Object[] { found }));
-
-                treeViewer.reveal(found);
-                treeViewer.setSelection(treeSelection);
+            if (element != null) {
+                treeViewer.reveal(element);
+                treeViewer.setSelection(new TreeSelection(new TreePath(new Object[] { element })));
             }
         }
 
@@ -154,6 +222,12 @@ public class QuickOutlinePopup extends AbstractInformationControl implements IIn
         GridData gd = new GridData(GridData.FILL_BOTH);
         gd.heightHint = tree.getItemHeight() * 12;
         tree.setLayoutData(gd);
+        tree.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetDefaultSelected(SelectionEvent e) {
+                gotoSelectedElement();
+            }
+        });
 
         applyInfoColor(tree);
 
@@ -161,21 +235,6 @@ public class QuickOutlinePopup extends AbstractInformationControl implements IIn
         treeViewer.setLabelProvider(labelProvider);
         treeViewer.setContentProvider(contentProvider);
         treeViewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
-
-        treeViewer.getTree().addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.character == SWT.ESC) // ESC
-                    dispose();
-            }
-        });
-
-        tree.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetDefaultSelected(SelectionEvent e) {
-                gotoSelectedElement();
-            }
-        });
     }
 
     private Text createFilterText(Composite parent) {
@@ -200,7 +259,7 @@ public class QuickOutlinePopup extends AbstractInformationControl implements IIn
                 if (e.keyCode == SWT.ARROW_UP)
                     treeViewer.getTree().setFocus();
                 if (e.character == SWT.ESC) // ESC
-                    dispose();
+                    hide();
             }
         });
 
@@ -208,7 +267,29 @@ public class QuickOutlinePopup extends AbstractInformationControl implements IIn
     }
 
     private void gotoSelectedElement() {
-        // TODO: select
+        Object selectedElement = treeViewer.getStructuredSelection().getFirstElement();
+
+        ParseTree treeNode = (ParseTree) selectedElement;
+
+        try {
+            Segment segment = ParseTreeInfo.getSegment(treeNode);
+            StyledText widget= sourceViewer.getTextWidget();
+            if (segment != null) {
+                int start = segment.getStart();
+                int length = segment.getLength();
+                widget.setRedraw(false);
+                sourceViewer.revealRange(start, length);
+                sourceViewer.setSelectedRange(start, length);
+                widget.setRedraw(true);
+                hide();
+            }
+        } catch (IllegalArgumentException e) {
+            JsonLog.logError("Could not open selected element from quick outline", e);
+        }
+    }
+
+    private void hide() {
+        setVisible(false);
     }
 
     private void applyInfoColor(Control control) {

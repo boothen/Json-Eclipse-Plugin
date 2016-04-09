@@ -70,9 +70,9 @@ public class NamePatternFilter extends ViewerFilter {
     /**
      * Sets a new regular expression that is used for filtering. Only tree elements with matching
      * label (as defined by the viewer's {@link ILabelProvider}) pass.
-     * @param regex a regular expression
+     * @param pattern a regular expression pattern
      */
-    public void setPattern(String regex) {
-        pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+    public void setPattern(Pattern pattern) {
+        this.pattern = pattern;
     }
 }

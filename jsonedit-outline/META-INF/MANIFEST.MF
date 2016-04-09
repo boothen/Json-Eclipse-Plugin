@@ -17,3 +17,4 @@ Export-Package: com.boothen.jsonedit.outline,
  com.boothen.jsonedit.quickoutline
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.boothen.jsonedit.outline.Activator
+Import-Package: com.boothen.jsonedit.core
