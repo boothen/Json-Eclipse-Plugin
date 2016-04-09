@@ -15,18 +15,23 @@
  *******************************************************************************/
 package com.boothen.jsonedit.editor;
 
-
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.text.AbstractInformationControlManager;
 import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IInformationControl;
+import org.eclipse.jface.text.IInformationControlCreator;
 import org.eclipse.jface.text.formatter.IContentFormatter;
+import org.eclipse.jface.text.information.IInformationPresenter;
+import org.eclipse.jface.text.information.InformationPresenter;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.reconciler.IReconciler;
 import org.eclipse.jface.text.reconciler.MonoReconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
 import com.boothen.jsonedit.antlr.JSONLexer;
@@ -35,6 +40,7 @@ import com.boothen.jsonedit.model.AntlrTokenScanner;
 import com.boothen.jsonedit.model.TokenMapping;
 import com.boothen.jsonedit.preferences.JsonTokenMapping;
 import com.boothen.jsonedit.preferences.format.JsonContentFormatter;
+import com.boothen.jsonedit.quickoutline.QuickOutlinePopup;
 
 /**
  * Configures the text editor.
@@ -50,7 +56,7 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
 
     @Override
     public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
-        PresentationReconciler reconciler= new PresentationReconciler();
+        PresentationReconciler reconciler = new PresentationReconciler();
 
         JSONLexer lexer = new JSONLexer(null);
         lexer.removeErrorListeners(); // don't print lexer errors to stderr
@@ -79,5 +85,27 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
     @Override
     public IAutoEditStrategy[] getAutoEditStrategies(ISourceViewer sourceViewer, String contentType) {
         return new IAutoEditStrategy[] { new DefaultIndentLineAutoEditStrategy() };
+    }
+
+    /**
+     * Returns the outline presenter which will determine and shown
+     * information requested for the current cursor position.
+     *
+     * @param sourceViewer the source viewer to be configured by this configuration
+     * @return an information presenter
+     */
+    public IInformationPresenter getOutlinePresenter(final ISourceViewer sourceViewer) {
+        IInformationControlCreator controlCreator = new IInformationControlCreator() {
+            @Override
+            public IInformationControl createInformationControl(Shell parent) {
+                return new QuickOutlinePopup(parent, sourceViewer);
+            }
+        };
+        InformationPresenter presenter = new InformationPresenter(controlCreator);
+        presenter.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
+        presenter.setAnchor(AbstractInformationControlManager.ANCHOR_GLOBAL);
+        presenter.setInformationProvider(new JsonInformationProvider(), IDocument.DEFAULT_CONTENT_TYPE);
+        presenter.setSizeConstraints(50, 20, true, false);
+        return presenter;
     }
 }

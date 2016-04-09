@@ -21,8 +21,13 @@
          point="org.eclipse.ui.commands">
       <command
             categoryId="org.eclipse.ui.category.edit"
-            name="Format JSON"
-            id="com.boothen.jsonedit.format">
+            id="com.boothen.jsonedit.format"
+            name="Format JSON">
+      </command>
+      <command
+            categoryId="org.eclipse.ui.category.navigate"
+            name="Quick Outline"
+            id="com.boothen.jsonedit.quickOutline">
       </command>
    </extension>
    <extension
@@ -104,6 +109,11 @@
               contextId="com.boothen.jsonedit.jsonEditorScope"
               schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
               sequence="M1+M2+F"/>
+        <key
+              sequence="M1+O"
+              contextId="com.boothen.jsonedit.jsonEditorScope"
+              commandId="com.boothen.jsonedit.quickOutline"
+              schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
     </extension>
     <extension point="org.eclipse.ui.contexts">
         <context

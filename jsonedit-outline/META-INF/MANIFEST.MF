@@ -13,6 +13,7 @@ Require-Bundle: org.eclipse.jface.text,
  jsonedit-model,
  org.antlr.antlr4-runtime-osgi,
  jsonedit-preferences
-Export-Package: com.boothen.jsonedit.outline
+Export-Package: com.boothen.jsonedit.outline,
+ com.boothen.jsonedit.quickoutline
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.boothen.jsonedit.outline.Activator

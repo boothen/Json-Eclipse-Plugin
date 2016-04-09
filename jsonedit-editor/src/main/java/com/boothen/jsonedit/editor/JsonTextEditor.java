@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPositionCategoryException;
@@ -52,6 +53,7 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.ide.ResourceUtil;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.eclipse.ui.texteditor.ChainedPreferenceStore;
+import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
@@ -83,6 +85,11 @@ public class JsonTextEditor extends TextEditor {
 
     public final static String JSON_CATEGORY = "__json_elements"; //$NON-NLS-1$
 
+    /**
+     * Text operation code for requesting the outline for the current input.
+     */
+    public static final int SHOW_OUTLINE= 51;
+
     public JsonTextEditor() {
     }
 
@@ -110,7 +117,7 @@ public class JsonTextEditor extends TextEditor {
     protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
         // A projection source viewer is a source viewer which supports multiple
         // visible regions which can dynamically be changed (aka document folding).
-        return new ProjectionViewer(parent, ruler, getOverviewRuler(), isOverviewRulerVisible(), styles);
+        return new JsonSourceViewer(parent, ruler, getOverviewRuler(), isOverviewRulerVisible(), styles);
     }
 
     @Override
@@ -147,11 +154,23 @@ public class JsonTextEditor extends TextEditor {
     protected void createActions() {
         super.createActions();
 
-        Action action = new TextOperationAction(Messages.RESOURCE_BUNDLE, "Format.", this, ISourceViewer.FORMAT);
-        action.setActionDefinitionId(Constants.FORMAT_ACTION_ID);
-        setAction(Constants.FORMAT_ACTION_ID, action);
+        Action outline = new TextOperationAction(Messages.RESOURCE_BUNDLE, "ShowOutline.", this, SHOW_OUTLINE, true);
+        outline.setActionDefinitionId(Constants.QUICK_OUTLINE_ACTION_ID);
+        setAction(Constants.QUICK_OUTLINE_ACTION_ID, outline);
+
+        Action format = new TextOperationAction(Messages.RESOURCE_BUNDLE, "Format.", this, ISourceViewer.FORMAT);
+        format.setActionDefinitionId(Constants.FORMAT_ACTION_ID);
+        setAction(Constants.FORMAT_ACTION_ID, format);
         markAsStateDependentAction(Constants.FORMAT_ACTION_ID, true);
         markAsSelectionDependentAction(Constants.FORMAT_ACTION_ID, true);
+    }
+
+    @Override
+    protected void editorContextMenuAboutToShow(IMenuManager menu) {
+        super.editorContextMenuAboutToShow(menu);
+
+        addAction(menu, ITextEditorActionConstants.GROUP_EDIT, Constants.FORMAT_ACTION_ID);
+        addAction(menu, ITextEditorActionConstants.GROUP_OPEN, Constants.QUICK_OUTLINE_ACTION_ID);
     }
 
     @Override
