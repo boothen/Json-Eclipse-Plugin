@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -26,7 +27,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -40,7 +40,7 @@ import com.boothen.jsonedit.preferences.OverlayPreferenceStore;
 import com.boothen.jsonedit.preferences.format.JsonFormatter.Affix;
 
 /**
- *
+ * A preference page for formatting details. Uses the preference store from {@link JsonCorePlugin} as a basis.
  */
 public class JsonFormatPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
@@ -60,6 +60,9 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
     private WhitespaceCharacterPainter painter;
     private OverlayPreferenceStore preferenceStore;
 
+    /**
+     * Default constructor
+     */
     public JsonFormatPreferencePage() {
         // TODO: implement performDefaults: update existing widgets with changed selection
         noDefaultAndApplyButton();
@@ -141,8 +144,8 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
             }
         });
 
-        List list = listViewer.getList();
-        list.setLayoutData(new GridData());
+        listViewer.setSelection(new StructuredSelection(tokenTypes[0]));   // yeah, why not make it complicated?
+        listViewer.getList().setLayoutData(new GridData());
     }
 
     private Group createConfigGroup(Composite container, Vocabulary vocab, String key, String text) {
