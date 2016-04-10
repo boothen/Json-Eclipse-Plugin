@@ -6,11 +6,13 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.ITokenScanner;
 
 import com.boothen.jsonedit.antlr.JSONLexer;
 import com.boothen.jsonedit.core.JsonLog;
+import com.boothen.jsonedit.core.preferences.TokenStyle;
 
 /**
  * Use the ANTLR lexer to extract tokens from a document.
@@ -21,7 +23,7 @@ public class AntlrTokenScanner implements ITokenScanner {
     private Lexer lexer;
     private CommonToken previous;
     private CommonToken current;
-    private TokenMapping tokenMapping;
+    private TokenStyler tokenStyler;
 
     /**
      * Uses the given JSONLexer
@@ -29,10 +31,10 @@ public class AntlrTokenScanner implements ITokenScanner {
      */
     public AntlrTokenScanner(Lexer lexer) {
         this.lexer = lexer;
-        this.tokenMapping = new TokenMapping() {
+        this.tokenStyler = new TokenStyler() {
             @Override
-            public Object apply(int currentTokenType, int previousTokenType) {
-                return null;
+            public TextAttribute apply(TokenStyle style) {
+                return new TextAttribute(null);
             }
         };
     }
@@ -41,9 +43,9 @@ public class AntlrTokenScanner implements ITokenScanner {
      * @param lexer the lexer to use
      * @param mapping the mapping from token type to result
      */
-    public AntlrTokenScanner(Lexer lexer, TokenMapping mapping) {
+    public AntlrTokenScanner(Lexer lexer, TokenStyler mapping) {
         this.lexer = lexer;
-        this.tokenMapping = mapping;
+        this.tokenStyler = mapping;
     }
 
     @Override
@@ -84,7 +86,8 @@ public class AntlrTokenScanner implements ITokenScanner {
 
         int currentType = current.getType();
         int previousType = previous != null ? previous.getType() : Token.EOF;
-        Object data = tokenMapping.apply(currentType, previousType);
+        TokenStyle style = getStyle(currentType, previousType);
+        TextAttribute data = tokenStyler.apply(style);
 
         return new org.eclipse.jface.text.rules.Token(data);
     }
@@ -97,5 +100,29 @@ public class AntlrTokenScanner implements ITokenScanner {
     @Override
     public int getTokenLength() {
         return current.getStopIndex() - current.getStartIndex() + 1;
+    }
+
+    private TokenStyle getStyle(int currentTokenType, int previousTokenType) {
+        switch (currentTokenType) {
+        case JSONLexer.STRING:
+            if (previousTokenType == JSONLexer.COLON) {
+                return TokenStyle.TEXT;
+            } else {
+                return TokenStyle.KEY;
+            }
+
+        case JSONLexer.NUMBER:
+            return TokenStyle.NUMBER;
+
+        case JSONLexer.TRUE:
+        case JSONLexer.FALSE:
+            return TokenStyle.BOOLEAN;
+
+        case JSONLexer.NULL:
+            return TokenStyle.NULL;
+
+        default:
+            return TokenStyle.DEFAULT;
+        }
     }
 }

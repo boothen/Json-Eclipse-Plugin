@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -40,6 +41,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
 import com.boothen.jsonedit.antlr.JSONParser.JsonContext;
+import com.boothen.jsonedit.core.JsonCorePlugin;
 import com.boothen.jsonedit.model.JsonContextTokenFinder;
 import com.boothen.jsonedit.model.ParseTreeInfo;
 import com.boothen.jsonedit.model.Segment;
@@ -67,10 +69,13 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
     public void createControl(Composite parent) {
         super.createControl(parent);
 
+        IPreferenceStore preferenceStore = JsonCorePlugin.getDefault().getPreferenceStore();
+        JsonLabelProvider labelProvider = new JsonLabelProvider(preferenceStore);
+
         TreeViewer viewer = getTreeViewer();
         viewer.setContentProvider(provider);
         // wrap in DSCLP to forward the styled text to the tree viewer
-        viewer.setLabelProvider(new DelegatingStyledCellLabelProvider(new JsonLabelProvider()));
+        viewer.setLabelProvider(new DelegatingStyledCellLabelProvider(labelProvider));
         viewer.setInput(root);
 
         fTextEditor.getSite().getPage().addPostSelectionListener(textListener);

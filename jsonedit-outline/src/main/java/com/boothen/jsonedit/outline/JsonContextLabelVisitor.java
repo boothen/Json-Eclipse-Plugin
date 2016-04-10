@@ -3,7 +3,12 @@ package com.boothen.jsonedit.outline;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.jface.viewers.StyledString.Styler;
+import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.graphics.TextStyle;
 
 import com.boothen.jsonedit.antlr.JSONBaseVisitor;
 import com.boothen.jsonedit.antlr.JSONParser;
@@ -11,12 +16,22 @@ import com.boothen.jsonedit.antlr.JSONParser.ArrayContext;
 import com.boothen.jsonedit.antlr.JSONParser.ObjectContext;
 import com.boothen.jsonedit.antlr.JSONParser.PairContext;
 import com.boothen.jsonedit.antlr.JSONParser.ValueContext;
+import com.boothen.jsonedit.preferences.JsonTokenStyler;
 import com.boothen.jsonedit.preferences.NodeType;
 
 /**
  * Visits tree nodes in the JsonContext depending on the node type. Does not recurse.
  */
 class JsonContextLabelVisitor extends JSONBaseVisitor<StyledString> {
+
+    private final JsonTokenStyler tokenStyler;
+
+    /**
+     * @param preferenceStore the preference store that defines the text style
+     */
+    public JsonContextLabelVisitor(IPreferenceStore preferenceStore) {
+        this.tokenStyler = new JsonTokenStyler(preferenceStore);
+    }
 
     @Override
     public StyledString visitObject(ObjectContext ctx) {
@@ -87,14 +102,36 @@ class JsonContextLabelVisitor extends JSONBaseVisitor<StyledString> {
     }
 
     private StyledString getStyledString(NodeType type, String key, String value) {
-        String fgColor = type.getForegroundColor();
+        TextAttribute attribs = tokenStyler.apply(type.getTokenStyle());
 
         StyledString text = new StyledString();
         if (key != null) {
             text.append(key);
             text.append(": ");
         }
-        text.append(value, StyledString.createColorRegistryStyler(fgColor, null));
+        text.append(value, new TextAttributeStyler(attribs));
         return text;
+    }
+
+    /**
+     * A {@link Styler} that wraps {@link TextAttribute}.
+     */
+    private static class TextAttributeStyler extends Styler {
+        private TextAttribute textAttribute;
+
+        public TextAttributeStyler(TextAttribute attrib) {
+            this.textAttribute = attrib;
+        }
+
+        @Override
+        public void applyStyles(TextStyle textStyle) {
+            if (textStyle instanceof StyleRange) {
+                final StyleRange range = (StyleRange) textStyle;
+                range.fontStyle = textAttribute.getStyle();
+            }
+
+            textStyle.foreground = textAttribute.getForeground();
+            textStyle.background = textAttribute.getBackground();
+        }
     }
 }

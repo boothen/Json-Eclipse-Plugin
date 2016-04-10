@@ -52,6 +52,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
+import com.boothen.jsonedit.core.JsonCorePlugin;
 import com.boothen.jsonedit.core.JsonLog;
 import com.boothen.jsonedit.model.JsonContextTokenFinder;
 import com.boothen.jsonedit.model.ParseTreeInfo;
@@ -66,7 +67,8 @@ import com.boothen.jsonedit.outline.JsonLabelProvider;
 public class QuickOutlinePopup extends AbstractInformationControl implements IInformationControlExtension2 {
 
     private final JsonContentProvider contentProvider = new JsonContentProvider();
-    private final JsonLabelProvider labelProvider = new JsonLabelProvider();
+    private final JsonLabelProvider labelProvider = new JsonLabelProvider(
+            JsonCorePlugin.getDefault().getPreferenceStore());
 
     private final ISourceViewer sourceViewer;
 

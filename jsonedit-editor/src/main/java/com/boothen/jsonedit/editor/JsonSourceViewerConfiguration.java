@@ -37,8 +37,8 @@ import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 import com.boothen.jsonedit.antlr.JSONLexer;
 import com.boothen.jsonedit.editor.model.JsonReconcilingStrategy;
 import com.boothen.jsonedit.model.AntlrTokenScanner;
-import com.boothen.jsonedit.model.TokenMapping;
-import com.boothen.jsonedit.preferences.JsonTokenMapping;
+import com.boothen.jsonedit.model.TokenStyler;
+import com.boothen.jsonedit.preferences.JsonTokenStyler;
 import com.boothen.jsonedit.preferences.format.JsonContentFormatter;
 import com.boothen.jsonedit.quickoutline.QuickOutlinePopup;
 
@@ -60,7 +60,7 @@ public class JsonSourceViewerConfiguration extends TextSourceViewerConfiguration
 
         JSONLexer lexer = new JSONLexer(null);
         lexer.removeErrorListeners(); // don't print lexer errors to stderr
-        TokenMapping mapping = new JsonTokenMapping(fPreferenceStore);
+        TokenStyler mapping = new JsonTokenStyler(fPreferenceStore);
         AntlrTokenScanner scanner = new AntlrTokenScanner(lexer, mapping);
         DefaultDamagerRepairer dr = new DefaultDamagerRepairer(scanner);
         reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);

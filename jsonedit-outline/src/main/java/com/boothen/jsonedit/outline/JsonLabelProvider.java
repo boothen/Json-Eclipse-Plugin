@@ -20,30 +20,25 @@ package com.boothen.jsonedit.outline;
 
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.eclipse.jface.resource.ColorRegistry;
-import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.RGB;
 
 /**
  * JsonLabelProvider provides the label format for each element in the tree.
  */
 public class JsonLabelProvider extends ColumnLabelProvider implements IStyledLabelProvider  {
 
-    private final JsonContextLabelVisitor contextLabelVisitor = new JsonContextLabelVisitor();
+    private final JsonContextLabelVisitor contextLabelVisitor;
     private final JsonContextImageVisitor contextImageVisitor = new JsonContextImageVisitor();
 
-    static {
-        ColorRegistry colorRegistry = JFaceResources.getColorRegistry();
-        colorRegistry.put("GREEN", new RGB(0,128,0));
-        colorRegistry.put("WHITE", new RGB(255,255,255));
-        colorRegistry.put("BLACK", new RGB(0,0,0));
-        colorRegistry.put("BLUE", new RGB(0,0,128));
-        colorRegistry.put("RED", new RGB(128,0,0));
-        colorRegistry.put("PURPLE", new RGB(128,0,128));
+    /**
+     * @param preferenceStore the preference store that provides the text style
+     */
+    public JsonLabelProvider(IPreferenceStore preferenceStore) {
+        contextLabelVisitor = new JsonContextLabelVisitor(preferenceStore);
     }
 
     /**

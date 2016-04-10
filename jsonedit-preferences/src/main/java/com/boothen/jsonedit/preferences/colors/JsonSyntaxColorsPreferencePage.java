@@ -38,7 +38,7 @@ import com.boothen.jsonedit.core.JsonLog;
 import com.boothen.jsonedit.core.preferences.TokenStyle;
 import com.boothen.jsonedit.model.AntlrTokenScanner;
 import com.boothen.jsonedit.preferences.Activator;
-import com.boothen.jsonedit.preferences.JsonTokenMapping;
+import com.boothen.jsonedit.preferences.JsonTokenStyler;
 import com.boothen.jsonedit.preferences.OverlayPreferenceStore;
 
 /**
@@ -212,7 +212,7 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
         PresentationReconciler reconciler = new PresentationReconciler();
 
         JSONLexer lexer = new JSONLexer(null);
-        JsonTokenMapping mapping = new JsonTokenMapping(getPreferenceStore());
+        JsonTokenStyler mapping = new JsonTokenStyler(getPreferenceStore());
         AntlrTokenScanner scanner = new AntlrTokenScanner(lexer, mapping);
         DefaultDamagerRepairer dr = new DefaultDamagerRepairer(scanner);
         reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);

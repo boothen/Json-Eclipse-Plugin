@@ -7,17 +7,16 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 
-import com.boothen.jsonedit.antlr.JSONLexer;
 import com.boothen.jsonedit.core.JsonColorProvider;
 import com.boothen.jsonedit.core.JsonCorePlugin;
 import com.boothen.jsonedit.core.preferences.TokenStyle;
-import com.boothen.jsonedit.model.TokenMapping;
+import com.boothen.jsonedit.model.TokenStyler;
 
 
 /**
  * Maps JSON token types to JFace {@link TextAttribute} instances.
  */
-public class JsonTokenMapping implements TokenMapping {
+public class JsonTokenStyler implements TokenStyler {
 
     private final IPreferenceStore preferenceStore;
     private final JsonColorProvider colorProvider = JsonCorePlugin.getColorProvider();
@@ -25,14 +24,12 @@ public class JsonTokenMapping implements TokenMapping {
     /**
      * @param preferenceStore the store that provides {@link TokenStyle} information.
      */
-    public JsonTokenMapping(IPreferenceStore preferenceStore) {
+    public JsonTokenStyler(IPreferenceStore preferenceStore) {
         this.preferenceStore = preferenceStore;
     }
 
     @Override
-    public Object apply(int currentTokenType, int previousTokenType) {
-        TokenStyle styleId = getIdentifier(currentTokenType, previousTokenType);
-
+    public TextAttribute apply(TokenStyle styleId) {
         boolean isBold = preferenceStore.getBoolean(styleId.isBold());
         boolean isItalic = preferenceStore.getBoolean(styleId.isItalic());
         int style = getStyle(isBold, isItalic);
@@ -54,29 +51,5 @@ public class JsonTokenMapping implements TokenMapping {
         style |= isBold ? SWT.BOLD : 0;
         style |= isItalic ? SWT.ITALIC : 0;
         return style;
-    }
-
-    private static TokenStyle getIdentifier(int currentTokenType, int previousTokenType) {
-        switch (currentTokenType) {
-        case JSONLexer.STRING:
-            if (previousTokenType == JSONLexer.COLON) {
-                return TokenStyle.TEXT;
-            } else {
-                return TokenStyle.KEY;
-            }
-
-        case JSONLexer.NUMBER:
-            return TokenStyle.NUMBER;
-
-        case JSONLexer.TRUE:
-        case JSONLexer.FALSE:
-            return TokenStyle.BOOLEAN;
-
-        case JSONLexer.NULL:
-            return TokenStyle.NULL;
-
-        default:
-            return TokenStyle.DEFAULT;
-        }
     }
 }

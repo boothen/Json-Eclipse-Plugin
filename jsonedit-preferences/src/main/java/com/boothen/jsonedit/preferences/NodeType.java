@@ -1,5 +1,7 @@
 package com.boothen.jsonedit.preferences;
 
+import com.boothen.jsonedit.core.preferences.TokenStyle;
+
 /**
  * Maps elements in the syntax tree to image, foreground and background color
  * in the outline view.
@@ -8,44 +10,44 @@ public enum NodeType {
     /**
      * An object, wrapped in curly braces
      */
-    OBJECT("JsonObject.gif", "BLUE"),
+    OBJECT("JsonObject.gif", TokenStyle.KEY),
 
     /**
      * An array of elements, wrapped in square brackets
      */
-    ARRAY("JsonArray.gif", "BLUE"),
+    ARRAY("JsonArray.gif", TokenStyle.DEFAULT),
+
     /**
      * A boolean value
      */
-    BOOLEAN("JsonBoolean.gif", "BLACK"),
+    BOOLEAN("JsonBoolean.gif", TokenStyle.BOOLEAN),
 
     /**
      * The constant <code>null</code>.
      */
-    NULL("JsonNull.gif", "BLACK"),
+    NULL("JsonNull.gif", TokenStyle.NULL),
 
     /**
      * A number, either integer or floating point
      */
-    NUMBER("JsonNumber.gif", "BLUE"),
+    NUMBER("JsonNumber.gif", TokenStyle.NUMBER),
 
     /**
      * A text string
      */
-    STRING("JsonString.gif", "GREEN"),
+    STRING("JsonString.gif", TokenStyle.TEXT),
 
     /**
      * An error node
      */
-    ERROR("JsonError.gif", "RED");
+    ERROR("JsonError.gif", TokenStyle.ERROR);
 
     private String imagePath;
-    private String foregroundColor;
-    private String backgroundColor;
+    private TokenStyle tokenStyle;
 
-    private NodeType(String imagePath, String foregroundColor) {
+    private NodeType(String imagePath, TokenStyle tokenStyle) {
         this.imagePath = imagePath;
-        this.foregroundColor = foregroundColor;
+        this.tokenStyle = tokenStyle;
     }
 
     /**
@@ -56,9 +58,9 @@ public enum NodeType {
     }
 
     /**
-     * @return the foreground color
+     * @return the token style keys
      */
-    public String getForegroundColor() {
-        return foregroundColor;
+    public TokenStyle getTokenStyle() {
+        return tokenStyle;
     }
 }
