@@ -10,7 +10,7 @@ public enum NodeType {
     /**
      * An object, wrapped in curly braces
      */
-    OBJECT("JsonObject.gif", TokenStyle.KEY),
+    OBJECT("JsonObject.gif", TokenStyle.DEFAULT),
 
     /**
      * An array of elements, wrapped in square brackets

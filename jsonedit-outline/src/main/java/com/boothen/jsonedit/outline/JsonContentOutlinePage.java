@@ -25,6 +25,8 @@ import java.util.Map;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -51,12 +53,15 @@ import com.boothen.jsonedit.model.Segment;
  */
 public class JsonContentOutlinePage extends ContentOutlinePage {
 
+    private final IPreferenceStore preferenceStore = JsonCorePlugin.getDefault().getPreferenceStore();
+
     private final ITextEditor fTextEditor;
     private final ISelectionListener textListener = new MyTextListener();
     private final ISelectionChangedListener treeListener = new MyTreeListener();
     private final Container<ParseTree> root = new Container<>();
     private final JsonContentProvider provider = new JsonContentProvider();
     private boolean textHasChanged;
+    private IPropertyChangeListener prefStoreListener;
 
     /**
      * @param editor the linked text editor
@@ -69,10 +74,9 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
     public void createControl(Composite parent) {
         super.createControl(parent);
 
-        IPreferenceStore preferenceStore = JsonCorePlugin.getDefault().getPreferenceStore();
         JsonLabelProvider labelProvider = new JsonLabelProvider(preferenceStore);
 
-        TreeViewer viewer = getTreeViewer();
+        final TreeViewer viewer = getTreeViewer();
         viewer.setContentProvider(provider);
         // wrap in DSCLP to forward the styled text to the tree viewer
         viewer.setLabelProvider(new DelegatingStyledCellLabelProvider(labelProvider));
@@ -80,6 +84,16 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
 
         fTextEditor.getSite().getPage().addPostSelectionListener(textListener);
         addSelectionChangedListener(treeListener);
+
+        prefStoreListener = new IPropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent event) {
+                // the color settings could have changed -> repaint
+                viewer.refresh();
+            }
+        };
+
+        preferenceStore.addPropertyChangeListener(prefStoreListener);
     }
 
     /**
@@ -87,6 +101,7 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
      */
     @Override
     public void dispose() {
+        preferenceStore.removePropertyChangeListener(prefStoreListener);
         fTextEditor.getSite().getPage().removePostSelectionListener(textListener);
         removeSelectionChangedListener(treeListener);
         super.dispose();

@@ -126,6 +126,7 @@ class JsonContextLabelVisitor extends JSONBaseVisitor<StyledString> {
         @Override
         public void applyStyles(TextStyle textStyle) {
             if (textStyle instanceof StyleRange) {
+                // for some reason, this does not have any effect
                 final StyleRange range = (StyleRange) textStyle;
                 range.fontStyle = textAttribute.getStyle();
             }
