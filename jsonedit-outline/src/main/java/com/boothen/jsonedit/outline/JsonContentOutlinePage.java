@@ -45,10 +45,7 @@ import com.boothen.jsonedit.model.ParseTreeInfo;
 import com.boothen.jsonedit.model.Segment;
 
 /**
- * JsonContentOutlinePage manages the outline view of the Json.
- *
- * @author Matt Garner
- *
+ * Manages the outline view of the JSON editor.
  */
 public class JsonContentOutlinePage extends ContentOutlinePage {
 
@@ -59,6 +56,9 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
     private final JsonContentProvider provider = new JsonContentProvider();
     private boolean textHasChanged;
 
+    /**
+     * @param editor the linked text editor
+     */
     public JsonContentOutlinePage(ITextEditor editor) {
         fTextEditor = editor;
     }

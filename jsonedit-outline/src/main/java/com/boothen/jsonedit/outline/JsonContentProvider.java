@@ -76,6 +76,11 @@ public class JsonContentProvider implements ITreeContentProvider {
         // must be implemented
     }
 
+    /**
+     * This method must be called when the content of the root container has changed.
+     * It should be possible to derive the parent element directly, though.
+     * @param tree the syntax tree that is walked to identify parent elements
+     */
     public void refreshParents(ParseTree tree) {
         parents = parentProvider.record(tree);
     }
