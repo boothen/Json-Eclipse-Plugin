@@ -61,11 +61,15 @@ public class AntlrTokenScanner implements ITokenScanner {
     public IToken nextToken() {
         Token token = lexer.nextToken();
 
-        previous = current;
-
         if (!(token instanceof CommonToken)) {
-            current = null;
+            // this doesn't seem to happen in practice
+            // if it ever does: don't update current/previous, just bail out
             return org.eclipse.jface.text.rules.Token.UNDEFINED;
+        }
+
+        // update only if token is relevant (no WS)
+        if (current == null || current.getType() != JSONLexer.WS) {
+            previous = current;
         }
 
         current = (CommonToken) token;
