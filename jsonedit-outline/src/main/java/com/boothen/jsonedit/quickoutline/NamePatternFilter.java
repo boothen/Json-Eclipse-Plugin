@@ -19,7 +19,16 @@ import org.eclipse.jface.viewers.ViewerFilter;
  */
 public class NamePatternFilter extends ViewerFilter {
 
+    private final ILabelProvider labelProvider;
+
     private Pattern pattern = Pattern.compile(".*");
+
+    /**
+     * @param labelProvider provides the text for tree elements (e.g. implemented through ILabelProvider)
+     */
+    public NamePatternFilter(ILabelProvider labelProvider) {
+        this.labelProvider = labelProvider;
+    }
 
     @Override
     public Object[] filter(Viewer viewer, TreePath parentPath, Object[] elements) {
@@ -41,7 +50,6 @@ public class NamePatternFilter extends ViewerFilter {
 
     private boolean selectTreePath(Viewer viewer, TreePath parentPath, Object element) {
         TreeViewer treeViewer = (TreeViewer) viewer;
-        ILabelProvider labelProvider = (ILabelProvider) treeViewer.getLabelProvider();
 
         String matchName = labelProvider.getText(element);
         Matcher matcher = pattern.matcher(matchName);

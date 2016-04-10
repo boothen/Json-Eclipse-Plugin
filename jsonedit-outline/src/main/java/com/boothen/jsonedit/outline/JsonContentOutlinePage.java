@@ -69,6 +69,7 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
 
         TreeViewer viewer = getTreeViewer();
         viewer.setContentProvider(provider);
+        // wrap in DSCLP to forward the styled text to the tree viewer
         viewer.setLabelProvider(new DelegatingStyledCellLabelProvider(new JsonLabelProvider()));
         viewer.setInput(root);
 

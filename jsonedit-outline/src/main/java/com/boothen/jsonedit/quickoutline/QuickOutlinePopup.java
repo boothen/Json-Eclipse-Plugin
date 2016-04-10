@@ -27,6 +27,7 @@ import org.eclipse.jface.text.IInformationControlExtension2;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
@@ -97,7 +98,7 @@ public class QuickOutlinePopup extends AbstractInformationControl implements IIn
 
         filterText = createFilterText(parent);
 
-        final NamePatternFilter namePatternFilter = new NamePatternFilter();
+        final NamePatternFilter namePatternFilter = new NamePatternFilter(labelProvider); // use unstyled text
         filterText.addModifyListener(new ModifyListener() {
 
             @Override
@@ -114,8 +115,6 @@ public class QuickOutlinePopup extends AbstractInformationControl implements IIn
 
         createTreeViewer(parent);
 
-//        final DelegatingStyledCellLabelProvider delegatingStyledCellLabelProvider = new DelegatingStyledCellLabelProvider(new JsonLabelProvider());
-        treeViewer.setLabelProvider(labelProvider);
         treeViewer.addFilter(namePatternFilter);
     }
 
@@ -150,19 +149,19 @@ public class QuickOutlinePopup extends AbstractInformationControl implements IIn
     private TreeItem findElement(TreeItem[] items) {
 
         // First search at same level
-        for (int i= 0; i < items.length; i++) {
-                final TreeItem item= items[i];
-                ParseTree element= (ParseTree)item.getData();
-                if (element != null) {
-                    String label= labelProvider.getText(element);
-                    if (pattern.matcher(label).find()) {
-                        return item;
-                    }
+        for (int i = 0; i < items.length; i++) {
+            final TreeItem item = items[i];
+            ParseTree element = (ParseTree) item.getData();
+            if (element != null) {
+                String label = labelProvider.getText(element);
+                if (pattern.matcher(label).find()) {
+                    return item;
                 }
+            }
         }
 
         // Go one level down for each item
-        for (int i= 0; i < items.length; i++) {
+        for (int i = 0; i < items.length; i++) {
             final TreeItem item = items[i];
             TreeItem foundItem = findElement(item.getItems());
             if (foundItem != null) {
@@ -232,9 +231,10 @@ public class QuickOutlinePopup extends AbstractInformationControl implements IIn
         applyInfoColor(tree);
 
         treeViewer = new TreeViewer(tree);
-        treeViewer.setLabelProvider(labelProvider);
         treeViewer.setContentProvider(contentProvider);
         treeViewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
+        // wrap in DSCLP to forward the styled text to the tree viewer
+        treeViewer.setLabelProvider(new DelegatingStyledCellLabelProvider(labelProvider));
     }
 
     private Text createFilterText(Composite parent) {

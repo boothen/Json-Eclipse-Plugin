@@ -88,14 +88,13 @@ class JsonContextLabelVisitor extends JSONBaseVisitor<StyledString> {
 
     private StyledString getStyledString(NodeType type, String key, String value) {
         String fgColor = type.getForegroundColor();
-        String bkColor = type.getBackgroundColor();
 
         StyledString text = new StyledString();
         if (key != null) {
             text.append(key);
             text.append(": ");
         }
-        text.append(value, StyledString.createColorRegistryStyler(fgColor, bkColor));
+        text.append(value, StyledString.createColorRegistryStyler(fgColor, null));
         return text;
     }
 }
