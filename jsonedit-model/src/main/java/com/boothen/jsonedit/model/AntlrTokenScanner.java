@@ -15,14 +15,17 @@ import com.boothen.jsonedit.core.JsonLog;
 import com.boothen.jsonedit.core.preferences.TokenStyle;
 
 /**
- * Use the ANTLR lexer to extract tokens from a document.
+ * Use the ANTLR lexer to extract JSON tokens from a document.
+ * It uses a 2-step lookahead to identify KEY text strings. It therefore does not require to
+ * construct a syntax tree.
  */
 public class AntlrTokenScanner implements ITokenScanner {
 
     private int offset;
     private Lexer lexer;
-    private CommonToken previous;
     private CommonToken current;
+    private CommonToken next;
+    private CommonToken afterNext;
     private TokenStyler tokenStyler;
 
     /**
@@ -54,6 +57,8 @@ public class AntlrTokenScanner implements ITokenScanner {
         try {
             String text = document.get(offset, length);
             lexer.setInputStream(new ANTLRInputStream(text));
+            next = (CommonToken) lexer.nextToken();
+            afterNext = (CommonToken) lexer.nextToken();
         } catch (BadLocationException e) {
             JsonLog.logError("Attempting to access a non-existing position", e);
         }
@@ -69,24 +74,22 @@ public class AntlrTokenScanner implements ITokenScanner {
             return org.eclipse.jface.text.rules.Token.UNDEFINED;
         }
 
-        // update only if token is relevant (no WS)
-        if (current == null || current.getType() != JSONLexer.WS) {
-            previous = current;
-        }
+        current = next;
+        next = afterNext;
+        afterNext = (CommonToken) token;
 
-        current = (CommonToken) token;
-
-        if (token.getType() == Token.EOF) {
+        if (current.getType() == Token.EOF) {
             return org.eclipse.jface.text.rules.Token.EOF;
         }
 
-        if (token.getType() == JSONLexer.WS) {
+        if (current.getType() == JSONLexer.WS) {
             return org.eclipse.jface.text.rules.Token.WHITESPACE;
         }
 
         int currentType = current.getType();
-        int previousType = previous != null ? previous.getType() : Token.EOF;
-        TokenStyle style = getStyle(currentType, previousType);
+        int nextType = next.getType();
+        int afterNextType = afterNext.getType();
+        TokenStyle style = getStyle(currentType, nextType, afterNextType);
         TextAttribute data = tokenStyler.apply(style);
 
         return new org.eclipse.jface.text.rules.Token(data);
@@ -102,13 +105,15 @@ public class AntlrTokenScanner implements ITokenScanner {
         return current.getStopIndex() - current.getStartIndex() + 1;
     }
 
-    private TokenStyle getStyle(int currentTokenType, int previousTokenType) {
-        switch (currentTokenType) {
+    private TokenStyle getStyle(int currentType, int nextType, int afterNextType) {
+        switch (currentType) {
         case JSONLexer.STRING:
-            if (previousTokenType == JSONLexer.COLON) {
-                return TokenStyle.TEXT;
-            } else {
+            // There could be whitespace between current and the next (real) token
+            // we therefore need to look two tokens ahead
+            if (nextType == JSONLexer.COLON || (nextType == JSONLexer.WS && afterNextType == JSONLexer.COLON)) {
                 return TokenStyle.KEY;
+            } else {
+                return TokenStyle.TEXT;
             }
 
         case JSONLexer.NUMBER:
