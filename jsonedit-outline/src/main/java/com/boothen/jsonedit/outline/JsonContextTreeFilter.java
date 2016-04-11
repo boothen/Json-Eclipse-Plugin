@@ -37,7 +37,9 @@ class JsonContextTreeFilter extends JSONBaseVisitor<List<ParseTree>> {
     public List<ParseTree> visitArray(ArrayContext ctx) {
         List<ParseTree> sum = new ArrayList<>();
         for (ValueContext child : ctx.value()) {
-            sum.add(child.getChild(0));
+            if (child.exception == null) {
+                sum.add(child.getChild(0));
+            }
         }
         return sum;
     }
