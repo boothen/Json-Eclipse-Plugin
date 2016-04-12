@@ -48,6 +48,10 @@ class FoldingVisitor extends JSONBaseVisitor<Void> {
     }
 
     private boolean isFoldingPoint(ParserRuleContext ctx) {
+        if (ctx.exception != null) {
+            return false;
+        }
+
         // the root element is at depth 1 and not part of the traversal
         // it contains one child with identical start/stop tokens
         // we filter it out to avoid folding the entire file
