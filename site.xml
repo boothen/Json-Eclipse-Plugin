@@ -12,6 +12,9 @@
    <feature url="features/jsonedit-feature_1.0.0.beta2.jar" id="jsonedit-feature" version="1.0.0.beta2">
       <category name="jsonedit"/>
    </feature>
+   <feature url="features/jsonedit-feature_1.0.0.beta3.jar" id="jsonedit-feature" version="1.0.0.beta3">
+      <category name="jsonedit"/>
+   </feature>
    <category-def name="jsonedit" label="JSON Editor"/>
    <category-def name="antlr4" label="ANTLR 4"/>
 </site>
