@@ -132,6 +132,12 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
                 String symbol = vocabulary.getSymbolicName(token);
                 String prefixValue = preferenceStore.getString(symbol + ".prefix");
                 String suffixValue = preferenceStore.getString(symbol + ".suffix");
+                if (prefixValue.isEmpty()) {
+                    prefixValue = Affix.NONE.name();
+                }
+                if (suffixValue.isEmpty()) {
+                    suffixValue = Affix.NONE.name();
+                }
                 for (int i = 0; i < 3; i++) {
                     Button prefixButton = (Button) prefixGroup.getChildren()[i];
                     String prefixName = prefixButton.getData().toString();

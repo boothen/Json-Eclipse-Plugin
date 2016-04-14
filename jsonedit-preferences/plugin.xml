@@ -31,7 +31,7 @@
             categoryId="com.boothen.jsonedit.presentation"
             defaultsTo="org.eclipse.jface.textfont"
             id="com.boothen.jsonedit.fonts.textfont"
-            label="%jsonEditorFontDefiniton.label">
+            label="%jsonEditorFontDefinition.label">
          <description>
             %jsonEditorFontDefinition.description
          </description>

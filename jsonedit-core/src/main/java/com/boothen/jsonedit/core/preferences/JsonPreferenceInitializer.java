@@ -44,6 +44,7 @@ public class JsonPreferenceInitializer extends AbstractPreferenceInitializer {
         node.setDefault(EDITOR_MATCHING_BRACKETS, true);
         node.setDefault(EDITOR_MATCHING_BRACKETS_COLOR, colorToString(0, 128, 0));
 
+        // See com.boothen.jsonedit.preferences.format.JsonFormatter.Affix for valid values
         node.setDefault("BEGIN_ARRAY.suffix", "NEWLINE");
         node.setDefault("BEGIN_OBJECT.suffix", "NEWLINE");
         node.setDefault("COLON.suffix", "SPACE");
