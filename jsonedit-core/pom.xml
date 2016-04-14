@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.boothen</groupId>
 		<artifactId>jsonedit-parent</artifactId>
-		<version>1.0.0.beta2</version>
+		<version>1.0.0.beta3</version>
 	</parent>
 
 	<artifactId>jsonedit-core</artifactId>
