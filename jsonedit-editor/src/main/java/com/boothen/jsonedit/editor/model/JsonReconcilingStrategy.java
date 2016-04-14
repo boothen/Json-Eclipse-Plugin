@@ -43,6 +43,7 @@ import com.boothen.jsonedit.model.AntlrAdapter;
 import com.boothen.jsonedit.model.DuplicateKeyFinder;
 import com.boothen.jsonedit.model.ParseProblem;
 import com.boothen.jsonedit.model.ParseResult;
+import com.boothen.jsonedit.text.PositionVisitor;
 
 public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcilingStrategyExtension {
 
@@ -123,7 +124,7 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
                 public void run() {
                     textEditor.updateDocumentPositions(positions.values());
                     textEditor.updateFoldingStructure(foldPositions);
-                    textEditor.updateSyntaxTree(syntaxTree, changeListener.getMapping());
+                    textEditor.updateSyntaxTree(syntaxTree, oldToNew, positions);
                     textEditor.updateProblemMarkers(problems);
                 }
             });

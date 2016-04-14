@@ -1,9 +1,12 @@
 package com.boothen.jsonedit.model;
 
+import java.util.Map;
+
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.eclipse.jface.text.Position;
 
 import com.boothen.jsonedit.antlr.JSONBaseVisitor;
 
@@ -14,15 +17,18 @@ public class JsonContextTokenFinder extends JSONBaseVisitor<ParseTree> {
 
     private int textStart;
     private int textStop;
+    private Map<ParseTree, Position> positions;
 
     /**
      * Takes a range of selected text
      * @param textStart the text start marker
      * @param textStop the text stop marker
+     * @param positions maps tree elements to document positions
      */
-    public JsonContextTokenFinder(int textStart, int textStop) {
+    public JsonContextTokenFinder(int textStart, int textStop, Map<ParseTree, Position> positions) {
         this.textStart = textStart;
         this.textStop = textStop;
+        this.positions = positions;
     }
 
     @Override
@@ -56,12 +62,12 @@ public class JsonContextTokenFinder extends JSONBaseVisitor<ParseTree> {
     }
 
     private boolean fullyInside(ParseTree treeNode) {
-        Segment segment = ParseTreeInfo.getSegment(treeNode);
+        Position segment = positions.get(treeNode);
         if (segment == null) {
-            // bail out on an erroneous nodes
+            // bail out on an erroneous and unknown nodes
             return false;
         }
 
-        return (segment.getStart() <= textStart && textStop <= segment.getStop());
+        return (segment.getOffset() <= textStart && textStop <= segment.getOffset() + segment.getLength());
     }
 }

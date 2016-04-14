@@ -19,12 +19,15 @@
 package com.boothen.jsonedit.outline;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.text.Position;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
@@ -62,6 +65,8 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
     private final JsonContentProvider provider = new JsonContentProvider();
     private boolean textHasChanged;
     private IPropertyChangeListener prefStoreListener;
+
+    private Map<ParseTree, Position> positions = Collections.emptyMap();
 
     /**
      * @param editor the linked text editor
@@ -108,14 +113,18 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
     }
 
     /**
-     * Sets the input of the outline page
+     * Sets the input of the outline page.
+     * The mapping from tree elements to document positions is required, because the positions are modified
+     * shortly after typing while the syntax tree update is delayed.
      *
      * @param input the input of this outline page
-     * @param map the mapping from old to new tree elements
+     * @param oldToNew the mapping from old to new tree elements
+     * @param positions maps tree elements to document positions
      */
-    public void setInput(JsonContext input, Map<ParseTree, ParseTree> map) {
+    public void setInput(JsonContext input, Map<ParseTree, ParseTree> oldToNew, Map<ParseTree, Position> positions) {
+        this.positions = positions;
         root.setContent(input);
-        update(map);
+        update(oldToNew);
     }
 
     /**
@@ -218,7 +227,8 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
                 int start = textSelection.getOffset();
                 int length = textSelection.getLength();
 
-                ParseTree element = root.getContent().accept(new JsonContextTokenFinder(start, start + length));
+                JsonContextTokenFinder finder = new JsonContextTokenFinder(start, start + length, positions);
+                ParseTree element = root.getContent().accept(finder);
                 // similar code exists in QuickOutlinePopup
                 while (element != null && !provider.isKnown(element)) {
                     element = element.getParent();

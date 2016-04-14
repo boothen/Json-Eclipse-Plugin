@@ -16,6 +16,7 @@
 
 package com.boothen.jsonedit.quickoutline;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -25,6 +26,7 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.text.AbstractInformationControl;
 import org.eclipse.jface.text.IInformationControlExtension2;
 import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
@@ -60,6 +62,7 @@ import com.boothen.jsonedit.model.Segment;
 import com.boothen.jsonedit.outline.Container;
 import com.boothen.jsonedit.outline.JsonContentProvider;
 import com.boothen.jsonedit.outline.JsonLabelProvider;
+import com.boothen.jsonedit.text.PositionVisitor;
 
 /**
  * An information control that shows a quick outline of an ANTLR {@link ParseTree} inside a shell.
@@ -192,7 +195,10 @@ public class QuickOutlinePopup extends AbstractInformationControl implements IIn
             int start = textSelection.getOffset();
             int length = textSelection.getLength();
 
-            ParseTree element = parseTree.accept(new JsonContextTokenFinder(start, start + length));
+            PositionVisitor positionVisitor = new PositionVisitor();
+            Map<ParseTree, Position> positions = parseTree.accept(positionVisitor);
+
+            ParseTree element = parseTree.accept(new JsonContextTokenFinder(start, start + length, positions));
             // similar code exists in JsonContentOutlinePage
             while (element != null && !contentProvider.isKnown(element)) {
                 element = element.getParent();

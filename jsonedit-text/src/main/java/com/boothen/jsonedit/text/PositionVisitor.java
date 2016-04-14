@@ -1,6 +1,6 @@
-package com.boothen.jsonedit.editor.model;
+package com.boothen.jsonedit.text;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -15,15 +15,16 @@ import org.eclipse.jface.text.Position;
 /**
  * Creates {@link Position} instances that wrap around every node in the syntax tree.
  */
-class PositionVisitor extends AbstractParseTreeVisitor<Map<ParseTree, Position>> {
+public class PositionVisitor extends AbstractParseTreeVisitor<Map<ParseTree, Position>> {
 
-    private final Map<ParseTree, Position> positions = new HashMap<>();
+    private final Map<ParseTree, Position> positions = new LinkedHashMap<>();
 
     @Override
     public Map<ParseTree, Position> visitChildren(RuleNode node) {
         ParserRuleContext ctx = (ParserRuleContext) node;
 
         // Add successful rule matches only
+        // TODO: maybe just skip over this element on exceptions and try to add children
         if (ctx.exception == null) {
             positions.put(node, createPosition(ctx.start, ctx.stop));
 

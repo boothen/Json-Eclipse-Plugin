@@ -80,7 +80,7 @@ All Recipient&apos;s rights under this Agreement shall terminate if it fails
    </license>
 
    <url>
-      <update label="Json Editor Plugin" url="http://martin-steiger.de/jsonedit/"/>
+      <update label="Json Editor Plugin" url="http://boothen.github.io/Json-Eclipse-Plugin/"/>
    </url>
 
    <requires>

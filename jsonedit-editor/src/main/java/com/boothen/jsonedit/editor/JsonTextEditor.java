@@ -175,8 +175,11 @@ public class JsonTextEditor extends TextEditor {
 
     @Override
     public void dispose() {
-        if (fOutlinePage != null)
-            fOutlinePage.setInput(null, Collections.<ParseTree, ParseTree>emptyMap());
+        if (fOutlinePage != null) {
+            Map<ParseTree, ParseTree> oldToNew = Collections.emptyMap();
+            Map<ParseTree, Position> positions = Collections.emptyMap();
+            fOutlinePage.setInput(null, oldToNew, positions);
+        }
 
         if (pairsMatcher != null) {
             pairsMatcher.dispose();
@@ -241,14 +244,14 @@ public class JsonTextEditor extends TextEditor {
         getSourceViewer().invalidateTextPresentation();
     }
 
-    public void updateDocumentPositions(Collection<Position> newPositions) {
+    public void updateDocumentPositions(Collection<Position> positions) {
         IDocument doc = getSourceViewer().getDocument();
         try {
             if (doc.containsPositionCategory(JSON_CATEGORY)) {
                 doc.removePositionCategory(JSON_CATEGORY);
             }
             doc.addPositionCategory(JSON_CATEGORY);
-            for (Position pos : newPositions) {
+            for (Position pos : positions) {
                 doc.addPosition(JSON_CATEGORY, pos);
             }
         } catch (BadPositionCategoryException | BadLocationException e) {
@@ -289,8 +292,9 @@ public class JsonTextEditor extends TextEditor {
         }
     }
 
-    public void updateSyntaxTree(JsonContext jsonContext, Map<ParseTree, ParseTree> oldToNew) {
-        getOutlinePage().setInput(jsonContext, oldToNew);
+    public void updateSyntaxTree(JsonContext jsonContext, Map<ParseTree, ParseTree> oldToNew,
+            Map<ParseTree, Position> positions) {
+        getOutlinePage().setInput(jsonContext, oldToNew, positions);
         rangeHighlighter.setInput(jsonContext);
     }
 
