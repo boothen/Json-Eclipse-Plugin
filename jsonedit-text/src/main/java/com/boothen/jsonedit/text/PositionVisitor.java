@@ -1,7 +1,6 @@
 package com.boothen.jsonedit.text;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -14,13 +13,15 @@ import org.eclipse.jface.text.Position;
 
 /**
  * Creates {@link Position} instances that wrap around every node in the syntax tree.
+ * Explicitly returns a {@link LinkedHashMap} to indicate that elements are ordered as they
+ * are encountered by depth first traversal.
  */
-public class PositionVisitor extends AbstractParseTreeVisitor<Map<ParseTree, Position>> {
+public class PositionVisitor extends AbstractParseTreeVisitor<LinkedHashMap<ParseTree, Position>> {
 
-    private final Map<ParseTree, Position> positions = new LinkedHashMap<>();
+    private final LinkedHashMap<ParseTree, Position> positions = new LinkedHashMap<>();
 
     @Override
-    public Map<ParseTree, Position> visitChildren(RuleNode node) {
+    public LinkedHashMap<ParseTree, Position> visitChildren(RuleNode node) {
         ParserRuleContext ctx = (ParserRuleContext) node;
 
         // Add successful rule matches only
@@ -37,14 +38,14 @@ public class PositionVisitor extends AbstractParseTreeVisitor<Map<ParseTree, Pos
     }
 
     @Override
-    public Map<ParseTree, Position> visitTerminal(TerminalNode node) {
+    public LinkedHashMap<ParseTree, Position> visitTerminal(TerminalNode node) {
         Token symbol = node.getSymbol();
         positions.put(node, createPosition(symbol, symbol));
         return positions;
     }
 
     @Override
-    public Map<ParseTree, Position> visitErrorNode(ErrorNode node) {
+    public LinkedHashMap<ParseTree, Position> visitErrorNode(ErrorNode node) {
         // ignore error tokens - they have invalid positions
         return positions;
     }

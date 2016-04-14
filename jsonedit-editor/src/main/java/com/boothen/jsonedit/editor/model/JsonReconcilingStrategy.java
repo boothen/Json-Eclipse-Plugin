@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -107,14 +108,13 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
         problems.addAll(result.getLexerErrors());
         problems.addAll(result.getParserErrors());
 
-        final Map<ParseTree, Position> positions = syntaxTree.accept(new PositionVisitor());
+        final LinkedHashMap<ParseTree, Position> positions = syntaxTree.accept(new PositionVisitor());
 
         DuplicateWarningGenerator duplicateListener = new DuplicateWarningGenerator();
         syntaxTree.accept(new DuplicateKeyFinder(duplicateListener));
         problems.addAll(duplicateListener.getWarnings());
 
-        final RecordingParseTreeChangeListener changeListener = new RecordingParseTreeChangeListener();
-        treeComparator.update(syntaxTree, positions, changeListener);
+        final Map<ParseTree, ParseTree> oldToNew = treeComparator.update(syntaxTree, positions);
 
         final List<Position> foldPositions = foldingPositionsBuilder.getFoldingPositions(syntaxTree);
 

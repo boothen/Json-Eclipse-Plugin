@@ -19,7 +19,6 @@
 package com.boothen.jsonedit.outline;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -153,6 +152,7 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
                 textHasChanged = true;
                 viewer.refresh();
                 viewer.setExpandedElements(newExpanded);
+
                 if (newSelected != null) {
                     viewer.reveal(newSelected);
                     viewer.setSelection(new TreeSelection(new TreePath(new Object[] { newSelected })));

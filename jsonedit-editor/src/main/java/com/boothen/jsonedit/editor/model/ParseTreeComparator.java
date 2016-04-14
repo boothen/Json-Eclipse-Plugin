@@ -1,8 +1,10 @@
 package com.boothen.jsonedit.editor.model;
 
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Map.Entry;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.jface.text.Position;
@@ -17,51 +19,55 @@ public class ParseTreeComparator {
     private JsonContext oldRoot;
     private Map<ParseTree, Position> oldPositions = Collections.emptyMap();
 
-    public void update(JsonContext syntaxTree, Map<ParseTree, Position> positions, ParseTreeChangeListener listener) {
+    /**
+     * Requires the positions map to by ordered as they are found in the tree.
+     * An alternative implementation could iterate over the new syntrax tree to avoid that.
+     * @param syntaxTree the syntax tree
+     * @param positions an <b>ordered</b> map.
+     * @return a mapping from old to new tree elements
+     */
+    public Map<ParseTree, ParseTree> update(JsonContext syntaxTree, LinkedHashMap<ParseTree, Position> positions) {
 
+        Map<ParseTree, ParseTree> oldToNew = new LinkedHashMap<>();
         if (oldRoot != null) {
-            compareTrees(syntaxTree, oldRoot, positions, oldPositions, listener);
+            compareTrees(positions, oldPositions, oldToNew);
         }
 
         oldRoot = syntaxTree;
         oldPositions = positions;
+
+        return oldToNew;
     }
 
-    private void compareTrees(ParseTree newTree, ParseTree oldTree,
-            Map<ParseTree, Position> newPositions, Map<ParseTree, Position> oldPositions,
-            ParseTreeChangeListener listener) {
 
-        int newIdx = 0;
-        int oldIdx = 0;
+    private void compareTrees(LinkedHashMap<ParseTree, Position> newPositions,
+            Map<ParseTree, Position> oldPositions, Map<ParseTree, ParseTree> oldToNew) {
 
-        int maxCount = Math.max(oldTree.getChildCount(), newTree.getChildCount());
-        for (int i = 0; i < maxCount; i++) {
-            ParseTree newChild = newTree.getChild(newIdx);
-            ParseTree oldChild = oldTree.getChild(oldIdx);
+        Map<ParseTree, Position> copyNew = new LinkedHashMap<>(newPositions);
+        Map<ParseTree, Position> copyOld = new LinkedHashMap<>(oldPositions);
 
-            Position newPos = newPositions.get(newChild);
-            Position oldPos = oldPositions.get(oldChild);
+        // matching elements are removed from the corresponding map to avoid that
+        // an element is matched twice.
+        // Attention must be paid to ValueContext instances, since they have identical segment bounds
+        // as their only child.
+        Iterator<Entry<ParseTree, Position>> itNew = copyNew.entrySet().iterator();
+        while (itNew.hasNext()) {
+            Entry<ParseTree, Position> entryNew = itNew.next();
 
-            if (Objects.equals(newPos, oldPos)) {
-                if (newPos != null && oldPos != null) {
-                    // no error nodes
-                    compareTrees(newChild, oldChild, newPositions, oldPositions, listener);
-                }
-                listener.sameNode(oldChild, newChild);
-                newIdx++;
-                oldIdx++;
-            } else {
-                if (newPos == null) {
-                    // probably a (incomplete) node with an exception and invalid position offsets
-                    newIdx++;
-                } else if (oldPos == null || !oldPos.isDeleted && newPos.offset < oldPos.offset) {
-                    listener.nodeAdded(newChild);
-                    newIdx++;
-                } else {
-                    listener.nodeRemoved(oldChild);
-                    oldIdx++;
+            Iterator<Entry<ParseTree, Position>> itOld = copyOld.entrySet().iterator();
+            while (itOld.hasNext()) {
+                Entry<ParseTree, Position> entryOld = itOld.next();
+                if (samePosition(entryNew.getValue(), entryOld.getValue())) {
+                    oldToNew.put(entryOld.getKey(), entryNew.getKey());
+                    itOld.remove();
+                    itNew.remove();
+                    break;
                 }
             }
         }
+    }
+
+    private static boolean samePosition(Position a, Position b) {
+        return a.getOffset() + a.getLength() == b.getOffset() + b.getLength();
     }
 }
