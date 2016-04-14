@@ -1,8 +1,11 @@
 package com.boothen.jsonedit.editor;
 
+import java.util.Map;
+
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.text.Position;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
@@ -20,6 +23,7 @@ public class RangeHighlighter implements ISelectionListener {
 
     private TextEditor textEditor;
     private ParseTree jsonContext;
+    private Map<ParseTree, Position> positions;
 
     /**
      * @param textEditor the text editor to use
@@ -38,7 +42,7 @@ public class RangeHighlighter implements ISelectionListener {
             ITextSelection textSelection = (ITextSelection) selection;
             int start = textSelection.getOffset();
             int length = textSelection.getLength();
-            ParseTree element = jsonContext.accept(new JsonContextTokenFinder(start, start + length));
+            ParseTree element = jsonContext.accept(new JsonContextTokenFinder(start, start + length, positions));
             // TODO: consider using the same rules as the FoldingVisitor
             if (element instanceof TerminalNode) {
                 element = element.getParent();
@@ -54,9 +58,11 @@ public class RangeHighlighter implements ISelectionListener {
 
     /**
      * @param tree the syntax tree
+     * @param positions maps tree elements to document positions
      */
-    public void setInput(ParseTree tree) {
+    public void setInput(ParseTree tree, Map<ParseTree, Position> positions) {
         this.jsonContext = tree;
+        this.positions = positions;
     }
 
 }

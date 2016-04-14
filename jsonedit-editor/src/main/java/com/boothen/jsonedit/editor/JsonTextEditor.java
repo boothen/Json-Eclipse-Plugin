@@ -295,7 +295,7 @@ public class JsonTextEditor extends TextEditor {
     public void updateSyntaxTree(JsonContext jsonContext, Map<ParseTree, ParseTree> oldToNew,
             Map<ParseTree, Position> positions) {
         getOutlinePage().setInput(jsonContext, oldToNew, positions);
-        rangeHighlighter.setInput(jsonContext);
+        rangeHighlighter.setInput(jsonContext, positions);
     }
 
     public void updateTabWidth(int tabWidth) {
@@ -319,13 +319,13 @@ public class JsonTextEditor extends TextEditor {
         }
     }
 
-    private static void updateMarkers(IDocument doc, IResource resource, List<ParseProblem> probs) throws CoreException {
+    private static void updateMarkers(IDocument doc, IResource res, List<ParseProblem> probs) throws CoreException {
 
-        resource.deleteMarkers(MARKER_ID, false, 0);
+        res.deleteMarkers(MARKER_ID, false, 0);
 
         for (final ParseProblem problem : probs) {
             try {
-                IMarker marker = resource.createMarker(MARKER_ID);
+                IMarker marker = res.createMarker(MARKER_ID);
                 Token token = problem.getOffendingToken();
 
                 int offset = doc.getLineOffset(problem.getLine() - 1) + problem.getCharPositionInLine();
