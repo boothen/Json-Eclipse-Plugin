@@ -1,17 +1,17 @@
 Eclipse Json Editor Plugin
 =======================
 
-[[epl10](https://img.shields.io/badge/EPL-1.0-blue.svg "Eclipse Public License 1.0")](https://www.eclipse.org/legal/epl-v10.html)
+[![epl10](https://img.shields.io/badge/EPL-1.0-blue.svg "Eclipse Public License 1.0")](https://www.eclipse.org/legal/epl-v10.html)
 
 ![screenshot](images/2016-04-16_editor_and_quickoutline.png "eclipse Screenshot")
 
-This plugin adds support for JSON files to eclipse. You can install the latest version either through the eclipse Marketplace or directly from this update site:
+This plugin adds support for JSON files to eclipse. You can install the latest version directly from this update site:
 
     http://boothen.github.io/Json-Eclipse-Plugin/
 
 You can also get this plugin from the [eclipse Marketplace](https://marketplace.eclipse.org/content/json-editor-plugin).
 
-A small video demonstration is [available on YouTube](https://www.youtube.com/watch?v=vXRwFwk2QE4) ![youtube-logo](YouTube-logo-small.png)
+A small video demonstration is [available on YouTube](https://www.youtube.com/watch?v=vXRwFwk2QE4) 
 
 Features
 ---------------------
@@ -27,11 +27,6 @@ Features
 * Detects duplicate keys
 * Reliable, resilient and fast syntax tree parsing and validation through ANTLR 4
 * Available for free - that's a feature, isn't it?
-
-Video
----------------------
-
-![video1](2016-04-16-JsonEditorPlugin_100beta3_snapshot_01_22.png
 
 License
 ---------------------
