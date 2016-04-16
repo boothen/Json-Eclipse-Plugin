@@ -5,6 +5,7 @@ Bundle-SymbolicName: jsonedit-test
 Bundle-Version: 1.0.0.beta3
 Fragment-Host: jsonedit-core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Require-Bundle: org.junit;bundle-version="4.8.2",
+Require-Bundle: org.junit,
  jsonedit-model,
- ch.qos.logback.core
+ ch.qos.logback.core,
+ org.antlr.antlr4-runtime-osgi
