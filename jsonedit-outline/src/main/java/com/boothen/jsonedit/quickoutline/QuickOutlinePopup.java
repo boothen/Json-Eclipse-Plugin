@@ -31,6 +31,7 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -275,7 +276,9 @@ public class QuickOutlinePopup extends AbstractInformationControl implements IIn
     }
 
     private void gotoSelectedElement() {
-        Object selectedElement = treeViewer.getStructuredSelection().getFirstElement();
+        // getStructuredSelection() is not yet available in indigo (3.7)
+        IStructuredSelection viewerSelection = (IStructuredSelection) treeViewer.getSelection();
+        Object selectedElement = viewerSelection.getFirstElement();
 
         ParseTree treeNode = (ParseTree) selectedElement;
 

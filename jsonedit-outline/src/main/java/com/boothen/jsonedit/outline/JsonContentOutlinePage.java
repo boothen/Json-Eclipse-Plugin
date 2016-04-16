@@ -144,7 +144,9 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
                 Object[] oldExpanded = viewer.getExpandedElements();
                 Object[] newExpanded = convertExpandedElements(oldExpanded, map);
 
-                Object oldSelected = viewer.getStructuredSelection().getFirstElement();
+                // getStructuredSelection() is not yet available in indigo (3.7)
+                IStructuredSelection viewerSelection = (IStructuredSelection) viewer.getSelection();
+                Object oldSelected = viewerSelection.getFirstElement();
                 Object newSelected = map.get(oldSelected);
 
                 control.setRedraw(false);

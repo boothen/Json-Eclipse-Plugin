@@ -89,6 +89,8 @@
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
+					<!-- This seems to be needed to get around the access rules for IMarker -->
+					<compilerArgument>-warn:+discouraged,forbidden</compilerArgument>
 				</configuration>
 			</plugin>
 			<plugin>

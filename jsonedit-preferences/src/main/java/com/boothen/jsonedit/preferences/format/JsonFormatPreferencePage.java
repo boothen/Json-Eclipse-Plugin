@@ -13,6 +13,7 @@ import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.WhitespaceCharacterPainter;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -128,7 +129,9 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
 
             @Override
             public void selectionChanged(SelectionChangedEvent event) {
-                Integer token = (Integer) listViewer.getStructuredSelection().getFirstElement();
+                // getStructuredSelection() is not yet available in indigo (3.7)
+                IStructuredSelection selection = (IStructuredSelection) listViewer.getSelection();
+                Integer token = (Integer) selection.getFirstElement();
                 String symbol = vocabulary.getSymbolicName(token);
                 String prefixValue = preferenceStore.getString(symbol + ".prefix");
                 String suffixValue = preferenceStore.getString(symbol + ".suffix");
@@ -303,7 +306,9 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
         public void widgetSelected(SelectionEvent e) {
             Button button = (Button)e.widget;
 
-            Integer token = (Integer) listViewer.getStructuredSelection().getFirstElement();
+            // getStructuredSelection() is not yet available in indigo (3.7)
+            IStructuredSelection selection = (IStructuredSelection) listViewer.getSelection();
+            Integer token = (Integer) selection.getFirstElement();
 
             if (button.getSelection()) {
                 String affixName = button.getData().toString();
