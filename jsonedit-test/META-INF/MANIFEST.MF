@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JSON Editor Plugin Test Fragment
 Bundle-SymbolicName: jsonedit-test
-Bundle-Version: 1.0.0.beta3
+Bundle-Version: 1.0.0.final
 Fragment-Host: jsonedit-core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.junit,
