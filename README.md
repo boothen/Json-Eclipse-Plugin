@@ -30,6 +30,10 @@ Features
 * Reliable, resilient and fast syntax tree parsing and validation through ANTLR 4
 * Available for free - that's a feature, isn't it?
 
+Developer Guides
+---------------------
+See this [getting started page](developer-guide.md) or the [release management cheat sheet](release-process.md).
+
 License
 ---------------------
 This software is licensed in compliance with the eclipse Foundation under the [eclipse Public License 1.0](https://www.eclipse.org/legal/epl-v10.html).
