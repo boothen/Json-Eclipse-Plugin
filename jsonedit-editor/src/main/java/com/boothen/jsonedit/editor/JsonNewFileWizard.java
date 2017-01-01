@@ -18,11 +18,6 @@ public class JsonNewFileWizard extends BasicNewResourceWizard
 {
     private WizardNewFileCreationPage mainPage;
 
-    public JsonNewFileWizard()
-    {
-        super();
-    }
-
     @Override
     public void addPages()
     {

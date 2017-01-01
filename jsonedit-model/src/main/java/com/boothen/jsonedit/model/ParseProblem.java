@@ -59,12 +59,15 @@ public class ParseProblem {
         return charPositionInLine;
     }
 
+    /**
+     * @return the token that causes this parse problem
+     */
     public Token getOffendingToken() {
         return offendingToken;
     }
 
     /**
-     * @return
+     * @return the severity of the problem
      */
     public Severity getSeverity() {
         return severity;

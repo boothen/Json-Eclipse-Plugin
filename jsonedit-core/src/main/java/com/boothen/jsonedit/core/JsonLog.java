@@ -29,7 +29,7 @@ public class JsonLog {
 
     /**
      * Log info method.
-     * @param message
+     * @param message the message to log
      */
     public static void logInfo(String message) {
         report(IStatus.INFO, IStatus.OK, message, null);
@@ -37,7 +37,7 @@ public class JsonLog {
 
     /**
      * Log error method.
-     * @param exception
+     * @param exception the exception to log (can be <code>null</code>)
      */
     public static void logError(Throwable exception) {
         logError("Unexpected Exception", exception);
@@ -45,23 +45,16 @@ public class JsonLog {
 
     /**
      * Log error method.
-     * @param message
-     * @param exception
+     * @param message the message to log
+     * @param exception the linked exception (can be <code>null</code>)
      */
     public static void logError(String message, Throwable exception) {
         report(IStatus.ERROR, IStatus.OK, message, exception);
     }
 
-    /**
-     * Log method.
-     *
-     * @param severity
-     * @param code
-     * @param message
-     * @param exception
-     */
-    private static void report(int severity, int code, String message, Throwable exception) {
+    private static void report(int severity, int code, String message, Throwable orgException) {
         String pluginId = JsonCorePlugin.PLUGIN_ID;
+        Throwable exception = orgException;
         if (exception == null) {
             // this will provide the stack trace
             exception = new RuntimeException();

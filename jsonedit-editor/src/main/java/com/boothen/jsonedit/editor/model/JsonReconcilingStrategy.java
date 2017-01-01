@@ -46,6 +46,10 @@ import com.boothen.jsonedit.model.ParseProblem;
 import com.boothen.jsonedit.model.ParseResult;
 import com.boothen.jsonedit.text.PositionVisitor;
 
+/**
+ * Re-compute the JSON syntax tree and update the JSON text editor based on the results.
+ * This includes folding structure, markers and the syntax error list.
+ */
 public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcilingStrategyExtension {
 
     private JsonTextEditor textEditor;
@@ -58,6 +62,9 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
 
     private ParseTreeComparator treeComparator = new ParseTreeComparator();
 
+    /**
+     * @param textEditor the JSON text editor to work on
+     */
     public JsonReconcilingStrategy(JsonTextEditor textEditor) {
         this.textEditor = textEditor;
     }

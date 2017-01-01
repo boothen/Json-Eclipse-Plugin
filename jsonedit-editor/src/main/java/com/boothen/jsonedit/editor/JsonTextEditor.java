@@ -72,9 +72,37 @@ import com.boothen.jsonedit.outline.JsonContentOutlinePage;
  */
 public class JsonTextEditor extends TextEditor {
 
-    private static String MARKER_ID = "com.boothen.jsonedit.validation.marker";
+    /**
+     * The action ID to trigger re-formatting the selected code
+     */
+    static final String FORMAT_ACTION_ID = "com.boothen.jsonedit.format"; //$NON-NLS-1$
 
-    private final static char[] PAIRS= { '{', '}', '[', ']' };
+    /**
+     * The action ID to open the Quick Outline View
+     */
+    static final String QUICK_OUTLINE_ACTION_ID = "com.boothen.jsonedit.quickOutline"; //$NON-NLS-1$
+
+    /**
+     * The editor context ID wrt. to the key binding scope
+     */
+    static final String EDITOR_CONTEXT_ID = "com.boothen.jsonedit.jsonEditorScope"; //$NON-NLS-1$
+
+    /**
+     * The marker ID for JSON (e.g. warnings, compile errors)
+     */
+    static final String MARKER_ID = "com.boothen.jsonedit.validation.marker";
+
+    /**
+     * The document category for JSON files
+     */
+    static final String JSON_CATEGORY = "__json_elements"; //$NON-NLS-1$
+
+    /**
+     * Text operation code for requesting the outline for the current input.
+     */
+    private static final int SHOW_OUTLINE = 51;
+
+    private final static char[] PAIRS = { '{', '}', '[', ']' };
 
     private DefaultCharacterPairMatcher pairsMatcher = new DefaultCharacterPairMatcher(PAIRS);
     private JsonSourceViewerConfiguration viewerConfiguration;
@@ -82,16 +110,6 @@ public class JsonTextEditor extends TextEditor {
     private JsonContentOutlinePage fOutlinePage;
 
     private ProjectionAnnotationModel annotationModel;
-
-    public final static String JSON_CATEGORY = "__json_elements"; //$NON-NLS-1$
-
-    /**
-     * Text operation code for requesting the outline for the current input.
-     */
-    public static final int SHOW_OUTLINE= 51;
-
-    public JsonTextEditor() {
-    }
 
     @Override
     public void createPartControl(Composite parent) {
@@ -130,7 +148,7 @@ public class JsonTextEditor extends TextEditor {
 
     @Override
     protected void initializeKeyBindingScopes() {
-        setKeyBindingScopes(new String[] { Constants.EDITOR_CONTEXT_ID });
+        setKeyBindingScopes(new String[] { EDITOR_CONTEXT_ID });
     }
 
     @Override
@@ -155,22 +173,22 @@ public class JsonTextEditor extends TextEditor {
         super.createActions();
 
         Action outline = new TextOperationAction(Messages.RESOURCE_BUNDLE, "ShowOutline.", this, SHOW_OUTLINE, true);
-        outline.setActionDefinitionId(Constants.QUICK_OUTLINE_ACTION_ID);
-        setAction(Constants.QUICK_OUTLINE_ACTION_ID, outline);
+        outline.setActionDefinitionId(QUICK_OUTLINE_ACTION_ID);
+        setAction(QUICK_OUTLINE_ACTION_ID, outline);
 
         Action format = new TextOperationAction(Messages.RESOURCE_BUNDLE, "Format.", this, ISourceViewer.FORMAT);
-        format.setActionDefinitionId(Constants.FORMAT_ACTION_ID);
-        setAction(Constants.FORMAT_ACTION_ID, format);
-        markAsStateDependentAction(Constants.FORMAT_ACTION_ID, true);
-        markAsSelectionDependentAction(Constants.FORMAT_ACTION_ID, true);
+        format.setActionDefinitionId(FORMAT_ACTION_ID);
+        setAction(FORMAT_ACTION_ID, format);
+        markAsStateDependentAction(FORMAT_ACTION_ID, true);
+        markAsSelectionDependentAction(FORMAT_ACTION_ID, true);
     }
 
     @Override
     protected void editorContextMenuAboutToShow(IMenuManager menu) {
         super.editorContextMenuAboutToShow(menu);
 
-        addAction(menu, ITextEditorActionConstants.GROUP_EDIT, Constants.FORMAT_ACTION_ID);
-        addAction(menu, ITextEditorActionConstants.GROUP_OPEN, Constants.QUICK_OUTLINE_ACTION_ID);
+        addAction(menu, ITextEditorActionConstants.GROUP_EDIT, FORMAT_ACTION_ID);
+        addAction(menu, ITextEditorActionConstants.GROUP_OPEN, QUICK_OUTLINE_ACTION_ID);
     }
 
     @Override
@@ -228,9 +246,9 @@ public class JsonTextEditor extends TextEditor {
      * @return an adapter for the required type or <code>null</code>
      */
     @Override
-    public Object getAdapter(@SuppressWarnings("rawtypes") Class required) {
+    public <T> T getAdapter(Class<T> required) {
         if (IContentOutlinePage.class.equals(required)) {
-            return getOutlinePage();
+            return required.cast(getOutlinePage());
         }
 
         return super.getAdapter(required);
@@ -270,7 +288,6 @@ public class JsonTextEditor extends TextEditor {
         // existing annotations will be removed so that only additions remain
         List<Position> additions = new ArrayList<>(newPositions);
 
-        @SuppressWarnings("unchecked") // we can be sure that only Annotation instances are in the Iterable
         Iterator<Annotation> it = annotationModel.getAnnotationIterator();
         while (it.hasNext()) {
             Annotation anno = it.next();
