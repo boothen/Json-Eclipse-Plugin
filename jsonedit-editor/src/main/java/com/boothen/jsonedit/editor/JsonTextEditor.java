@@ -246,9 +246,9 @@ public class JsonTextEditor extends TextEditor {
      * @return an adapter for the required type or <code>null</code>
      */
     @Override
-    public <T> T getAdapter(Class<T> required) {
+    public Object getAdapter(@SuppressWarnings("rawtypes") Class required) {
         if (IContentOutlinePage.class.equals(required)) {
-            return required.cast(getOutlinePage());
+            return getOutlinePage();
         }
 
         return super.getAdapter(required);
