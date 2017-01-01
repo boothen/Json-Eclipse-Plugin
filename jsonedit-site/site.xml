@@ -18,6 +18,9 @@
    <feature url="features/jsonedit-feature_1.0.0.final.jar" id="jsonedit-feature" version="1.0.0.final">
       <category name="jsonedit"/>
    </feature>
+   <feature url="features/jsonedit-feature_1.0.1.jar" id="jsonedit-feature" version="1.0.1">
+      <category name="jsonedit"/>
+   </feature>
    <category-def name="jsonedit" label="JSON Editor"/>
    <category-def name="antlr4" label="ANTLR 4"/>
 </site>
