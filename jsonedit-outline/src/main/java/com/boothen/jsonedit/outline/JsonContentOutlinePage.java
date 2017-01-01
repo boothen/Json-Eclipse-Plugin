@@ -87,7 +87,10 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
         viewer.setInput(root);
 
         fTextEditor.getSite().getPage().addPostSelectionListener(textListener);
-        addSelectionChangedListener(treeListener);
+
+        // Updating the text selection in the main JSON editor is disabled for now
+        // due to numerous reports about incorrect updates
+//        addSelectionChangedListener(treeListener);
 
         prefStoreListener = new IPropertyChangeListener() {
             @Override
