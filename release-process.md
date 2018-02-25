@@ -22,10 +22,13 @@ mvn versions:commit
 **Note:** I suspect that there is an easier way, probably through Tycho: 
 auto-generate eclipse files or use mvn install directly to build the target site?
 
-* Manually open and edit the version entry in the different plugins.
+* Manually open and edit the version entry in the different plugins (including the test bundle fragment).
 * Open and adjust the version in the `feature.xml` file
 * Open the `site.xml` and edit the XML content directly: add a new entry for the new version. 
 Go back to "Site Map" and build only the new feature - the older ones are unresolvable.
+
+* Update the "category.xml" file: the jar file path and the feature version must be updated
+
 
 # Update Site
 
