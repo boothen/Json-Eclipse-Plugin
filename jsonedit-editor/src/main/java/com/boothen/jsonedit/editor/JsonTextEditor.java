@@ -328,11 +328,13 @@ public class JsonTextEditor extends TextEditor {
 
     public void updateProblemMarkers(List<ParseProblem> problems) {
         IResource resource = ResourceUtil.getResource(getEditorInput());
-        try {
-            IDocument doc = getSourceViewer().getDocument();
-            updateMarkers(doc, resource, problems);
-        } catch (CoreException e) {
-            StatusManager.getManager().handle(e.getStatus());
+        if (resource != null) {
+            try {
+                IDocument doc = getSourceViewer().getDocument();
+                updateMarkers(doc, resource, problems);
+            } catch (CoreException e) {
+                StatusManager.getManager().handle(e.getStatus());
+            }
         }
     }
 
