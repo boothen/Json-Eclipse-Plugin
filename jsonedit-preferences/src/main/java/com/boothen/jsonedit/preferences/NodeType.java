@@ -10,37 +10,37 @@ public enum NodeType {
     /**
      * An object, wrapped in curly braces
      */
-    OBJECT("JsonObject.gif", TokenStyle.DEFAULT),
+    OBJECT("JsonObject.png", TokenStyle.DEFAULT),
 
     /**
      * An array of elements, wrapped in square brackets
      */
-    ARRAY("JsonArray.gif", TokenStyle.DEFAULT),
+    ARRAY("JsonArray.png", TokenStyle.DEFAULT),
 
     /**
      * A boolean value
      */
-    BOOLEAN("JsonBoolean.gif", TokenStyle.BOOLEAN),
+    BOOLEAN("JsonBoolean.png", TokenStyle.BOOLEAN),
 
     /**
      * The constant <code>null</code>.
      */
-    NULL("JsonNull.gif", TokenStyle.NULL),
+    NULL("JsonNull.png", TokenStyle.NULL),
 
     /**
      * A number, either integer or floating point
      */
-    NUMBER("JsonNumber.gif", TokenStyle.NUMBER),
+    NUMBER("JsonNumber.png", TokenStyle.NUMBER),
 
     /**
      * A text string
      */
-    STRING("JsonString.gif", TokenStyle.TEXT),
+    STRING("JsonString.png", TokenStyle.TEXT),
 
     /**
      * An error node
      */
-    ERROR("JsonError.gif", TokenStyle.ERROR);
+    ERROR("JsonError.png", TokenStyle.ERROR);
 
     private String imagePath;
     private TokenStyle tokenStyle;
