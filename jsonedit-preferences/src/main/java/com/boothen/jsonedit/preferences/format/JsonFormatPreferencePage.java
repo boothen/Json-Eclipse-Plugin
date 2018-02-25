@@ -28,8 +28,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import com.boothen.jsonedit.antlr.JSONLexer;
 import com.boothen.jsonedit.core.BundleUtils;
@@ -92,6 +95,7 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
         refreshViewer();
 
         createWhitespaceCheckbox(container, gridLayout.numColumns);
+        createGeneralTextEditorHint(container, gridLayout.numColumns);
 
         return container;
     }
@@ -259,6 +263,26 @@ public class JsonFormatPreferencePage extends PreferencePage implements IWorkben
         if (getPreferenceStore().getBoolean(SHOW_WHITESPACE_PREF)) {
             textViewer.addPainter(painter);
         }
+    }
+
+    private void createGeneralTextEditorHint(final Composite container, int numColumns) {
+        Link editorHint = new Link(container, SWT.NONE);
+        editorHint.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    Shell shell = container.getShell();
+                    if ("org.eclipse.ui.preferencePages.GeneralTextEditor".equals(e.text)) { //$NON-NLS-1$
+                        PreferencesUtil.createPreferenceDialogOn(shell, e.text, null, null);
+                    }
+                }
+        });
+        editorHint.setText("Go to <a href=\"org.eclipse.ui.preferencePages.GeneralTextEditor\">"
+                + "Text Editors</a> to configure general text settings such as tabs/spaces");
+
+        GridData editorHintData = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
+        editorHintData.widthHint = 150; // only expand further if anyone else requires it
+        editorHintData.horizontalSpan = numColumns;
+        editorHint.setLayoutData(editorHintData);
     }
 
     private static WhitespaceCharacterPainter createWhitespacePainter(ITextViewer viewer) {

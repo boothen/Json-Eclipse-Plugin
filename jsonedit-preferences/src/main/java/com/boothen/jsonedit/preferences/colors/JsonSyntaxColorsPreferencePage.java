@@ -101,9 +101,9 @@ public class JsonSyntaxColorsPreferencePage extends PreferencePage implements IW
                 }
         });
         fontHint.setText("See <a href=\"org.eclipse.ui.preferencePages.GeneralTextEditor\">"
-                + "'Text Editors'</a> for general text editor preferences and "
-                + "<a href=\"org.eclipse.ui.preferencePages.ColorsAndFonts\">'Colors and Fonts'</a> "
-                + "to configure the font.");
+                + "Text Editors</a> to adjust text rendering and "
+                + "<a href=\"org.eclipse.ui.preferencePages.ColorsAndFonts\">Colors and Fonts</a> "
+                + "to change the font.");
 
         GridData fontHintData = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
         fontHintData.widthHint = 150; // only expand further if anyone else requires it
