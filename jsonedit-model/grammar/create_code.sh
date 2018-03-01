@@ -13,4 +13,7 @@ fi
 
 echo "Compiling grammar file"
 java -jar antlr-4.5.2-complete.jar JSON.g4 -visitor -package com.boothen.jsonedit.antlr -o json-grammar
-echo "Done!"
+echo "Compilation done!"
+
+echo "Moving generated Java files"
+mv -v json-grammar/*.java ../src/main/java/com/boothen/jsonedit/antlr/

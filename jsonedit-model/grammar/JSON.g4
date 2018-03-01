@@ -5,8 +5,7 @@
 grammar JSON;
 
 json
-   : object
-   | array
+   : value
    ;
 
 object
@@ -35,7 +34,7 @@ value
 
 
 STRING
-   : '"' (ESC | ~ ["\\])* '"'
+   : '"' (ESC | SAFECODEPOINT)* '"'
    ;
 
 
@@ -54,10 +53,14 @@ fragment HEX
    ;
 
 
-NUMBER
-   : '-'? INT '.' [0-9] + EXP? | '-'? INT EXP | '-'? INT
+fragment SAFECODEPOINT
+   : ~ ["\\\u0000-\u001F]
    ;
 
+
+NUMBER
+   : '-'? INT ('.' [0-9] +)? EXP?
+   ;
 
 // keywords
 
