@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target includeMode="feature" name="antlr" sequenceNumber="3">
+<?pde version="3.8"?><target includeMode="feature" name="antlr" sequenceNumber="4">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.antlr.v4.feature.group" version="4.5.2"/>
 <repository location="http://martin-steiger.de/antlr4"/>
 </location>
-<location path="${eclipse_home}" type="Directory"/>
+<location path="E:\GitHub\eclipse_minimal" type="Directory"/>
 </locations>
 </target>
