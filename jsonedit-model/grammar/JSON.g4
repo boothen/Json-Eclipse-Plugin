@@ -39,7 +39,7 @@ STRING
 
 
 fragment ESC
-   : '\\' (["\\/bfnrt] | UNICODE)
+   : '\\' (["\\/bfnrt] | UNICODE | SAFECODEPOINT )
    ;
 
 
