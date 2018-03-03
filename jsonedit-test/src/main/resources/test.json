@@ -1,0 +1,24 @@
+{
+    "glossary": {
+        "title": "example glossary",
+		"GlossDiv": {
+            "title": "S",
+            "val": -1.0e1113,
+			"GlossList": {
+                "GlossEntry": {
+                    "ID": "SGML",
+					"SortAs": "SGML",
+					"GlossTerm": "Standard Generalized Markup Language",
+					"Acronym": "SGM",
+					"Acronym": "SGML2",
+					"Abbrev": "ISO 8879:1986",
+					"GlossDef": {
+                        "para": "A meta-markup\\ lan\"guage,\\\asab\ab\\s\qq\u u\s\"ed to \n     re\kate \u89mark\u23a41p languges s\\uch as Do,cBook.\\a",
+						"GlossSeeAlso": ["GML", "XML"]
+                    },
+					"GlossSee": "markup"
+                }
+            }
+        }
+    }
+}
