@@ -59,7 +59,13 @@ public class AntlrAdapter {
         public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int posInLine,
                 String msg, RecognitionException e) {
             Token offendingToken = e != null ? e.getOffendingToken() : null;
-            ParseProblem error = new ParseProblem(msg, line, posInLine, offendingToken, Severity.ERROR);
+            int endPos;
+            if (offendingToken != null) {
+                endPos = posInLine + offendingToken.getText().length();
+            } else {
+                endPos = posInLine + 1;
+            }
+            ParseProblem error = new ParseProblem(Severity.ERROR, msg, line, posInLine, endPos);
             errorList.add(error);
         }
 
@@ -79,7 +85,7 @@ public class AntlrAdapter {
         }
 
         @Override
-        public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
+        public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int posInLine,
                 String msg, RecognitionException e) {
             Token offendingToken = null;
             if (e != null) {
@@ -89,7 +95,14 @@ public class AntlrAdapter {
                 offendingToken = (Token) offendingSymbol;
             }
 
-            ParseProblem error = new ParseProblem(msg, line, charPositionInLine, offendingToken, Severity.ERROR);
+            int endPos;
+            if (offendingToken != null) {
+                endPos = posInLine + offendingToken.getText().length();
+            } else {
+                endPos = posInLine + 1;
+            }
+
+            ParseProblem error = new ParseProblem(Severity.ERROR, msg, line, posInLine, endPos);
             errorList.add(error);
         }
 

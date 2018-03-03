@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -345,15 +344,13 @@ public class JsonTextEditor extends TextEditor {
         for (final ParseProblem problem : probs) {
             try {
                 IMarker marker = res.createMarker(MARKER_ID);
-                Token token = problem.getOffendingToken();
 
-                int offset = doc.getLineOffset(problem.getLine() - 1) + problem.getCharPositionInLine();
-                int length = token != null ? token.getText().length() : 1;
+                int offset = doc.getLineOffset(problem.getLine() - 1);
                 marker.setAttribute(IMarker.SEVERITY, problem.getSeverity().getMarkerValue());
                 marker.setAttribute(IMarker.LOCATION, "Line " + problem.getLine());
                 marker.setAttribute(IMarker.MESSAGE, problem.getMessage());
-                marker.setAttribute(IMarker.CHAR_START, offset);
-                marker.setAttribute(IMarker.CHAR_END, offset + length);
+                marker.setAttribute(IMarker.CHAR_START, offset + problem.getStartPositionInLine());
+                marker.setAttribute(IMarker.CHAR_END, offset + problem.getEndPositionInLine());
             } catch (BadLocationException e) {
                 Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Invalid position", e);
                 StatusManager.getManager().handle(status);

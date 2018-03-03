@@ -11,4 +11,5 @@ Require-Bundle: org.eclipse.jface.text,
  org.eclipse.swt,
  org.eclipse.core.resources
 Export-Package: com.boothen.jsonedit.antlr,
- com.boothen.jsonedit.model
+ com.boothen.jsonedit.model,
+ com.boothen.jsonedit.problems

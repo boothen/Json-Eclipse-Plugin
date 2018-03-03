@@ -1,8 +1,10 @@
 package com.boothen.jsonedit.model;
 
-import org.antlr.v4.runtime.Token;
 import org.eclipse.core.resources.IMarker;
 
+/**
+ * Describes a parsing problem with the input document
+ */
 public class ParseProblem {
 
     public static enum Severity {
@@ -26,15 +28,22 @@ public class ParseProblem {
 
     private final String msg;
     private final int line;
-    private final int charPositionInLine;
-    private final Token offendingToken;
+    private final int startPositionInLine;
+    private final int endPositionInLine;
     private final Severity severity;
 
-    public ParseProblem(String msg, int line, int charPositionInLine, Token offendingToken, Severity severity) {
+    /**
+     * @param severity the severity of the problem
+     * @param msg the problem message to emit
+     * @param line the line number in the input where the error occurred
+     * @param start The start position within that line where the error occurred
+     * @param end The end position within that line where the error occurred
+     */
+    public ParseProblem(Severity severity, String msg, int line, int start, int end) {
         this.msg = msg;
         this.line = line;
-        this.charPositionInLine = charPositionInLine;
-        this.offendingToken = offendingToken;
+        this.startPositionInLine = start;
+        this.endPositionInLine = end;
         this.severity = severity;
     }
 
@@ -46,24 +55,24 @@ public class ParseProblem {
     }
 
     /**
-     * @return The character position within that line where the error occurred.
+     * @return line number in the input where the error occurred
      */
     public int getLine() {
         return line;
     }
 
     /**
-     * @return line number in the input where the error occurred.
+     * @return The start position within that line where the error occurred
      */
-    public int getCharPositionInLine() {
-        return charPositionInLine;
+    public int getStartPositionInLine() {
+        return startPositionInLine;
     }
 
     /**
-     * @return the token that causes this parse problem
+     * @return The end position within that line where the error occurred
      */
-    public Token getOffendingToken() {
-        return offendingToken;
+    public int getEndPositionInLine() {
+        return endPositionInLine;
     }
 
     /**

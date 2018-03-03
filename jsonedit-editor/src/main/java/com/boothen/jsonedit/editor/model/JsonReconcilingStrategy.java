@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,9 +42,10 @@ import com.boothen.jsonedit.editor.Activator;
 import com.boothen.jsonedit.editor.JsonTextEditor;
 import com.boothen.jsonedit.folding.JsonFoldingPositionsBuilder;
 import com.boothen.jsonedit.model.AntlrAdapter;
-import com.boothen.jsonedit.model.DuplicateKeyFinder;
 import com.boothen.jsonedit.model.ParseProblem;
 import com.boothen.jsonedit.model.ParseResult;
+import com.boothen.jsonedit.problems.DuplicateKeyFinder;
+import com.boothen.jsonedit.problems.StringProblemFinder;
 import com.boothen.jsonedit.text.PositionVisitor;
 
 /**
@@ -117,9 +119,7 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
 
         final LinkedHashMap<ParseTree, Position> positions = syntaxTree.accept(new PositionVisitor());
 
-        DuplicateWarningGenerator duplicateListener = new DuplicateWarningGenerator();
-        syntaxTree.accept(new DuplicateKeyFinder(duplicateListener));
-        problems.addAll(duplicateListener.getWarnings());
+        problems.addAll(addCustomProblems(syntaxTree));
 
         final Map<ParseTree, ParseTree> oldToNew = treeComparator.update(syntaxTree, positions);
 
@@ -136,6 +136,18 @@ public class JsonReconcilingStrategy implements IReconcilingStrategy, IReconcili
                 }
             });
         }
+    }
+
+    private Collection<ParseProblem> addCustomProblems(JsonContext syntaxTree) {
+        Collection<ParseProblem> problems = new ArrayList<>();
+
+        // add duplicate keys
+        syntaxTree.accept(new DuplicateKeyFinder(problems));
+
+        // add unneeded escaping warnings
+        syntaxTree.accept(new StringProblemFinder(problems));
+
+        return problems;
     }
 
 }
