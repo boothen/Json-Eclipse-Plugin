@@ -2,7 +2,7 @@
 <feature
       id="org.antlr.v4"
       label="ANTLR"
-      version="4.5.2"
+      version="4.7.1"
       provider-name="Terence Parr">
 
    <description url="http://www.antlr.org/">
@@ -80,14 +80,14 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    </license>
 
    <plugin
-         id="org.antlr.antlr4-runtime-osgi"
+         id="org.antlr.antlr4-runtime"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.antlr.antlr4-runtime-osgi.source"
+         id="org.antlr.antlr4-runtime.source"
          download-size="0"
          install-size="0"
          version="0.0.0"

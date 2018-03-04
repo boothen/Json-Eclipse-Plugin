@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.core.resources,
  jsonedit-model,
  org.eclipse.jface.text,
  jsonedit-text,
- org.antlr.antlr4-runtime-osgi
+ org.antlr.antlr4-runtime
 Export-Package: com.boothen.jsonedit.preferences;
   uses:="org.eclipse.ui,
    org.eclipse.swt.events,

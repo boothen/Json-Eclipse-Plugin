@@ -6,7 +6,7 @@ Bundle-Version: 1.0.2
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: Boothen Technology
 Require-Bundle: org.eclipse.jface.text,
- org.antlr.antlr4-runtime-osgi;bundle-version="4.5.2",
+ org.antlr.antlr4-runtime,
  jsonedit-core,
  org.eclipse.swt,
  org.eclipse.core.resources

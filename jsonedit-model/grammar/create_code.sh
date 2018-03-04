@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ANTLR_VERSION=4.5.2
+ANTLR_VERSION=4.7.1
 FILENAME="antlr-$ANTLR_VERSION-complete.jar"
 
 if ! [ -f $FILENAME ]; then
@@ -12,7 +12,7 @@ else
 fi
 
 echo "Compiling grammar file"
-java -jar antlr-4.5.2-complete.jar JSON.g4 -visitor -package com.boothen.jsonedit.antlr -o json-grammar
+java -jar ${FILENAME} JSON.g4 -visitor -package com.boothen.jsonedit.antlr -o json-grammar
 echo "Compilation done!"
 
 echo "Moving generated Java files"
