@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -59,6 +60,11 @@ class JsonContextTreeFilter extends JSONBaseVisitor<List<ParseTree>> {
 
     @Override
     public List<ParseTree> visitTerminal(TerminalNode node) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<ParseTree> visitErrorNode(ErrorNode node) {
         return Collections.emptyList();
     }
 
