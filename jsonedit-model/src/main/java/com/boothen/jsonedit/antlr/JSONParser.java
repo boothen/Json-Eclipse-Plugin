@@ -1,4 +1,4 @@
-// Generated from JSON.g4 by ANTLR 4.5.2
+// Generated from JSON.g4 by ANTLR 4.7.1
 package com.boothen.jsonedit.antlr;
 import java.util.List;
 
@@ -21,13 +21,13 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class JSONParser extends Parser {
-    static { RuntimeMetaData.checkVersion("4.5.2", RuntimeMetaData.VERSION); }
+    static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
 
     protected static final DFA[] _decisionToDFA;
     protected static final PredictionContextCache _sharedContextCache =
         new PredictionContextCache();
     public static final int
-        STRING=1, NUMBER=2, TRUE=3, FALSE=4, NULL=5, BEGIN_ARRAY=6, END_ARRAY=7, 
+        STRING=1, NUMBER=2, TRUE=3, FALSE=4, NULL=5, BEGIN_ARRAY=6, END_ARRAY=7,
         BEGIN_OBJECT=8, END_OBJECT=9, COMMA=10, COLON=11, WS=12;
     public static final int
         RULE_json = 0, RULE_object = 1, RULE_pair = 2, RULE_array = 3, RULE_value = 4;
@@ -394,6 +394,7 @@ public class JSONParser extends Parser {
         enterRule(_localctx, 8, RULE_value);
         try {
             setState(53);
+            _errHandler.sync(this);
             switch (_input.LA(1)) {
             case STRING:
                 enterOuterAlt(_localctx, 1);
@@ -460,17 +461,17 @@ public class JSONParser extends Parser {
     }
 
     public static final String _serializedATN =
-        "\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\16:\4\2\t\2\4\3\t"+
+        "\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\16:\4\2\t\2\4\3\t"+
         "\3\4\4\t\4\4\5\t\5\4\6\t\6\3\2\3\2\3\3\3\3\3\3\3\3\7\3\23\n\3\f\3\16\3"+
         "\26\13\3\3\3\3\3\3\3\3\3\5\3\34\n\3\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\7"+
         "\5&\n\5\f\5\16\5)\13\5\3\5\3\5\3\5\3\5\5\5/\n\5\3\6\3\6\3\6\3\6\3\6\3"+
-        "\6\3\6\5\68\n\6\3\6\2\2\7\2\4\6\b\n\2\2>\2\f\3\2\2\2\4\33\3\2\2\2\6\35"+
-        "\3\2\2\2\b.\3\2\2\2\n\67\3\2\2\2\f\r\5\n\6\2\r\3\3\2\2\2\16\17\7\n\2\2"+
-        "\17\24\5\6\4\2\20\21\7\f\2\2\21\23\5\6\4\2\22\20\3\2\2\2\23\26\3\2\2\2"+
-        "\24\22\3\2\2\2\24\25\3\2\2\2\25\27\3\2\2\2\26\24\3\2\2\2\27\30\7\13\2"+
-        "\2\30\34\3\2\2\2\31\32\7\n\2\2\32\34\7\13\2\2\33\16\3\2\2\2\33\31\3\2"+
-        "\2\2\34\5\3\2\2\2\35\36\7\3\2\2\36\37\7\r\2\2\37 \5\n\6\2 \7\3\2\2\2!"+
-        "\"\7\b\2\2\"\'\5\n\6\2#$\7\f\2\2$&\5\n\6\2%#\3\2\2\2&)\3\2\2\2\'%\3\2"+
+        "\6\3\6\5\68\n\6\3\6\2\2\7\2\4\6\b\n\2\2\2>\2\f\3\2\2\2\4\33\3\2\2\2\6"+
+        "\35\3\2\2\2\b.\3\2\2\2\n\67\3\2\2\2\f\r\5\n\6\2\r\3\3\2\2\2\16\17\7\n"+
+        "\2\2\17\24\5\6\4\2\20\21\7\f\2\2\21\23\5\6\4\2\22\20\3\2\2\2\23\26\3\2"+
+        "\2\2\24\22\3\2\2\2\24\25\3\2\2\2\25\27\3\2\2\2\26\24\3\2\2\2\27\30\7\13"+
+        "\2\2\30\34\3\2\2\2\31\32\7\n\2\2\32\34\7\13\2\2\33\16\3\2\2\2\33\31\3"+
+        "\2\2\2\34\5\3\2\2\2\35\36\7\3\2\2\36\37\7\r\2\2\37 \5\n\6\2 \7\3\2\2\2"+
+        "!\"\7\b\2\2\"\'\5\n\6\2#$\7\f\2\2$&\5\n\6\2%#\3\2\2\2&)\3\2\2\2\'%\3\2"+
         "\2\2\'(\3\2\2\2(*\3\2\2\2)\'\3\2\2\2*+\7\t\2\2+/\3\2\2\2,-\7\b\2\2-/\7"+
         "\t\2\2.!\3\2\2\2.,\3\2\2\2/\t\3\2\2\2\608\7\3\2\2\618\7\4\2\2\628\5\4"+
         "\3\2\638\5\b\5\2\648\7\5\2\2\658\7\6\2\2\668\7\7\2\2\67\60\3\2\2\2\67"+
