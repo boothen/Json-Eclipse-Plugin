@@ -12,7 +12,7 @@ else
 fi
 
 echo "Compiling grammar file"
-java -jar ${FILENAME} JSON.g4 -visitor -package com.boothen.jsonedit.antlr -o json-grammar
+java -jar ${FILENAME} JSONLexer.g4 JSON.g4 -visitor -package com.boothen.jsonedit.antlr -o json-grammar
 echo "Compilation done!"
 
 echo "Replacing tabs with spaces"

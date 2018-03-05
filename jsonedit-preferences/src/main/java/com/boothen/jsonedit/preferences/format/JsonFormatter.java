@@ -12,6 +12,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 
 import com.boothen.jsonedit.antlr.JSONLexer;
+import com.boothen.jsonedit.antlr.JSONParser;
 
 /**
  * Reads from a token source and writes formatted and indented text.
@@ -108,6 +109,13 @@ public class JsonFormatter {
                 addSuffix(token, buffer);
                 prevToken = token;
             }
+
+            if (token.getChannel() == JSONLexer.COMMENTS_CHANNEL) {
+                indenter.indent(buffer);
+                buffer.append(token.getText());
+                buffer.append(lineDelim);
+            }
+
             token = lexer.nextToken();
         }
 
