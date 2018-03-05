@@ -36,7 +36,7 @@
 		<repository>
 			<id>antlr</id>
 			<layout>p2</layout>
-			<url>http://martin-steiger.de/antlr4</url>
+			<url>http://martin-steiger.de/antlr47</url>
 		</repository>
 	</repositories>
 
