@@ -52,11 +52,12 @@ public class JsonPreferenceInitializer extends AbstractPreferenceInitializer {
         node.setDefault("END_OBJECT.prefix", "NEWLINE");
         node.setDefault("END_ARRAY.prefix", "NEWLINE");
 
-        node.setDefault(TokenStyle.KEY.color(), colorToString(0, 128, 0));
-        node.setDefault(TokenStyle.TEXT.color(), colorToString(0, 0, 128));
+        node.setDefault(TokenStyle.KEY.color(), colorToString(64, 128, 64));
+        node.setDefault(TokenStyle.TEXT.color(), colorToString(16, 0, 160));
         node.setDefault(TokenStyle.NULL.color(), colorToString(0, 0, 0));
         node.setDefault(TokenStyle.BOOLEAN.color(), colorToString(0, 0, 0));
-        node.setDefault(TokenStyle.NUMBER.color(), colorToString(0, 0, 128));
+        node.setDefault(TokenStyle.NUMBER.color(), colorToString(16, 0, 160));
+        node.setDefault(TokenStyle.COMMENT.color(), colorToString(16, 128, 16));
         node.setDefault(TokenStyle.ERROR.color(), colorToString(224, 0, 0));
 
         node.setDefault(TokenStyle.NULL.isBold(), true);

@@ -127,7 +127,7 @@ public class AntlrTokenScanner implements ITokenScanner {
             return TokenStyle.NULL;
 
         case JSONLexer.LINE_COMMENT:
-            return TokenStyle.ERROR;
+            return TokenStyle.COMMENT;
 
         default:
             return TokenStyle.DEFAULT;

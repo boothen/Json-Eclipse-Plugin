@@ -42,7 +42,8 @@ public class JSONParser extends Parser {
     };
     private static final String[] _SYMBOLIC_NAMES = {
         null, "STRING", "NUMBER", "TRUE", "FALSE", "NULL", "BEGIN_ARRAY", "END_ARRAY",
-        "BEGIN_OBJECT", "END_OBJECT", "COMMA", "COLON", "WS", "UNKNOWN"
+        "BEGIN_OBJECT", "END_OBJECT", "COMMA", "COLON", "WS", "LINE_COMMENT",
+        "UNKNOWN"
     };
     public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 

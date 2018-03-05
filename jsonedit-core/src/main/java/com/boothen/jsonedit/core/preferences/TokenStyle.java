@@ -36,6 +36,11 @@ public enum TokenStyle {
     NULL,
 
     /**
+     * A text comment node
+     */
+    COMMENT,
+
+    /**
      * An error node
      */
     ERROR;
