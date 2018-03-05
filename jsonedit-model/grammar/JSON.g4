@@ -92,3 +92,10 @@ fragment EXP
 WS
    : [ \t\n\r] + -> channel(HIDDEN)
    ;
+
+
+UNKNOWN
+   : ~ [{}[\],:"0-9\- \t\r\n]+
+   ;
+
+// collect everything else and put it into a single token to aggregate consecutive error chars.
