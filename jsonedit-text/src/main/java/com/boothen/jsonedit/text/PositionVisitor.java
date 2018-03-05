@@ -52,7 +52,8 @@ public class PositionVisitor extends AbstractParseTreeVisitor<LinkedHashMap<Pars
 
     private Position createPosition(Token start, Token stop) {
         int startIndex = start.getStartIndex();
-        int stopIndex = stop.getStopIndex();
+        // stop token is null if the whole tree is just EOF (document out of sync)
+        int stopIndex = stop != null ? stop.getStopIndex() : startIndex - 1;
         Position pos = new Position(startIndex, stopIndex - startIndex + 1);
         return pos;
     }

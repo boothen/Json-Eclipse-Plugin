@@ -18,7 +18,8 @@ public class ParseTreeInfo {
             ParserRuleContext ctx = (ParserRuleContext) treeNode;
             if (ctx.exception == null) {
                 int start = ctx.start.getStartIndex();
-                int stop = ctx.stop.getStopIndex();
+                // stop token is null if the whole tree is just EOF (document out of sync)
+                int stop = (ctx.stop != null) ? ctx.stop.getStopIndex() : start;
                 return new Segment(start, stop);
             }
         }

@@ -18,5 +18,8 @@ echo "Compilation done!"
 echo "Replacing tabs with spaces"
 find json-grammar/*.java -exec sed -i 's/\t/    /g' {} +
 
+echo "Adding a new-line char at the end (if missing)"
+find json-grammar/*.java -exec sed -i -e '$a\' {} +
+
 echo "Moving generated Java files"
 mv -v json-grammar/*.java ../src/main/java/com/boothen/jsonedit/antlr/
