@@ -29,7 +29,7 @@ public class JSONParser extends Parser {
     public static final int
         STRING=1, NUMBER=2, TRUE=3, FALSE=4, NULL=5, BEGIN_ARRAY=6, END_ARRAY=7,
         BEGIN_OBJECT=8, END_OBJECT=9, COMMA=10, COLON=11, WS=12, LINE_COMMENT=13,
-        UNKNOWN=14;
+        BLOCK_COMMENT=14, UNKNOWN=15;
     public static final int
         RULE_json = 0, RULE_object = 1, RULE_pair = 2, RULE_array = 3, RULE_value = 4;
     public static final String[] ruleNames = {
@@ -43,7 +43,7 @@ public class JSONParser extends Parser {
     private static final String[] _SYMBOLIC_NAMES = {
         null, "STRING", "NUMBER", "TRUE", "FALSE", "NULL", "BEGIN_ARRAY", "END_ARRAY",
         "BEGIN_OBJECT", "END_OBJECT", "COMMA", "COLON", "WS", "LINE_COMMENT",
-        "UNKNOWN"
+        "BLOCK_COMMENT", "UNKNOWN"
     };
     public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -463,7 +463,7 @@ public class JSONParser extends Parser {
     }
 
     public static final String _serializedATN =
-        "\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\20:\4\2\t\2\4\3\t"+
+        "\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\21:\4\2\t\2\4\3\t"+
         "\3\4\4\t\4\4\5\t\5\4\6\t\6\3\2\3\2\3\3\3\3\3\3\3\3\7\3\23\n\3\f\3\16\3"+
         "\26\13\3\3\3\3\3\3\3\3\3\5\3\34\n\3\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\7"+
         "\5&\n\5\f\5\16\5)\13\5\3\5\3\5\3\5\3\5\5\5/\n\5\3\6\3\6\3\6\3\6\3\6\3"+

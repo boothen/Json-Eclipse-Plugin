@@ -73,6 +73,10 @@ LINE_COMMENT
    : '//' ~[\r\n]* -> channel(COMMENTS_CHANNEL)
    ;
 
+BLOCK_COMMENT
+   : '/*' .*? '*/' -> channel(COMMENTS_CHANNEL)
+   ;
+
 UNKNOWN
    : ~ [{}[\],:"0-9\- \t\r\n]+
    ;
