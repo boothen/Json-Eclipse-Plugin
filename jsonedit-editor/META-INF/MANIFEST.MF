@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JSON Editor
 Bundle-SymbolicName: jsonedit-editor;singleton:=true
-Bundle-Version: 1.1.0
+Bundle-Version: 1.1.1
 Bundle-Activator: com.boothen.jsonedit.editor.Activator
 Require-Bundle: jsonedit-core,
  jsonedit-folding,
