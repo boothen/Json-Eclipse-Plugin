@@ -17,6 +17,10 @@ import com.boothen.jsonedit.model.ParseProblem.Severity;
  */
 public class StringProblemFinder extends JSONBaseVisitor<Void> {
 
+    // Do a negative lookahead for [bnfrt\/"] or uXXXX (four digit hex code)
+    // Original pattern: \\(?![bnfrt\/"]|u[0-9a-fA-F]{4}).
+    private static final Pattern UNESCAPED_UNSAFE = Pattern.compile("\\\\(?![bnfrt\\/\"]|u[0-9a-fA-F]{4}).");
+
     private final Collection<ParseProblem> problems;
 
     /**
@@ -37,13 +41,11 @@ public class StringProblemFinder extends JSONBaseVisitor<Void> {
     }
 
     private void checkEscaping(Token token) {
-        // Do a negative lookahead for [bnf\/"] or uXXXX (four digit hex code)
-        // Original pattern: \\(?![bnf\/"]|u[0-9a-fA-F]{4}).
-        Pattern pattern = Pattern.compile("\\\\(?![bnf\\/\"]|u[0-9a-fA-F]{4}).");
         // replace double-occurrences of backslash to identify odd numbers only
         // this will make it work for \\\ too
         String text = token.getText().replace("\\\\", "__");  // preserve length
-        Matcher matcher = pattern.matcher(text);
+
+        Matcher matcher = UNESCAPED_UNSAFE.matcher(text);
         while (matcher.find()) {
             report(token, matcher);
         }
