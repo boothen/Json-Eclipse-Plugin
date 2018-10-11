@@ -2,7 +2,7 @@
 <feature
       id="jsonedit-feature"
       label="JSON Editor Plugin"
-      version="1.1.1"
+      version="1.1.2"
       provider-name="Boothen Technology"
       plugin="jsonedit-core">
 
