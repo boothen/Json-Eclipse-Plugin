@@ -30,10 +30,10 @@ import org.eclipse.jface.text.Position;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -59,7 +59,7 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
 
     private final ITextEditor fTextEditor;
     private final ISelectionListener textListener = new MyTextListener();
-    private final ISelectionChangedListener treeListener = new MyTreeListener();
+    private final IDoubleClickListener treeListener = new MyTreeListener();
     private final Container<ParseTree> root = new Container<>();
     private final JsonContentProvider provider = new JsonContentProvider();
     private boolean textHasChanged;
@@ -85,12 +85,10 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
         // wrap in DSCLP to forward the styled text to the tree viewer
         viewer.setLabelProvider(new DelegatingStyledCellLabelProvider(labelProvider));
         viewer.setInput(root);
+        viewer.addDoubleClickListener(treeListener);
 
         fTextEditor.getSite().getPage().addPostSelectionListener(textListener);
 
-        // Updating the text selection in the main JSON editor is disabled for now
-        // due to numerous reports about incorrect updates
-//        addSelectionChangedListener(treeListener);
 
         prefStoreListener = new IPropertyChangeListener() {
             @Override
@@ -110,7 +108,6 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
     public void dispose() {
         preferenceStore.removePropertyChangeListener(prefStoreListener);
         fTextEditor.getSite().getPage().removePostSelectionListener(textListener);
-        removeSelectionChangedListener(treeListener);
         super.dispose();
     }
 
@@ -184,10 +181,10 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
      * Selects the text in the editor associated with the item selected in the
      * outline view tree.
      */
-    private class MyTreeListener implements ISelectionChangedListener {
+    private class MyTreeListener implements IDoubleClickListener {
 
         @Override
-        public void selectionChanged(SelectionChangedEvent event) {
+        public void doubleClick(DoubleClickEvent event) {
             if (textHasChanged) {
                 // this method is called from MyTextListener#selectionChanged
                 // avoid getting caught in an infinite loop triggering text/tree selection
@@ -210,7 +207,6 @@ public class JsonContentOutlinePage extends ContentOutlinePage {
                 }
             }
         }
-
     }
 
     /**
