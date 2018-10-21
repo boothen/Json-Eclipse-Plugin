@@ -3,5 +3,8 @@
    <feature url="features/org.antlr.v4_4.5.2.jar" id="org.antlr.v4" version="4.5.2">
       <category name="ANTLR"/>
    </feature>
+   <feature url="features/org.antlr.v4_4.7.1.jar" id="org.antlr.v4" version="4.7.1">
+      <category name="ANTLR"/>
+   </feature>
    <category-def name="ANTLR" label="ANTLR"/>
 </site>
