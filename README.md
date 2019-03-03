@@ -3,7 +3,7 @@ Eclipse Json Editor Plugin
 
 [![epl10](https://img.shields.io/badge/EPL-1.0-blue.svg "Eclipse Public License 1.0")](https://www.eclipse.org/legal/epl-v10.html)
 [![GitHub tag](https://img.shields.io/github/tag/boothen/Json-Eclipse-Plugin.svg)]()
-[![Build Status](https://secure.travis-ci.org/boothen/Json-Eclipse-Plugin.png)](http://travis-ci.org/boothen/Json-Eclipse-Plugin)
+[![Build Status](https://travis-ci.org/boothen/Json-Eclipse-Plugin.svg?branch=master)](http://travis-ci.org/boothen/Json-Eclipse-Plugin)
 
 ![screenshot](images/2016-04-16_editor_and_quickoutline.png "eclipse Screenshot")
 
