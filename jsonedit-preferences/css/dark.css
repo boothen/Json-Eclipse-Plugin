@@ -1,0 +1,10 @@
+IEclipsePreferences#jsonedit-core:jsonedit-core { /* pseudo attribute added to allow contributions without replacing this node, see Bug 466075 */
+    preferences:
+        'colorHyperlink=49,98,98'
+        'colorTextItalic=88,98,98'
+        'colorTextBold=85,255,255'
+        'colorTextBlocks=49,98,98'
+        'styleTextColor=192,192,192'
+        'styleDefaultColor=192,192,192'
+        'styleKeyColor=200,50,50'
+}

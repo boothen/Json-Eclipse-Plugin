@@ -57,28 +57,28 @@ public enum TokenStyle {
      * @return the key separator
      */
     public String separator() {
-        return ".";
+        return "";
     }
 
     /**
      * @return the color key
      */
     public String color() {
-        return base() + separator() + "color";
+        return base() + separator() + "Color";
     }
 
     /**
      * @return the key that indicates if the style requires <b>bold</b> font
      */
     public String isBold() {
-        return base() + separator() + "isBold";
+        return base() + separator() + "Bold";
     }
 
     /**
      * @return the key that indicates if the style requires <em>italic</em> font
      */
     public String isItalic() {
-        return base() + separator() + "isItalic";
+        return base() + separator() + "Italic";
     }
 
     /**
