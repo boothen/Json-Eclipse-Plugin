@@ -19,7 +19,7 @@ Features
 ---------------------
 
 * Supports every eclipse flavor (JavaEE, CDT, RCP, you name it!)
-* Supports eclipse version 3.7 - 4.5.2 and most probably later versions
+* Supports eclipse version 3.7 - 4.8.0 and most probably later versions
 * Conforms to the JSON standard as defined in the [RFC 4627](https://tools.ietf.org/html/rfc4627) by D. Crockford
 * Deep Integration (File wizards, tree outline, preference pages)
 * Quick Outline with reg-ex support `(CTRL + O)`
@@ -28,6 +28,7 @@ Features
 * Text folding and range highlighters
 * Detects duplicate keys
 * Reliable, resilient and fast syntax tree parsing and validation through ANTLR 4
+* Synchronized tree view and text editor
 * Available for free - that's a feature, isn't it?
 
 Developer Guides
