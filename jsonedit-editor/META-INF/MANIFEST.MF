@@ -26,3 +26,4 @@ Require-Bundle: jsonedit-core,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Boothen Technology
+Export-Package: com.boothen.jsonedit.editor
